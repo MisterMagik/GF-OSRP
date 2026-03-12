@@ -1,0 +1,88 @@
+/*
+	Project: GodFather
+	Author: MisterMagik, steeZ
+	File name: defines.inc
+	Date: 12.03.2026
+	Modified: 12.03.2026
+	Desc: Server macros.
+*/
+
+#undef MAX_PLAYERS
+#define MAX_PLAYERS 20
+
+// Rozmiar stosu:
+#pragma dynamic 2048
+
+// Callbacks:
+#define sampCallback%0(%1) \
+	public %0(%1)
+
+#define Callback%0(%1) \
+	forward %0(%1); public %0(%1)
+
+// Kolory:
+#define COLOR_GRAD1 0xB4B5B7FF
+#define COLOR_GRAD2 0xBFC0C2FF
+#define COLOR_GRAD3 0xCBCCCEFF
+#define COLOR_GRAD4 0xD8D8D8FF
+#define COLOR_GRAD5 0xE3E3E3FF
+#define COLOR_GRAD6 0xF0F0F0FF
+#define COLOR_GREY 0xAFAFAFAA
+#define COLOR_GREEN 0x33AA33AA
+#define COLOR_RED 0xAA3333AA
+#define COLOR_LIGHTRED 0xFF6347AA
+#define COLOR_LIGHTBLUE 0x33CCFFAA
+#define COLOR_LIGHTGREEN 0x9ACD32AA
+#define COLOR_YELLOW 0xFFFF00AA
+#define COLOR_YELLOW2 0xF5DEB3AA
+#define COLOR_WHITE 0xFFFFFFAA
+#define COLOR_FADE1 0xE6E6E6E6
+#define COLOR_FADE2 0xC8C8C8C8
+#define COLOR_FADE3 0xAAAAAAAA
+#define COLOR_FADE4 0x8C8C8C8C
+#define COLOR_FADE5 0x6E6E6E6E
+#define COLOR_PURPLE 0xC2A2DAAA
+#define COLOR_DBLUE 0x2641FEAA
+#define COLOR_ALLDEPT 0xFF8282AA
+#define COLOR_NEWS 0xFFA500AA
+#define COLOR_OOC 0xE0FFFFAA
+
+// Inne:
+#define MAX_STRING 255
+#define CHECKPOINT_NONE 0
+#define CHECKPOINT_HOME 12
+#define TEAM_CYAN 1
+#define TEAM_BLUE 2
+#define TEAM_GREEN 3
+#define TEAM_ORANGE 4
+#define TEAM_COR 5
+#define TEAM_BAR 6
+#define TEAM_TAT 7
+#define TEAM_CUN 8
+#define TEAM_STR 9
+#define TEAM_HIT 10
+#define TEAM_ADMIN 11
+#define OBJECTIVE_COLOR 0x64000064
+#define TEAM_GREEN_COLOR 0xFFFFFFAA
+#define TEAM_JOB_COLOR 0xFFB6C1AA
+#define TEAM_HIT_COLOR 0xFFFFFF00
+#define TEAM_BLUE_COLOR 0x8D8DFF00
+#define COLOR_ADD 0x63FF60AA
+#define TEAM_GROVE_COLOR 0x00D900C8
+#define TEAM_VAGOS_COLOR 0xFFC801C8
+#define TEAM_BALLAS_COLOR 0xD900D3C8
+#define TEAM_AZTECAS_COLOR 0x01FCFFC8
+#define TEAM_CYAN_COLOR 0xFF8282AA
+#define TEAM_ORANGE_COLOR 0xFF830000
+#define TEAM_COR_COLOR 0x39393900
+#define TEAM_BAR_COLOR 0x00D90000
+#define TEAM_TAT_COLOR 0xBDCB9200
+#define TEAM_CUN_COLOR 0xD900D300
+#define TEAM_STR_COLOR 0x01FCFF00
+#define TEAM_ADMIN_COLOR 0x00808000
+#define COLOR_INVIS 0xAFAFAF00
+#define COLOR_SPEC 0xBFC0C200
+#define GasMax 100
+#define RunOutTime 15000
+#define RefuelWait 5000
+#define CAR_AMOUNT 700 //Change to Your Vehicle Amount
