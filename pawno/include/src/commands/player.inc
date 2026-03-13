@@ -40,7 +40,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 			moneys = strval(tmp);
 			if(moneys > 1000 && PlayerInfo[playerid][pLevel] < 3)
 			{
-				SendClientMessage(playerid, COLOR_GRAD1, "You must be level 3 to pay over 1000");
+				SendClientMessage(playerid, COLOR_GRAD1, "Musisz miec level 3, aby dac 1000");
 				return 1;
 			}
 			if(moneys < 1 || moneys > 99999)
@@ -54,7 +54,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 			    {
 			        if(PlayerInfo[giveplayerid][pLocal] == 106)
 					{
-						SendClientMessage(playerid, COLOR_GRAD1, "Command not allowed in this location");
+						SendClientMessage(playerid, COLOR_GRAD1, "Ta komenda nie jest dostepna w tym miejscu");
 						return 1;
 					}
 					if (ProxDetectorS(5.0, playerid, giveplayerid))
@@ -95,7 +95,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 			}
 			else
 			{
-				format(string, sizeof(string), "   %d is not an active player.", giveplayerid);
+				format(string, sizeof(string), "   %d nie jest w grze.", giveplayerid);
 				SendClientMessage(playerid, COLOR_GRAD1, string);
 			}
 		}
@@ -114,7 +114,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 			}
 			if(PlayerInfo[playerid][pLocal] == 106)
 			{
-				SendClientMessage(playerid, COLOR_GRAD1, "Command not allowed in this location");
+				SendClientMessage(playerid, COLOR_GRAD1, "Ta komenda nie jest dostepna w tym miejscu");
 				return 1;
 			}
 			moneys = strval(tmp);
@@ -352,7 +352,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 			}
 			else
 			{
-				SendClientMessage(playerid, COLOR_GRAD1, "   You do not have a PhoneBook !");
+				SendClientMessage(playerid, COLOR_GRAD1, "   Nie posiadasz ksiazki telefonicznej !");
 			}
 		}
 		return 1;
@@ -1061,7 +1061,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 	        new tmppass[64];
 			if(gPlayerLogged[playerid] == 1)
 			{
-				SendClientMessage(playerid, COLOR_WHITE, "SERVER: You are already logged in.");
+				SendClientMessage(playerid, COLOR_WHITE, "SERVER: Jestes zalogowany.");
 				return 1;
 			}
 			tmp = strtok(cmdtext, idx);
@@ -1082,7 +1082,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 	    {
 	        if(gPlayerLogged[playerid] == 1)
 			{
-				SendClientMessage(playerid, COLOR_WHITE, "SERVER: You are already logged in.");
+				SendClientMessage(playerid, COLOR_WHITE, "SERVER: Jestes zalogowany.");
 				return 1;
 			}
 			GetPlayerName(playerid, sendername, sizeof(sendername));
@@ -1159,12 +1159,12 @@ public OnPlayerCommandText(playerid, cmdtext[])
 			if (PlayerInfo[playerid][pAdmin] >= 3 && (!noooc))
 			{
 				noooc = 1;
-				BroadCast(COLOR_GRAD2, "   OOC chat channel disabled by an Admin !");
+				BroadCast(COLOR_GRAD2, "   Chat OOC zostal wylaczony przez administracje !");
 			}
 			else if (PlayerInfo[playerid][pAdmin] >= 3 && (noooc))
 			{
 				noooc = 0;
-				BroadCast(COLOR_GRAD2, "   OOC chat channel enabled by an Admin !");
+				BroadCast(COLOR_GRAD2, "   Chat OOC zostal wlaczony przez administracje !");
 			}
 			else
 			{
@@ -1396,12 +1396,12 @@ public OnPlayerCommandText(playerid, cmdtext[])
 				if (!PhoneOnline[playerid])
 				{
 					PhoneOnline[playerid] = 1;
-					SendClientMessage(playerid, COLOR_GRAD2, "   Your Phone is Offline !");
+					SendClientMessage(playerid, COLOR_GRAD2, "   Wyłaczono telefon !");
 				}
 				else if (PhoneOnline[playerid])
 				{
 					PhoneOnline[playerid] = 0;
-					SendClientMessage(playerid, COLOR_GRAD2, "   Your Phone is Online !");
+					SendClientMessage(playerid, COLOR_GRAD2, "   Włączono telefon !");
 				}
 			}
 			else

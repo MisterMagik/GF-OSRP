@@ -46,7 +46,7 @@ sampCallback OnGameModeInit()
 	PlayerHaul[79][pCapasity] = 100;
 	PlayerHaul[80][pCapasity] = 50;
 	PlayerHaul[81][pCapasity] = 50;
-	SetGameModeText("The Godfather: LS/SF");
+	SetGameModeText("Old School RolePlay");
 	format(objstore, sizeof(objstore), "MOLE: I got nothing, check back with me later.");
 	format(cbjstore, sizeof(cbjstore), "HQ: There is nothing in your Vicinity, Out.");
 	format(motd, sizeof(motd), "Welcome to the Role Play - The Godfather Server.");
