@@ -26,7 +26,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 			tmp = strtok(cmdtext, idx);
 			if(!strlen(tmp))
 			{
-				SendClientMessage(playerid, COLOR_GRAD1, "USAGE: /pay [playerid/PartOfName] [amount]");
+				SendClientMessage(playerid, COLOR_GRAD1, "Uzycie: /pay [playerid/PartOfName] [ilosc]");
 				return 1;
 			}
 			//giveplayerid = strval(tmp);
@@ -34,7 +34,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 			tmp = strtok(cmdtext, idx);
 			if(!strlen(tmp))
 			{
-				SendClientMessage(playerid, COLOR_GRAD1, "USAGE: /pay [playerid/PartOfName] [amount]");
+				SendClientMessage(playerid, COLOR_GRAD1, "Uzycie: /pay [playerid/PartOfName] [ilosc]");
 				return 1;
 			}
 			moneys = strval(tmp);
@@ -109,7 +109,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 			tmp = strtok(cmdtext, idx);
 			if(!strlen(tmp))
 			{
-				SendClientMessage(playerid, COLOR_GRAD1, "USAGE: /charity [amount]");
+				SendClientMessage(playerid, COLOR_GRAD1, "Uzycie: /charity [ilosc]");
 				return 1;
 			}
 			if(PlayerInfo[playerid][pLocal] == 106)
@@ -149,7 +149,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 			}
 			else
 			{
-				SendClientMessage(playerid, COLOR_GRAD1, "   You are not Logged in !");
+				SendClientMessage(playerid, COLOR_GRAD1, "   Nie jesteś zalogowany !");
 			}
 		}
 		return 1;
@@ -168,7 +168,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 			}
 			else
 			{
-				SendClientMessage(playerid, COLOR_GRAD1, "   You are not an Admin !");
+				SendClientMessage(playerid, COLOR_GRAD1, "   Nie jestes administratorem !");
 			}
 		}
 		return 1;
@@ -186,7 +186,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 			}
 			else
 			{
-				SendClientMessage(playerid, COLOR_GRAD1, "   You are not an Admin !");
+				SendClientMessage(playerid, COLOR_GRAD1, "   Nie jestes administratorem !");
 			}
 		}
 		return 1;
@@ -247,7 +247,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 			}
 			else
 			{
-				SendClientMessage(playerid, COLOR_GRAD1, "   You are not an Admin !");
+				SendClientMessage(playerid, COLOR_GRAD1, "   Nie jestes administratorem !");
 			}
 		}
 		return 1;
@@ -265,7 +265,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 			}
 			else
 			{
-				SendClientMessage(playerid, COLOR_GRAD1, "   You are not an Admin !");
+				SendClientMessage(playerid, COLOR_GRAD1, "   Nie jestes administratorem !");
 			}
 		}
 		return 1;
@@ -283,7 +283,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 			}
 			else
 			{
-				SendClientMessage(playerid, COLOR_GRAD1, "   You are not an Admin !");
+				SendClientMessage(playerid, COLOR_GRAD1, "   Nie jestes administratorem !");
 			}
 		}
 		return 1;
@@ -298,7 +298,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 				tmp = strtok(cmdtext, idx);
 				if(!strlen(tmp))
 				{
-					SendClientMessage(playerid, COLOR_GRAD1, "USAGE: /check [playerid/PartOfName]");
+					SendClientMessage(playerid, COLOR_GRAD1, "Uzycie: /check [playerid/PartOfName]");
 					return 1;
 				}
 				//giveplayerid = strval(tmp);
@@ -312,12 +312,12 @@ public OnPlayerCommandText(playerid, cmdtext[])
 				}
 				else
 				{
-					SendClientMessage(playerid, COLOR_GRAD1, "   No Such Player");
+					SendClientMessage(playerid, COLOR_GRAD1, "   Nie ma takiego gracza online");
 				}
 			}
 			else
 			{
-				SendClientMessage(playerid, COLOR_GRAD1, "   You are not an admin");
+				SendClientMessage(playerid, COLOR_GRAD1, "   Nie jestes administratorem");
 			}
 		}
 		return 1;
@@ -331,7 +331,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 				tmp = strtok(cmdtext, idx);
 				if(!strlen(tmp))
 				{
-					SendClientMessage(playerid, COLOR_GRAD1, "USAGE: /number [playerid/PartOfName]");
+					SendClientMessage(playerid, COLOR_GRAD1, "Uzycie: /number [playerid/PartOfName]");
 					return 1;
 				}
 				//giveplayerid = strval(tmp);
@@ -499,7 +499,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 				tmp = strtok(cmdtext, idx);
 				if(!strlen(tmp))
 				{
-					format(string, sizeof(string), "USAGE: /carupgrade [carname]");
+					format(string, sizeof(string), "Uzycie: /carupgrade [carname]");
 					SendClientMessage(playerid, COLOR_GREEN,"_______________________________________");
 					SendClientMessage(playerid, COLOR_WHITE,"*** CAR UPGRADES Cost $100000 ***");
 					SendClientMessage(playerid, COLOR_GRAD2,string);
@@ -752,7 +752,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 				tmp = strtok(cmdtext, idx);
 				if(!strlen(tmp))
 				{
-					format(string, sizeof(string), "USAGE: /buygun [gunname] [ammoamount]");
+					format(string, sizeof(string), "Uzycie: /buygun [gunname] [ammoamount]");
 					SendClientMessage(playerid, COLOR_GREEN,"_______________________________________");
 					SendClientMessage(playerid, COLOR_WHITE,"*** Guns & Ammo ***");
 					SendClientMessage(playerid, COLOR_GRAD2,string);
@@ -778,7 +778,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 				tmp = strtok(cmdtext, idx);
 				if(!strlen(tmp))
 				{
-					format(string, sizeof(string), "USAGE: /buygun [gunname] [ammoamount]");
+					format(string, sizeof(string), "Uzycie: /buygun [gunname] [ammoamount]");
 					return 1;
 				}
 				new ammo = strval(tmp);
@@ -927,7 +927,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 			tmp = strtok(cmdtext, idx);
 			if(!strlen(tmp))
 			{
-				format(string, sizeof(string), "USAGE: /upgrade [upgradename] (You have %d Upgrade points)",PlayerInfo[playerid][gPupgrade]);
+				format(string, sizeof(string), "Uzycie: /upgrade [upgradename] (You have %d Upgrade points)",PlayerInfo[playerid][gPupgrade]);
 				SendClientMessage(playerid, COLOR_GREEN,"_______________________________________");
 				SendClientMessage(playerid, COLOR_WHITE,"*** UPGRADES ***");
 				SendClientMessage(playerid, COLOR_GRAD2,string);
@@ -1067,7 +1067,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 			tmp = strtok(cmdtext, idx);
 			if(!strlen(tmp))
 			{
-				SendClientMessage(playerid, COLOR_GRAD1, "USAGE: /login [password]");
+				SendClientMessage(playerid, COLOR_GRAD1, "Uzycie: /login [password]");
 				return 1;
 			}
 			strmid(tmppass, tmp, 0, strlen(cmdtext), 255);
@@ -1098,7 +1098,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 			tmp = strtok(cmdtext, idx);
 			if(!strlen(tmp))
 			{
-				SendClientMessage(playerid, COLOR_GRAD1, "USAGE: /register [password]");
+				SendClientMessage(playerid, COLOR_GRAD1, "Uzycie: /register [password]");
 				return 1;
 			}
 			strmid(tmppass, tmp, 0, strlen(cmdtext), 255);
@@ -1143,7 +1143,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 			result[idx - offset] = EOS;
 			if(!strlen(result))
 			{
-				SendClientMessage(playerid, COLOR_GRAD2, "USAGE: (/o)oc [ooc chat]");
+				SendClientMessage(playerid, COLOR_GRAD2, "Uzycie: (/o)oc [ooc chat]");
 				return 1;
 			}
 			format(string, sizeof(string), "(( %s: %s ))", sendername, result);
@@ -1241,7 +1241,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 			result[idx - offset] = EOS;
 			if(!strlen(result))
 			{
-				SendClientMessage(playerid, COLOR_GRAD2, "USAGE: (/ad)vertise [advert text]");
+				SendClientMessage(playerid, COLOR_GRAD2, "Uzycie: (/ad)vertise [advert text]");
 				return 1;
 			}
 			if ((!adds) && (PlayerInfo[playerid][pAdmin] < 1))
@@ -1300,7 +1300,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 			result[idx - offset] = EOS;
 			if(!strlen(result))
 			{
-				SendClientMessage(playerid, COLOR_GRAD2, "USAGE: (/gov)ernment [text]");
+				SendClientMessage(playerid, COLOR_GRAD2, "Uzycie: (/gov)ernment [text]");
 				return 1;
 			}
 			SendClientMessageToAll(COLOR_WHITE, "|___________ Government News Announcement ___________|");
@@ -1438,7 +1438,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 			result[idx - offset] = EOS;
 			if(!strlen(result))
 			{
-				SendClientMessage(playerid, COLOR_GRAD2, "USAGE: /me [action]");
+				SendClientMessage(playerid, COLOR_GRAD2, "Uzycie: /me [action]");
 				return 1;
 			}
 			format(string, sizeof(string), "* %s %s", sendername, result);
@@ -1473,7 +1473,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 			result[idx - offset] = EOS;
 			if(!strlen(result))
 			{
-				SendClientMessage(playerid, COLOR_GRAD2, "USAGE: (/l)ocal [local chat]");
+				SendClientMessage(playerid, COLOR_GRAD2, "Uzycie: (/l)ocal [local chat]");
 				return 1;
 			}
 			format(string, sizeof(string), "%s Says: %s", sendername, result);
@@ -1507,7 +1507,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 			result[idx - offset] = EOS;
 			if(!strlen(result))
 			{
-				SendClientMessage(playerid, COLOR_GRAD2, "USAGE: /b [local ooc chat]");
+				SendClientMessage(playerid, COLOR_GRAD2, "Uzycie: /b [local ooc chat]");
 				return 1;
 			}
 			format(string, sizeof(string), "%s Says: (( %s ))", sendername, result);
@@ -1541,7 +1541,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 			result[idx - offset] = EOS;
 			if(!strlen(result))
 			{
-				SendClientMessage(playerid, COLOR_GRAD2, "USAGE: /(c)lose [close chat text]");
+				SendClientMessage(playerid, COLOR_GRAD2, "Uzycie: /(c)lose [close chat text]");
 				return 1;
 			}
 			format(string, sizeof(string), "%s Says: %s", sendername, result);
@@ -1576,7 +1576,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 			result[idx - offset] = EOS;
 			if(!strlen(result))
 			{
-				SendClientMessage(playerid, COLOR_GRAD2, "USAGE: (/s)hout [local chat]");
+				SendClientMessage(playerid, COLOR_GRAD2, "Uzycie: (/s)hout [local chat]");
 				return 1;
 			}
 			format(string, sizeof(string), "%s Shouts: %s!!", sendername, result);
@@ -1607,7 +1607,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 			result[idx - offset] = EOS;
 			if(!strlen(result))
 			{
-				SendClientMessage(playerid, COLOR_GRAD2, "USAGE: (/m)egaphone [megaphone chat]");
+				SendClientMessage(playerid, COLOR_GRAD2, "Uzycie: (/m)egaphone [megaphone chat]");
 				return 1;
 			}
 			if(gTeam[playerid] == 2 || IsACop(playerid))
@@ -1663,7 +1663,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 			result[idx - offset] = EOS;
 			if(!strlen(result))
 			{
-				SendClientMessage(playerid, COLOR_GRAD2, "USAGE: (/r)adio [radio chat]");
+				SendClientMessage(playerid, COLOR_GRAD2, "Uzycie: (/r)adio [radio chat]");
 				return 1;
 			}
 			if(PlayerInfo[playerid][pMember] == 1 || PlayerInfo[playerid][pLeader] == 1)
@@ -1820,7 +1820,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 			result[idx - offset] = EOS;
 			if(!strlen(result))
 			{
-				SendClientMessage(playerid, COLOR_GRAD2, "USAGE: (/d)epartments [department chat]");
+				SendClientMessage(playerid, COLOR_GRAD2, "Uzycie: (/d)epartments [department chat]");
 				return 1;
 			}
 			if(PlayerInfo[playerid][pMember] == 1 || PlayerInfo[playerid][pLeader] == 1)
@@ -1904,7 +1904,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 			tmp = strtok(cmdtext, idx);
 			if(!strlen(tmp))
 			{
-				SendClientMessage(playerid, COLOR_GRAD2, "USAGE: /mdc [playerid/PartOfName]");
+				SendClientMessage(playerid, COLOR_GRAD2, "Uzycie: /mdc [playerid/PartOfName]");
 				return 1;
 			}
 			//giveplayerid = strval(tmp);
@@ -1957,7 +1957,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 			tmp = strtok(cmdtext, idx);
 			if(!strlen(tmp))
 			{
-				SendClientMessage(playerid, COLOR_GRAD2, "USAGE: (/su)spect [playerid/PartOfName] [crime discription]");
+				SendClientMessage(playerid, COLOR_GRAD2, "Uzycie: (/su)spect [playerid/PartOfName] [crime discription]");
 				return 1;
 			}
 			giveplayerid = ReturnUser(tmp);
@@ -1986,7 +1986,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 							result[idx - offset] = EOS;
 							if(!strlen(result))
 							{
-								SendClientMessage(playerid, COLOR_GRAD2, "USAGE: (/su)spect [playerid/PartOfName] [crime text]");
+								SendClientMessage(playerid, COLOR_GRAD2, "Uzycie: (/su)spect [playerid/PartOfName] [crime text]");
 								return 1;
 							}
 							if(WantedPoints[giveplayerid] == 0) { WantedPoints[giveplayerid] = 3; }
@@ -2219,7 +2219,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 			tmp = strtok(cmdtext, idx);
 			if(!strlen(tmp))
 			{
-				SendClientMessage(playerid, COLOR_GRAD2, "USAGE: (/w)isper [playerid/PartOfName] [whisper text]");
+				SendClientMessage(playerid, COLOR_GRAD2, "Uzycie: (/w)isper [playerid/PartOfName] [whisper text]");
 				return 1;
 			}
 			giveplayerid = ReturnUser(tmp);
@@ -2254,7 +2254,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 					result[idx - offset] = EOS;
 					if(!strlen(result))
 					{
-						SendClientMessage(playerid, COLOR_GRAD2, "USAGE: (/w)isper [playerid/PartOfName] [whisper text]");
+						SendClientMessage(playerid, COLOR_GRAD2, "Uzycie: (/w)isper [playerid/PartOfName] [whisper text]");
 						return 1;
 					}
 					format(string, sizeof(string), "%s(ID: %d) whispers: %s", sendername, playerid, (result));
@@ -2287,7 +2287,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 			tmp = strtok(cmdtext, idx);
 			if(!strlen(tmp))
 			{
-				SendClientMessage(playerid, COLOR_GRAD2, "USAGE: /withdraw [amount]");
+				SendClientMessage(playerid, COLOR_GRAD2, "Uzycie: /withdraw [amount]");
 				format(string, sizeof(string), "  You Have $%d in your account.", PlayerInfo[playerid][pAccount]);
 				SendClientMessage(playerid, COLOR_GRAD3, string);
 				return 1;
@@ -2295,7 +2295,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 			new cashdeposit = strval(tmp);
 			if(!strlen(tmp))
 			{
-				SendClientMessage(playerid, COLOR_GRAD2, "USAGE: /withdraw [amount]");
+				SendClientMessage(playerid, COLOR_GRAD2, "Uzycie: /withdraw [amount]");
 				format(string, sizeof(string), "  You Have $%d in your account.", PlayerInfo[playerid][pAccount]);
 				SendClientMessage(playerid, COLOR_GRAD3, string);
 				return 1;
@@ -2326,7 +2326,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 			tmp = strtok(cmdtext, idx);
 			if(!strlen(tmp))
 			{
-				SendClientMessage(playerid, COLOR_GRAD2, "USAGE: /bank [amount]");
+				SendClientMessage(playerid, COLOR_GRAD2, "Uzycie: /bank [amount]");
 				format(string, sizeof(string), "  You Have $%d in your account.", PlayerInfo[playerid][pAccount]);
 				SendClientMessage(playerid, COLOR_GRAD3, string);
 				return 1;
@@ -2334,7 +2334,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 			new cashdeposit = strval(tmp);
 			if(!strlen(tmp))
 			{
-				SendClientMessage(playerid, COLOR_GRAD2, "USAGE: /bank [amount]");
+				SendClientMessage(playerid, COLOR_GRAD2, "Uzycie: /bank [amount]");
 				format(string, sizeof(string), "  You Have $%d in your account.", PlayerInfo[playerid][pAccount]);
 				SendClientMessage(playerid, COLOR_GRAD3, string);
 				return 1;
@@ -2409,14 +2409,14 @@ public OnPlayerCommandText(playerid, cmdtext[])
 			tmp = strtok(cmdtext, idx);
 			if(!strlen(tmp))
 			{
-				SendClientMessage(playerid, COLOR_GRAD1, "USAGE: /transfer [playerid/PartOfName] [amount]");
+				SendClientMessage(playerid, COLOR_GRAD1, "Uzycie: /transfer [playerid/PartOfName] [amount]");
 				return 1;
 			}
 			giveplayerid = ReturnUser(tmp);
 			tmp = strtok(cmdtext, idx);
 			if(!strlen(tmp))
 			{
-				SendClientMessage(playerid, COLOR_GRAD1, "USAGE: /transfer [playerid/PartOfName] [amount]");
+				SendClientMessage(playerid, COLOR_GRAD1, "Uzycie: /transfer [playerid/PartOfName] [amount]");
 				return 1;
 			}
 			moneys = strval(tmp);
@@ -2471,7 +2471,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 			tmp = strtok(cmdtext, idx);
 			if(!strlen(tmp))
 			{
-				SendClientMessage(playerid, COLOR_WHITE, "USAGE: /buy [item number]");
+				SendClientMessage(playerid, COLOR_WHITE, "Uzycie: /buy [item number]");
 				SendClientMessage(playerid, COLOR_GREEN, "|_______ 24-7 _______|");
 				SendClientMessage(playerid, COLOR_GRAD1, "| 1: Cell Phone $500			2: Scratch Card $7500");
 				SendClientMessage(playerid, COLOR_GRAD2, "| 3: Phone Book $5000			4: Dice $500");
@@ -3105,7 +3105,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 				tmp = strtok(cmdtext, idx);
 				if(!strlen(tmp))
 				{
-					SendClientMessage(playerid, COLOR_GRAD1, "USAGE: /hirecar [key id]");
+					SendClientMessage(playerid, COLOR_GRAD1, "Uzycie: /hirecar [key id]");
 					return 1;
 				}
 				new car = strval(tmp);
@@ -3151,7 +3151,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 			new car;
 			if(!strlen(tmp))
 			{
-				SendClientMessage(playerid, COLOR_GRAD1, "USAGE: /givekey [playerid/PartOfName]");
+				SendClientMessage(playerid, COLOR_GRAD1, "Uzycie: /givekey [playerid/PartOfName]");
 				return 1;
 			}
 			giveplayerid = ReturnUser(tmp);
@@ -3241,7 +3241,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 				tmp = strtok(cmdtext, idx);
 				if(!strlen(tmp))
 				{
-					SendClientMessage(playerid, COLOR_GRAD2, "USAGE: /housewithdraw [amount]");
+					SendClientMessage(playerid, COLOR_GRAD2, "Uzycie: /housewithdraw [amount]");
 					format(string, sizeof(string), "  You Have $%d in your cashbox.", HouseInfo[bouse][hTakings]);
 					SendClientMessage(playerid, COLOR_GRAD3, string);
 					return 1;
@@ -3249,7 +3249,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 				new cashdeposit = strval(tmp);
 				if(!strlen(tmp))
 				{
-					SendClientMessage(playerid, COLOR_GRAD2, "USAGE: /housewithdraw [amount]");
+					SendClientMessage(playerid, COLOR_GRAD2, "Uzycie: /housewithdraw [amount]");
 					format(string, sizeof(string), "  You Have $%d in your cashbox.", HouseInfo[bouse][hTakings]);
 					SendClientMessage(playerid, COLOR_GRAD3, string);
 					return 1;
@@ -3291,7 +3291,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 			tmp = strtok(cmdtext, idx);
 			if(!strlen(tmp))
 			{
-				SendClientMessage(playerid, COLOR_GRAD1, "USAGE: /asellbiz [bizid]");
+				SendClientMessage(playerid, COLOR_GRAD1, "Uzycie: /asellbiz [bizid]");
 				return 1;
 			}
 			new biz = strval(tmp);
@@ -3322,7 +3322,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 			tmp = strtok(cmdtext, idx);
 			if(!strlen(tmp))
 			{
-				SendClientMessage(playerid, COLOR_GRAD1, "USAGE: /asellsbiz [sbizid]");
+				SendClientMessage(playerid, COLOR_GRAD1, "Uzycie: /asellsbiz [sbizid]");
 				return 1;
 			}
 			new sbiz = strval(tmp);
@@ -3353,7 +3353,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 			tmp = strtok(cmdtext, idx);
 			if(!strlen(tmp))
 			{
-				SendClientMessage(playerid, COLOR_GRAD1, "USAGE: /asellhouse [houseid]");
+				SendClientMessage(playerid, COLOR_GRAD1, "Uzycie: /asellhouse [houseid]");
 				return 1;
 			}
 			new house = strval(tmp);
@@ -3454,7 +3454,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 				tmp = strtok(cmdtext, idx);
 				if(!strlen(tmp))
 				{
-					SendClientMessage(playerid, COLOR_WHITE, "USAGE: /houseupgrade [item number]");
+					SendClientMessage(playerid, COLOR_WHITE, "Uzycie: /houseupgrade [item number]");
 					SendClientMessage(playerid, COLOR_GRAD1, "|_______ Home Supplys _______|");
 					SendClientMessage(playerid, COLOR_GRAD2, "| 1: Health Upgrade $50000");
 					SendClientMessage(playerid, COLOR_GRAD3, "| 2: Armour Upgrade $100000");
@@ -3568,7 +3568,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 				tmp = strtok(cmdtext, idx);
 				if(!strlen(tmp))
 				{
-					SendClientMessage(playerid, COLOR_WHITE, "USAGE: /setrent [RentFee]");
+					SendClientMessage(playerid, COLOR_WHITE, "Uzycie: /setrent [RentFee]");
 					return 1;
 				}
 				if(strval(tmp) < 1 || strval(tmp) > 99999)
@@ -3633,7 +3633,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 				tmp = strtok(cmdtext, idx);
 				if(!strlen(tmp))
 				{
-					SendClientMessage(playerid, COLOR_WHITE, "USAGE: /evict [playerid/PartOfName]");
+					SendClientMessage(playerid, COLOR_WHITE, "Uzycie: /evict [playerid/PartOfName]");
 				}
 				new target;
 				//target = strval(tmp);
@@ -3681,7 +3681,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 				tmp = strtok(cmdtext, idx);
 				if(!strlen(tmp))
 				{
-					SendClientMessage(playerid, COLOR_WHITE, "USAGE: /setrentable [0/1]");
+					SendClientMessage(playerid, COLOR_WHITE, "Uzycie: /setrentable [0/1]");
 				}
 				HouseInfo[bouse][hRentabil] = strval(tmp);
 				OnPropUpdate();
@@ -3704,7 +3704,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 			tmp = strtok(cmdtext, idx);
 			if(!strlen(tmp))
 			{
-				SendClientMessage(playerid, COLOR_GRAD2, "USAGE: /call [phonenumber]");
+				SendClientMessage(playerid, COLOR_GRAD2, "Uzycie: /call [phonenumber]");
 				return 1;
 			}
 			if(PlayerInfo[playerid][pPnumber] == 0)
@@ -3783,7 +3783,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 			tmp = strtok(cmdtext, idx);
 			if(!strlen(tmp))
 			{
-				SendClientMessage(playerid, COLOR_GRAD2, "USAGE: (/t)ext [phonenumber] [text chat]");
+				SendClientMessage(playerid, COLOR_GRAD2, "Uzycie: (/t)ext [phonenumber] [text chat]");
 				return 1;
 			}
 			if(PlayerInfo[playerid][pPnumber] == 0)
@@ -3810,7 +3810,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 			result[idx - offset] = EOS;
 			if(!strlen(result))
 			{
-				SendClientMessage(playerid, COLOR_GRAD2, "USAGE: (/t)ext [phonenumber] [text chat]");
+				SendClientMessage(playerid, COLOR_GRAD2, "Uzycie: (/t)ext [phonenumber] [text chat]");
 				return 1;
 			}
 			if(phonenumb == 555)
@@ -4002,7 +4002,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 				tmp = strtok(cmdtext, idx);
 				if(!strlen(tmp))
 				{
-					SendClientMessage(playerid, COLOR_GRAD2, "USAGE: /house [housenumber]");
+					SendClientMessage(playerid, COLOR_GRAD2, "Uzycie: /house [housenumber]");
 					return 1;
 				}
 				new housenum = strval(tmp);
@@ -4024,7 +4024,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 				tmp = strtok(cmdtext, idx);
 				if(!strlen(tmp))
 				{
-					SendClientMessage(playerid, COLOR_GRAD2, "USAGE: /houseo [housenumber]");
+					SendClientMessage(playerid, COLOR_GRAD2, "Uzycie: /houseo [housenumber]");
 					return 1;
 				}
 				new housenum = strval(tmp);
@@ -4043,7 +4043,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 				tmp = strtok(cmdtext, idx);
 				if(!strlen(tmp))
 				{
-					SendClientMessage(playerid, COLOR_GRAD2, "USAGE: /biz [biznumber]");
+					SendClientMessage(playerid, COLOR_GRAD2, "Uzycie: /biz [biznumber]");
 					return 1;
 				}
 				new housenum = strval(tmp);
@@ -4065,7 +4065,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 				tmp = strtok(cmdtext, idx);
 				if(!strlen(tmp))
 				{
-					SendClientMessage(playerid, COLOR_GRAD2, "USAGE: /sbiz [biznumber]");
+					SendClientMessage(playerid, COLOR_GRAD2, "Uzycie: /sbiz [biznumber]");
 					return 1;
 				}
 				new housenum = strval(tmp);
@@ -4114,7 +4114,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 			tmp = strtok(cmdtext, idx);
 			if(!strlen(tmp))
 			{
-				SendClientMessage(playerid, COLOR_GRAD2, "USAGE: /edithousecar [vecid]");
+				SendClientMessage(playerid, COLOR_GRAD2, "Uzycie: /edithousecar [vecid]");
 				return 1;
 			}
 			new proplev = strval(tmp);
@@ -4144,7 +4144,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 			x_job = strtok(cmdtext, idx);
 			if(!strlen(x_job)) {
 				SendClientMessage(playerid, COLOR_WHITE, "|__________________ Edit __________________|");
-				SendClientMessage(playerid, COLOR_WHITE, "USAGE: /edit [name] [ammount] (Used for Houses and Businesses)");
+				SendClientMessage(playerid, COLOR_WHITE, "Uzycie: /edit [name] [ammount] (Used for Houses and Businesses)");
 				SendClientMessage(playerid, COLOR_GREY, "Available names: Level, Price, Funds, Products");
 				SendClientMessage(playerid, COLOR_WHITE, "|____________________________________________|");
 				return 1;
@@ -4152,7 +4152,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 			tmp = strtok(cmdtext, idx);
 			if(!strlen(tmp))
 			{
-				SendClientMessage(playerid, COLOR_GRAD2, "USAGE: /edit [name] [ammount]");
+				SendClientMessage(playerid, COLOR_GRAD2, "Uzycie: /edit [name] [ammount]");
 				return 1;
 			}
 			new proplev = strval(tmp);
@@ -4267,7 +4267,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 					    tmp = strtok(cmdtext, idx);
 						if(!strlen(tmp))
 						{
-							SendClientMessage(playerid, COLOR_GRAD1, "USAGE: /buyprods [amount]");
+							SendClientMessage(playerid, COLOR_GRAD1, "Uzycie: /buyprods [amount]");
 							return 1;
 						}
 						amount = strval(tmp);
@@ -4935,7 +4935,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 		tmp = strtok(cmdtext, idx);
 		if(!strlen(tmp))
 		{
-			SendClientMessage(playerid, COLOR_WHITE, "USAGE: /prodprice [amount to pay per Product]");
+			SendClientMessage(playerid, COLOR_WHITE, "Uzycie: /prodprice [amount to pay per Product]");
 		}
 		if(strval(tmp) < 1 || strval(tmp) > 99999)
 		{
@@ -4979,7 +4979,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 			tmp = strtok(cmdtext, idx);
 			if(!strlen(tmp))
 			{
-				SendClientMessage(playerid, COLOR_WHITE, "USAGE: /bizfee [EntranceFee]");
+				SendClientMessage(playerid, COLOR_WHITE, "Uzycie: /bizfee [EntranceFee]");
 			}
 			if(strval(tmp) < 0 || strval(tmp) > 99999)
 			{
@@ -5014,7 +5014,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 			tmp = strtok(cmdtext, idx);
 			if(!strlen(tmp))
 			{
-			    SendClientMessage(playerid, COLOR_WHITE, "USAGE: /extortion [playerid/PartOfName] (or 555 for No-one)");
+			    SendClientMessage(playerid, COLOR_WHITE, "Uzycie: /extortion [playerid/PartOfName] (or 555 for No-one)");
 			    return 1;
 			}
 			giveplayerid = ReturnUser(tmp);
@@ -5094,7 +5094,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 			result[idx - offset] = EOS;
 			if(!strlen(result))
 			{
-				SendClientMessage(playerid, COLOR_WHITE, "USAGE: /bizname [Name]");
+				SendClientMessage(playerid, COLOR_WHITE, "Uzycie: /bizname [Name]");
 			}
 			if (bouse >= 100)
 			{
@@ -5134,13 +5134,13 @@ public OnPlayerCommandText(playerid, cmdtext[])
 					format(string, sizeof(string), "  You Have $%d in your till.", BizzInfo[bouse][bTill]);
 					SendClientMessage(playerid, COLOR_GRAD3, string);
 				}
-				SendClientMessage(playerid, COLOR_GRAD2, "USAGE: /bizwithdraw [amount]");
+				SendClientMessage(playerid, COLOR_GRAD2, "Uzycie: /bizwithdraw [amount]");
 				return 1;
 			}
 			new cashdeposit = strval(tmp);
 			if(!strlen(tmp))
 			{
-				SendClientMessage(playerid, COLOR_GRAD2, "USAGE: /bizwithdraw [amount]");
+				SendClientMessage(playerid, COLOR_GRAD2, "Uzycie: /bizwithdraw [amount]");
 				return 1;
 			}
 			if (bouse >= 100)
@@ -5221,13 +5221,13 @@ public OnPlayerCommandText(playerid, cmdtext[])
 					format(string, sizeof(string), "  You Have $%d in your till.", BizzInfo[bouse][bTill]);
 					SendClientMessage(playerid, COLOR_GRAD3, string);
 				}
-				SendClientMessage(playerid, COLOR_GRAD2, "USAGE: /bizbank [amount]");
+				SendClientMessage(playerid, COLOR_GRAD2, "Uzycie: /bizbank [amount]");
 				return 1;
 			}
 			new cashdeposit = strval(tmp);
 			if(!strlen(tmp))
 			{
-				SendClientMessage(playerid, COLOR_GRAD2, "USAGE: /bizbank [amount]");
+				SendClientMessage(playerid, COLOR_GRAD2, "Uzycie: /bizbank [amount]");
 				SendClientMessage(playerid, COLOR_GRAD3, string);
 				return 1;
 			}
@@ -5363,7 +5363,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 				}
 				else
 				{
-					SendClientMessage(playerid, COLOR_GRAD2, "USAGE: /heal [playerid/PartOfName] [price]");
+					SendClientMessage(playerid, COLOR_GRAD2, "Uzycie: /heal [playerid/PartOfName] [price]");
 					return 1;
 				}
 			}
@@ -5371,7 +5371,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 			tmp = strtok(cmdtext, idx);
 			if(!strlen(tmp))
 			{
-			    SendClientMessage(playerid, COLOR_GRAD2, "USAGE: /heal [playerid/PartOfName] [price]");
+			    SendClientMessage(playerid, COLOR_GRAD2, "Uzycie: /heal [playerid/PartOfName] [price]");
 				return 1;
 			}
 			moneys = strval(tmp);
@@ -5468,7 +5468,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 			result[idx - offset] = EOS;
 			if(!strlen(result))
 			{
-				//SendClientMessage(playerid, COLOR_GRAD2, "USAGE: /mole [mole text]");
+				//SendClientMessage(playerid, COLOR_GRAD2, "Uzycie: /mole [mole text]");
 				return 1;
 			}
 			format(string, sizeof(string), "SMS: %s, Sender: MOLE (555)",result);
@@ -5509,7 +5509,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 			result[idx - offset] = EOS;
 			if(!strlen(result))
 			{
-				//SendClientMessage(playerid, COLOR_GRAD2, "USAGE: /hq [hq text]");
+				//SendClientMessage(playerid, COLOR_GRAD2, "Uzycie: /hq [hq text]");
 				return 1;
 			}
 			format(string, sizeof(string), "HQ: %s, over", result);
@@ -5544,7 +5544,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 			tmp = strtok(cmdtext, idx);
 			if(!strlen(tmp))
 			{
-				SendClientMessage(playerid, COLOR_GRAD2, "USAGE: /id [playerid/PartOfName]");
+				SendClientMessage(playerid, COLOR_GRAD2, "Uzycie: /id [playerid/PartOfName]");
 				return 1;
 			}
 			new target;
@@ -5682,7 +5682,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 			result[idx - offset] = EOS;
 			if(!strlen(result))
 			{
-				SendClientMessage(playerid, COLOR_GRAD2, "USAGE: (/a)dmin [admin chat]");
+				SendClientMessage(playerid, COLOR_GRAD2, "Uzycie: (/a)dmin [admin chat]");
 				return 1;
 			}
 			format(string, sizeof(string), "*%d Admin %s: %s", PlayerInfo[playerid][pAdmin], sendername, result);
@@ -5719,7 +5719,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 			tmp = strtok(cmdtext, idx);
 			if(!strlen(tmp))
 			{
-				SendClientMessage(playerid, COLOR_GRAD2, "USAGE: /logoutpl [playerid/PartOfName]");
+				SendClientMessage(playerid, COLOR_GRAD2, "Uzycie: /logoutpl [playerid/PartOfName]");
 				return 1;
 			}
 			giveplayerid = ReturnUser(tmp);
@@ -5787,7 +5787,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 				result[idx - offset] = EOS;
 				if(!strlen(result))
 				{
-					SendClientMessage(playerid, COLOR_GRAD2, "USAGE: /cnn [cnn textformat ~n~=Newline ~r~=Red ~g~=Green ~b~=Blue ~w~=White ~y~=Yellow]");
+					SendClientMessage(playerid, COLOR_GRAD2, "Uzycie: /cnn [cnn textformat ~n~=Newline ~r~=Red ~g~=Green ~b~=Blue ~w~=White ~y~=Yellow]");
 					return 1;
 				}
 				format(string, sizeof(string), "~b~%s: ~w~%s",sendername,result);
@@ -5818,7 +5818,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 				new txtid;
 				if(!strlen(tmp))
 				{
-					SendClientMessage(playerid, COLOR_GRAD2, "USAGE: /cnnn <type> ");
+					SendClientMessage(playerid, COLOR_GRAD2, "Uzycie: /cnnn <type> ");
 					return 1;
 				}
 				txtid = strval(tmp);
@@ -5842,7 +5842,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 				result[idx - offset] = EOS;
 				if(!strlen(result))
 				{
-					SendClientMessage(playerid, COLOR_GRAD2, "USAGE: /cnnn <type> [cnnc textformat ~n~=Newline ~r~=Red ~g~=Green ~b~=Blue ~w~=White ~y~=Yellow]");
+					SendClientMessage(playerid, COLOR_GRAD2, "Uzycie: /cnnn <type> [cnnc textformat ~n~=Newline ~r~=Red ~g~=Green ~b~=Blue ~w~=White ~y~=Yellow]");
 					return 1;
 				}
 				format(string, sizeof(string), "~w~%s",result);
@@ -5877,7 +5877,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 	        tmp = strtok(cmdtext, idx);
 			if(!strlen(tmp))
 			{
-				SendClientMessage(playerid, COLOR_GRAD2, "USAGE: /prison [playerid/PartOfName]");
+				SendClientMessage(playerid, COLOR_GRAD2, "Uzycie: /prison [playerid/PartOfName]");
 				return 1;
 			}
 			giveplayerid = ReturnUser(tmp);
@@ -5915,7 +5915,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 			tmp = strtok(cmdtext, idx);
 			if(!strlen(tmp))
 			{
-				SendClientMessage(playerid, COLOR_GRAD2, "USAGE: /jail [playerid/PartOfName] [time(minutes)]");
+				SendClientMessage(playerid, COLOR_GRAD2, "Uzycie: /jail [playerid/PartOfName] [time(minutes)]");
 				return 1;
 			}
 			new playa;
@@ -5962,7 +5962,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 			tmp = strtok(cmdtext, idx);
 			if(!strlen(tmp))
 			{
-				SendClientMessage(playerid, COLOR_GRAD2, "USAGE: /tod [timeofday] (0-23)");
+				SendClientMessage(playerid, COLOR_GRAD2, "Uzycie: /tod [timeofday] (0-23)");
 				return 1;
 			}
 			new hour;
@@ -6008,7 +6008,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 			tmp = strtok(cmdtext, idx);
 			if(!strlen(tmp))
 			{
-				SendClientMessage(playerid, COLOR_GRAD1, "USAGE: /setstat [playerid/PartOfName] [statcode] [amount]");
+				SendClientMessage(playerid, COLOR_GRAD1, "Uzycie: /setstat [playerid/PartOfName] [statcode] [amount]");
 				SendClientMessage(playerid, COLOR_GRAD4, "|1 Level |2 SpawnHealth |3 UpgradePoints |4 Model ");
 				SendClientMessage(playerid, COLOR_GRAD3, "|5 BankAccount |6 PhoneNumber |7 RespectPoints ");
 				SendClientMessage(playerid, COLOR_GRAD2, "|8 HouseKey |9 BizKey |10 DonateRank |11 FMember");
@@ -6023,7 +6023,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 					tmp = strtok(cmdtext, idx);
 					if(!strlen(tmp))
 					{
-						SendClientMessage(playerid, COLOR_GRAD1, "USAGE: /setstat [playerid/PartOfName] [statcode] [amount]");
+						SendClientMessage(playerid, COLOR_GRAD1, "Uzycie: /setstat [playerid/PartOfName] [statcode] [amount]");
 						SendClientMessage(playerid, COLOR_GRAD4, "|1 Level |2 SpawnHealth |3 UpgradePoints |4 Model ");
 						SendClientMessage(playerid, COLOR_GRAD3, "|5 BankAccount |6 PhoneNumber |7 RespectPoints ");
 						SendClientMessage(playerid, COLOR_GRAD2, "|8 HouseKey |9 BizKey |10 DonateRank");
@@ -6035,7 +6035,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 					tmp = strtok(cmdtext, idx);
 					if(!strlen(tmp))
 					{
-						SendClientMessage(playerid, COLOR_GRAD1, "USAGE: /setstat [playerid/PartOfName] [statcode] [amount]");
+						SendClientMessage(playerid, COLOR_GRAD1, "Uzycie: /setstat [playerid/PartOfName] [statcode] [amount]");
 						SendClientMessage(playerid, COLOR_GRAD4, "|1 Level |2 SpawnHealth |3 UpgradePoints |4 Model ");
 						SendClientMessage(playerid, COLOR_GRAD3, "|5 BankAccount |6 PhoneNumber |7 RespectPoints ");
 						SendClientMessage(playerid, COLOR_GRAD2, "|8 HouseKey |9 BizKey |10 DonateRank");
@@ -6182,7 +6182,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 			tmp = strtok(cmdtext, idx);
 			if(!strlen(tmp))
 			{
-				SendClientMessage(playerid, COLOR_GRAD1, "USAGE: /setfamily [Family] [code] [amount]");
+				SendClientMessage(playerid, COLOR_GRAD1, "Uzycie: /setfamily [Family] [code] [amount]");
 				SendClientMessage(playerid, COLOR_GRAD4, "|1 Members");
 				return 1;
 			}
@@ -6193,7 +6193,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 			tmp = strtok(cmdtext, idx);
 			if(!strlen(tmp))
 			{
-				SendClientMessage(playerid, COLOR_GRAD1, "USAGE: /setfamily [Family] [code] [amount]");
+				SendClientMessage(playerid, COLOR_GRAD1, "Uzycie: /setfamily [Family] [code] [amount]");
 				SendClientMessage(playerid, COLOR_GRAD4, "|1 Members");
 				return 1;
 			}
@@ -6203,7 +6203,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 			tmp = strtok(cmdtext, idx);
 			if(!strlen(tmp))
 			{
-				SendClientMessage(playerid, COLOR_GRAD1, "USAGE: /setfamily [Family] [code] [amount]");
+				SendClientMessage(playerid, COLOR_GRAD1, "Uzycie: /setfamily [Family] [code] [amount]");
 				SendClientMessage(playerid, COLOR_GRAD4, "|1 Members");
 				return 1;
 			}
@@ -6234,7 +6234,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 			tmp = strtok(cmdtext, idx);
 			if(!strlen(tmp))
 			{
-				SendClientMessage(playerid, COLOR_GRAD2, "USAGE: /setint [interiorid]");
+				SendClientMessage(playerid, COLOR_GRAD2, "Uzycie: /setint [interiorid]");
 				return 1;
 			}
 			new intid;
@@ -6283,7 +6283,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 			tmp = strtok(cmdtext, idx);
 			if(!strlen(tmp))
 			{
-				SendClientMessage(playerid, COLOR_GRAD2, "USAGE: /fourdive [playerid1] [playerid2] [playerid3] [playerid4]");
+				SendClientMessage(playerid, COLOR_GRAD2, "Uzycie: /fourdive [playerid1] [playerid2] [playerid3] [playerid4]");
 				return 1;
 			}
 			new para1;
@@ -6319,7 +6319,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 			tmp = strtok(cmdtext, idx);
 			if(!strlen(tmp))
 			{
-				SendClientMessage(playerid, COLOR_GRAD2, "USAGE: /invite [playerid/PartOfName]");
+				SendClientMessage(playerid, COLOR_GRAD2, "Uzycie: /invite [playerid/PartOfName]");
 				return 1;
 			}
 			new para1;
@@ -6397,7 +6397,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 			tmp = strtok(cmdtext, idx);
 			if(!strlen(tmp))
 			{
-				SendClientMessage(playerid, COLOR_GRAD2, "USAGE: /uninvite [playerid/PartOfName]");
+				SendClientMessage(playerid, COLOR_GRAD2, "Uzycie: /uninvite [playerid/PartOfName]");
 				return 1;
 			}
 			new para1;
@@ -6447,7 +6447,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 			tmp = strtok(cmdtext, idx);
 			if(!strlen(tmp))
 			{
-				SendClientMessage(playerid, COLOR_GRAD2, "USAGE: /makeadmin [playerid/PartOfName] [level(1-3)]");
+				SendClientMessage(playerid, COLOR_GRAD2, "Uzycie: /makeadmin [playerid/PartOfName] [level(1-3)]");
 				return 1;
 			}
 			new para1;
@@ -6487,14 +6487,14 @@ public OnPlayerCommandText(playerid, cmdtext[])
 			tmp = strtok(cmdtext, idx);
 			if(!strlen(tmp))
 			{
-				SendClientMessage(playerid, COLOR_GRAD2, "USAGE: /makeircadmin [playerid/PartOfName] [ChannelNr]");
+				SendClientMessage(playerid, COLOR_GRAD2, "Uzycie: /makeircadmin [playerid/PartOfName] [ChannelNr]");
 				return 1;
 			}
 			giveplayerid = ReturnUser(tmp);
 			tmp = strtok(cmdtext, idx);
 			if(!strlen(tmp))
 			{
-				SendClientMessage(playerid, COLOR_GRAD2, "USAGE: /makeircadmin [playerid/PartOfName] [ChannelNr]");
+				SendClientMessage(playerid, COLOR_GRAD2, "Uzycie: /makeircadmin [playerid/PartOfName] [ChannelNr]");
 				return 1;
 			}
 			new channel = strval(tmp);
@@ -6590,7 +6590,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 			tmp = strtok(cmdtext, idx);
 			if(!strlen(tmp))
 			{
-				SendClientMessage(playerid, COLOR_GRAD2, "USAGE: /makeleader [playerid/PartOfName] [Number(1-10)]");
+				SendClientMessage(playerid, COLOR_GRAD2, "Uzycie: /makeleader [playerid/PartOfName] [Number(1-10)]");
 				return 1;
 			}
 			new para1;
@@ -6649,7 +6649,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 			tmp = strtok(cmdtext, idx);
 			if(!strlen(tmp))
 			{
-				SendClientMessage(playerid, COLOR_GRAD2, "USAGE: /forceskin [playerid/PartOfName]");
+				SendClientMessage(playerid, COLOR_GRAD2, "Uzycie: /forceskin [playerid/PartOfName]");
 				return 1;
 			}
 			new para1;
@@ -6712,7 +6712,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 			tmp = strtok(cmdtext, idx);
 			if(!strlen(tmp))
 			{
-				SendClientMessage(playerid, COLOR_GRAD2, "USAGE: /giverank [playerid/PartOfName] [Number(1-6)]");
+				SendClientMessage(playerid, COLOR_GRAD2, "Uzycie: /giverank [playerid/PartOfName] [Number(1-6)]");
 				return 1;
 			}
 			new para1;
@@ -6752,7 +6752,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 			tmp = strtok(cmdtext, idx);
 			if(!strlen(tmp))
 			{
-				SendClientMessage(playerid, COLOR_GRAD2, "USAGE: /setteam [playerid/PartOfName] [team 1(civ) - 2(cop)]");
+				SendClientMessage(playerid, COLOR_GRAD2, "Uzycie: /setteam [playerid/PartOfName] [team 1(civ) - 2(cop)]");
 				return 1;
 			}
 			new para1;
@@ -6877,7 +6877,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 			tmp = strtok(cmdtext, idx);
 			if(!strlen(tmp))
 			{
-				SendClientMessage(playerid, COLOR_GRAD1, "USAGE: /entercar [carid]");
+				SendClientMessage(playerid, COLOR_GRAD1, "Uzycie: /entercar [carid]");
 				return 1;
 			}
 			new testcar = strval(tmp);
@@ -6900,7 +6900,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 			tmp = strtok(cmdtext, idx);
 			if(!strlen(tmp))
 			{
-				SendClientMessage(playerid, COLOR_GRAD1, "USAGE: /gotocar [carid]");
+				SendClientMessage(playerid, COLOR_GRAD1, "Uzycie: /gotocar [carid]");
 				return 1;
 			}
 			new testcar = strval(tmp);
@@ -7052,7 +7052,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 			tmp = strtok(cmdtext, idx);
 			if(!strlen(tmp))
 			{
-				SendClientMessage(playerid, COLOR_GRAD2, "USAGE: /goto [playerid/PartOfName]");
+				SendClientMessage(playerid, COLOR_GRAD2, "Uzycie: /goto [playerid/PartOfName]");
 				return 1;
 			}
 			new Float:plocx,Float:plocy,Float:plocz;
@@ -7118,7 +7118,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 			tmp = strtok(cmdtext, idx);
 			if(!strlen(tmp))
 			{
-				SendClientMessage(playerid, COLOR_GRAD2, "USAGE: /gethere [playerid/PartOfName]");
+				SendClientMessage(playerid, COLOR_GRAD2, "Uzycie: /gethere [playerid/PartOfName]");
 				return 1;
 			}
 			new Float:plocx,Float:plocy,Float:plocz;
@@ -7185,7 +7185,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 			tmp = strtok(cmdtext, idx);
 			if(!strlen(tmp))
 			{
-				SendClientMessage(playerid, COLOR_GRAD2, "USAGE: /getcar [carid]");
+				SendClientMessage(playerid, COLOR_GRAD2, "Uzycie: /getcar [carid]");
 				return 1;
 			}
 			new Float:plocx,Float:plocy,Float:plocz;
@@ -7240,7 +7240,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 			tmp = strtok(cmdtext, idx);
 			if(!strlen(tmp))
 			{
-				SendClientMessage(playerid, COLOR_GRAD2, "USAGE: /givegun [playerid/PartOfName] [weaponid(eg. 46 = Parachute)] [ammo]");
+				SendClientMessage(playerid, COLOR_GRAD2, "Uzycie: /givegun [playerid/PartOfName] [weaponid(eg. 46 = Parachute)] [ammo]");
 				return 1;
 			}
 			new playa;
@@ -7251,7 +7251,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 			gun = strval(tmp);
 			if(!strlen(tmp))
 			{
-				SendClientMessage(playerid, COLOR_GRAD1, "USAGE: /givegun [playerid/PartOfName] [weaponid] [ammo]");
+				SendClientMessage(playerid, COLOR_GRAD1, "Uzycie: /givegun [playerid/PartOfName] [weaponid] [ammo]");
 				SendClientMessage(playerid, COLOR_GRAD4, "3(Club) 4(knife) 5(bat) 6(Shovel) 7(Cue) 8(Katana) 10-13(Dildo) 14(Flowers) 16(Grenades) 18(Molotovs) 22(Pistol) 23(SPistol)");
 				SendClientMessage(playerid, COLOR_GRAD3, "24(Eagle) 25(shotgun) 29(MP5) 30(AK47) 31(M4) 33(Rifle) 34(Sniper) 37(Flamethrower) 41(spray) 42(exting) 43(Camera) 46(Parachute)");
 				return 1;
@@ -7287,7 +7287,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 			tmp = strtok(cmdtext, idx);
 			if(!strlen(tmp))
 			{
-				SendClientMessage(playerid, COLOR_GRAD2, "USAGE: /sethp [playerid/PartOfName] [health]");
+				SendClientMessage(playerid, COLOR_GRAD2, "Uzycie: /sethp [playerid/PartOfName] [health]");
 				return 1;
 			}
 			new playa;
@@ -7319,7 +7319,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 			tmp = strtok(cmdtext, idx);
 			if(!strlen(tmp))
 			{
-				SendClientMessage(playerid, COLOR_GRAD2, "USAGE: /setarmor [playerid/PartOfName] [armor]");
+				SendClientMessage(playerid, COLOR_GRAD2, "Uzycie: /setarmor [playerid/PartOfName] [armor]");
 				return 1;
 			}
 			new playa;
@@ -7356,7 +7356,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 			tmp = strtok(cmdtext, idx);
 			if(!strlen(tmp))
 			{
-				SendClientMessage(playerid, COLOR_GRAD2, "USAGE: /veh [carid] [color1] [color2]");
+				SendClientMessage(playerid, COLOR_GRAD2, "Uzycie: /veh [carid] [color1] [color2]");
 				return 1;
 			}
 			new car;
@@ -7365,7 +7365,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 			tmp = strtok(cmdtext, idx);
 			if(!strlen(tmp))
 			{
-				SendClientMessage(playerid, COLOR_GRAD2, "USAGE: /veh [carid] [color1] [color2]");
+				SendClientMessage(playerid, COLOR_GRAD2, "Uzycie: /veh [carid] [color1] [color2]");
 				return 1;
 			}
 			new color1;
@@ -7374,7 +7374,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 			tmp = strtok(cmdtext, idx);
 			if(!strlen(tmp))
 			{
-				SendClientMessage(playerid, COLOR_GRAD2, "USAGE: /veh [carid] [color1] [color2]");
+				SendClientMessage(playerid, COLOR_GRAD2, "Uzycie: /veh [carid] [color1] [color2]");
 				return 1;
 			}
 			new color2;
@@ -7439,7 +7439,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 			tmp = strtok(cmdtext, idx);
 			if(!strlen(tmp))
 			{
-			    SendClientMessage(playerid, COLOR_WHITE, "USAGE: /weather [weatherid]");
+			    SendClientMessage(playerid, COLOR_WHITE, "Uzycie: /weather [weatherid]");
 			    return 1;
 			}
 			new weather;
@@ -7462,7 +7462,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 			tmp = strtok(cmdtext, idx);
 			if(!strlen(tmp))
 			{
-			    SendClientMessage(playerid, COLOR_WHITE, "USAGE: /weatherall [weatherid]");
+			    SendClientMessage(playerid, COLOR_WHITE, "Uzycie: /weatherall [weatherid]");
 			    return 1;
 			}
 			new weather;
@@ -7481,7 +7481,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 			tmp = strtok(cmdtext, idx);
 			if(!strlen(tmp))
 			{
-				SendClientMessage(playerid, COLOR_GRAD2, "USAGE: /money [playerid/PartOfName] [money]");
+				SendClientMessage(playerid, COLOR_GRAD2, "Uzycie: /money [playerid/PartOfName] [money]");
 				return 1;
 			}
 			new playa;
@@ -7516,7 +7516,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 			tmp = strtok(cmdtext, idx);
 			if(!strlen(tmp))
 			{
-				SendClientMessage(playerid, COLOR_GRAD2, "USAGE: /givemoney [playerid/PartOfName] [money]");
+				SendClientMessage(playerid, COLOR_GRAD2, "Uzycie: /givemoney [playerid/PartOfName] [money]");
 				return 1;
 			}
 			new playa;
@@ -7550,7 +7550,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 			tmp = strtok(cmdtext, idx);
 			if(!strlen(tmp))
 			{
-				SendClientMessage(playerid, COLOR_GRAD2, "USAGE: /slap [playerid/PartOfName]");
+				SendClientMessage(playerid, COLOR_GRAD2, "Uzycie: /slap [playerid/PartOfName]");
 				return 1;
 			}
 			new playa;
@@ -7590,7 +7590,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 			tmp = strtok(cmdtext, idx);
 			if(!strlen(tmp))
 			{
-				SendClientMessage(playerid, COLOR_GRAD2, "USAGE: /mute [playerid/PartOfName]");
+				SendClientMessage(playerid, COLOR_GRAD2, "Uzycie: /mute [playerid/PartOfName]");
 				return 1;
 			}
 			new playa;
@@ -7636,7 +7636,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 	    	tmp = strtok(cmdtext, idx);
 			if(!strlen(tmp))
 			{
-				SendClientMessage(playerid, COLOR_GRAD2, "USAGE: /kick [playerid/PartOfName] [reason]");
+				SendClientMessage(playerid, COLOR_GRAD2, "Uzycie: /kick [playerid/PartOfName] [reason]");
 				return 1;
 			}
 			giveplayerid = ReturnUser(tmp);
@@ -7663,7 +7663,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 						result[idx - offset] = EOS;
 						if(!strlen(result))
 						{
-							SendClientMessage(playerid, COLOR_GRAD2, "USAGE: /kick [playerid/PartOfName] [reason]");
+							SendClientMessage(playerid, COLOR_GRAD2, "Uzycie: /kick [playerid/PartOfName] [reason]");
 							return 1;
 						}
 						new year, month,day;
@@ -7692,7 +7692,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 	    	tmp = strtok(cmdtext, idx);
 			if(!strlen(tmp))
 			{
-				SendClientMessage(playerid, COLOR_GRAD2, "USAGE: /skick [playerid/PartOfName]");
+				SendClientMessage(playerid, COLOR_GRAD2, "Uzycie: /skick [playerid/PartOfName]");
 				return 1;
 			}
 			giveplayerid = ReturnUser(tmp);
@@ -7725,7 +7725,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 	    	tmp = strtok(cmdtext, idx);
 			if(!strlen(tmp))
 			{
-				SendClientMessage(playerid, COLOR_GRAD2, "USAGE: /kickres [level] [ammount]");
+				SendClientMessage(playerid, COLOR_GRAD2, "Uzycie: /kickres [level] [ammount]");
 				return 1;
 			}
 			new level = strval(tmp);
@@ -7733,7 +7733,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 			tmp = strtok(cmdtext, idx);
 			if(!strlen(tmp))
 			{
-				SendClientMessage(playerid, COLOR_GRAD2, "USAGE: /kickres [level] [ammount]");
+				SendClientMessage(playerid, COLOR_GRAD2, "Uzycie: /kickres [level] [ammount]");
 				return 1;
 			}
 			new ammount = strval(tmp);
@@ -7759,7 +7759,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 	    	tmp = strtok(cmdtext, idx);
 			if(!strlen(tmp))
 			{
-				SendClientMessage(playerid, COLOR_GRAD2, "USAGE: /warn [playerid/PartOfName] [reason]");
+				SendClientMessage(playerid, COLOR_GRAD2, "Uzycie: /warn [playerid/PartOfName] [reason]");
 				return 1;
 			}
 			giveplayerid = ReturnUser(tmp);
@@ -7786,7 +7786,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 						result[idx - offset] = EOS;
 						if(!strlen(result))
 						{
-							SendClientMessage(playerid, COLOR_GRAD2, "USAGE: /warn [playerid/PartOfName] [reason]");
+							SendClientMessage(playerid, COLOR_GRAD2, "Uzycie: /warn [playerid/PartOfName] [reason]");
 							return 1;
 						}
 						PlayerInfo[giveplayerid][pWarns] += 1;
@@ -7826,7 +7826,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 	    	tmp = strtok(cmdtext, idx);
 			if(!strlen(tmp))
 			{
-				SendClientMessage(playerid, COLOR_GRAD2, "USAGE: /sban [playerid/PartOfName] [reason]");
+				SendClientMessage(playerid, COLOR_GRAD2, "Uzycie: /sban [playerid/PartOfName] [reason]");
 				return 1;
 			}
 			giveplayerid = ReturnUser(tmp);
@@ -7853,7 +7853,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 						result[idx - offset] = EOS;
 						if(!strlen(result))
 						{
-							SendClientMessage(playerid, COLOR_GRAD2, "USAGE: /sban [playerid/PartOfName] [reason]");
+							SendClientMessage(playerid, COLOR_GRAD2, "Uzycie: /sban [playerid/PartOfName] [reason]");
 							return 1;
 						}
 						new year, month,day;
@@ -7882,7 +7882,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 	    	tmp = strtok(cmdtext, idx);
 			if(!strlen(tmp))
 			{
-				SendClientMessage(playerid, COLOR_GRAD2, "USAGE: /ban [playerid/PartOfName] [reason]");
+				SendClientMessage(playerid, COLOR_GRAD2, "Uzycie: /ban [playerid/PartOfName] [reason]");
 				return 1;
 			}
 			giveplayerid = ReturnUser(tmp);
@@ -7909,7 +7909,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 						result[idx - offset] = EOS;
 						if(!strlen(result))
 						{
-							SendClientMessage(playerid, COLOR_GRAD2, "USAGE: /ban [playerid/PartOfName] [reason]");
+							SendClientMessage(playerid, COLOR_GRAD2, "Uzycie: /ban [playerid/PartOfName] [reason]");
 							return 1;
 						}
 						new year, month,day;
@@ -7941,7 +7941,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 			tmp = strtok(cmdtext, idx);
 			if(!strlen(tmp))
 			{
-				SendClientMessage(playerid, COLOR_GRAD2, "USAGE: /freeze [playerid/PartOfName]");
+				SendClientMessage(playerid, COLOR_GRAD2, "Uzycie: /freeze [playerid/PartOfName]");
 				return 1;
 			}
 			new playa;
@@ -7983,7 +7983,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 			tmp = strtok(cmdtext, idx);
 			if(!strlen(tmp))
 			{
-				SendClientMessage(playerid, COLOR_GRAD2, "USAGE: /unfreeze [playerid]");
+				SendClientMessage(playerid, COLOR_GRAD2, "Uzycie: /unfreeze [playerid]");
 				return 1;
 			}
 			new playa;
@@ -8054,7 +8054,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 			tmp = strtok(cmdtext, idx);
 			if(!strlen(tmp))
 			{
-				SendClientMessage(playerid, COLOR_GRAD2, "USAGE: /cam [1/2/3/4]");
+				SendClientMessage(playerid, COLOR_GRAD2, "Uzycie: /cam [1/2/3/4]");
 				return 1;
 			}
 			Unspec[playerid][sCam] = strval(tmp);
@@ -8312,7 +8312,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 	        }
 	        tmp = strtok(cmdtext, idx);
 	        if(!strlen(tmp)) {
-	            SendClientMessage(playerid, COLOR_WHITE, "USAGE: /gravity [value Default: 0.008]");
+	            SendClientMessage(playerid, COLOR_WHITE, "Uzycie: /gravity [value Default: 0.008]");
 	            return 1;
 			}
 			new Float:gravity;
@@ -8336,7 +8336,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 	        new x_mk[256];
 			x_mk = strtok(cmdtext, idx);
 			if(!strlen(x_mk)) {
-				SendClientMessage(playerid, COLOR_WHITE, "USAGE: /mk [name]");
+				SendClientMessage(playerid, COLOR_WHITE, "Uzycie: /mk [name]");
 				SendClientMessage(playerid, COLOR_GREY, "Available names: (/mk text [number] [text]) (/mk game [number] [text]) (/mk cp [number])");
 				SendClientMessage(playerid, COLOR_GREY, "Available names: (/mk title [text]) (/mk reward [price]) (/mk usecp)");
 				return 1;
@@ -8346,7 +8346,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 			    tmp = strtok(cmdtext, idx);
 			    if(!strlen(x_mk))
 				{
-					SendClientMessage(playerid, COLOR_WHITE, "USAGE: /mk text [number] [text]");
+					SendClientMessage(playerid, COLOR_WHITE, "Uzycie: /mk text [number] [text]");
 					return 1;
 				}
 				new number = strval(tmp);
@@ -8366,7 +8366,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 				result[idx - offset] = EOS;
 				if(!strlen(result))
 				{
-					SendClientMessage(playerid, COLOR_GRAD2, "USAGE: (/mk text [number] [text]");
+					SendClientMessage(playerid, COLOR_GRAD2, "Uzycie: (/mk text [number] [text]");
 					return 1;
 				}
 				switch(number)
@@ -8468,7 +8468,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 			    tmp = strtok(cmdtext, idx);
 			    if(!strlen(x_mk))
 				{
-					SendClientMessage(playerid, COLOR_WHITE, "USAGE: /mk game [number] [text]");
+					SendClientMessage(playerid, COLOR_WHITE, "Uzycie: /mk game [number] [text]");
 					return 1;
 				}
 				new number = strval(tmp);
@@ -8488,7 +8488,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 				result[idx - offset] = EOS;
 				if(!strlen(result))
 				{
-					SendClientMessage(playerid, COLOR_GRAD2, "USAGE: (/mk game [number] [text]");
+					SendClientMessage(playerid, COLOR_GRAD2, "Uzycie: (/mk game [number] [text]");
 					return 1;
 				}
 				switch(number)
@@ -8530,7 +8530,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 			    tmp = strtok(cmdtext, idx);
 			    if(!strlen(x_mk))
 				{
-					SendClientMessage(playerid, COLOR_WHITE, "USAGE: /mk cp [number]");
+					SendClientMessage(playerid, COLOR_WHITE, "Uzycie: /mk cp [number]");
 					return 1;
 				}
 			    new number = strval(tmp);
@@ -8576,7 +8576,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 			    tmp = strtok(cmdtext, idx);
 			    if(!strlen(x_mk))
 				{
-					SendClientMessage(playerid, COLOR_WHITE, "USAGE: /mk usecp [0/1]");
+					SendClientMessage(playerid, COLOR_WHITE, "Uzycie: /mk usecp [0/1]");
 					return 1;
 				}
 			    new toggle = strval(tmp);
@@ -8603,7 +8603,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 				result[idx - offset] = EOS;
 				if(!strlen(result))
 				{
-					SendClientMessage(playerid, COLOR_GRAD2, "USAGE: (/mk title [text]");
+					SendClientMessage(playerid, COLOR_GRAD2, "Uzycie: (/mk title [text]");
 					return 1;
 				}
 				strmid(MissionInfo[mTitle], result, 0, strlen(result), 255);
@@ -8614,7 +8614,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 			    tmp = strtok(cmdtext, idx);
 			    if(!strlen(x_mk))
 				{
-					SendClientMessage(playerid, COLOR_WHITE, "USAGE: /mk reward [price]");
+					SendClientMessage(playerid, COLOR_WHITE, "Uzycie: /mk reward [price]");
 					return 1;
 				}
 			    new price = strval(tmp);
@@ -8639,7 +8639,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 				tmp = strtok(cmdtext, idx);
 				if(!strlen(tmp))
 				{
-					SendClientMessage(playerid, COLOR_GRAD1, "USAGE: /savemission [missionname]");
+					SendClientMessage(playerid, COLOR_GRAD1, "Uzycie: /savemission [missionname]");
 					return 1;
 				}
 				SaveMission(playerid,tmp);
@@ -8660,7 +8660,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 				tmp = strtok(cmdtext, idx);
 				if(!strlen(tmp))
 				{
-					SendClientMessage(playerid, COLOR_GRAD1, "USAGE: /loadmission [missionname]");
+					SendClientMessage(playerid, COLOR_GRAD1, "Uzycie: /loadmission [missionname]");
 					return 1;
 				}
 				LoadMission(playerid,tmp);
@@ -8688,7 +8688,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 			x_nr = strtok(cmdtext, idx);
 			if(!strlen(x_nr)) {
 				SendClientMessage(playerid, COLOR_WHITE, "|__________________ Skill Info __________________|");
-				SendClientMessage(playerid, COLOR_WHITE, "USAGE: /skill [number]");
+				SendClientMessage(playerid, COLOR_WHITE, "Uzycie: /skill [number]");
 		  		SendClientMessage(playerid, COLOR_GREY, "| 1: Detective            7: Car Mechanic");
 		  		SendClientMessage(playerid, COLOR_GREY, "| 2: Lawyer               8: Car Dealer");
 		  		SendClientMessage(playerid, COLOR_GREY, "| 3: Whore                9: Boxer");
@@ -8838,7 +8838,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 			    tmp = strtok(cmdtext, idx);
 				if(!strlen(tmp))
 				{
-				    SendClientMessage(playerid, COLOR_WHITE, "USAGE: /cks accept [cknumber]");
+				    SendClientMessage(playerid, COLOR_WHITE, "Uzycie: /cks accept [cknumber]");
 					return 1;
 				}
 				ck = strval(tmp);
@@ -8887,7 +8887,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 			    tmp = strtok(cmdtext, idx);
 				if(!strlen(tmp))
 				{
-				    SendClientMessage(playerid, COLOR_WHITE, "USAGE: /cks delete [cknumber]");
+				    SendClientMessage(playerid, COLOR_WHITE, "Uzycie: /cks delete [cknumber]");
 					return 1;
 				}
 				ck = strval(tmp);
@@ -8919,7 +8919,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 	        tmp = strtok(cmdtext, idx);
 			if(!strlen(tmp))
 			{
-				SendClientMessage(playerid, COLOR_GRAD1, "USAGE: /ck [playerid/PartOfName]");
+				SendClientMessage(playerid, COLOR_GRAD1, "Uzycie: /ck [playerid/PartOfName]");
 				return 1;
 			}
 	        giveplayerid = ReturnUser(tmp);
@@ -8990,7 +8990,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 	            new x_nr[256];
 				x_nr = strtok(cmdtext, idx);
 				if(!strlen(x_nr)) {
-				    SendClientMessage(playerid, COLOR_WHITE, "USAGE: /givelicense [name] [playerid/PartOfName]");
+				    SendClientMessage(playerid, COLOR_WHITE, "Uzycie: /givelicense [name] [playerid/PartOfName]");
 				    SendClientMessage(playerid, COLOR_WHITE, "Available names: Driving, Flying, Sailing, Fishing, Weapon.");
 					return 1;
 				}
@@ -8999,7 +8999,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 		            tmp = strtok(cmdtext, idx);
 					if(!strlen(tmp))
 					{
-					    SendClientMessage(playerid, COLOR_WHITE, "USAGE: /givelicense driverslicense [playerid/PartOfName]");
+					    SendClientMessage(playerid, COLOR_WHITE, "Uzycie: /givelicense driverslicense [playerid/PartOfName]");
 					    return 1;
 					}
 					giveplayerid = ReturnUser(tmp);
@@ -9028,7 +9028,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 		            tmp = strtok(cmdtext, idx);
 					if(!strlen(tmp))
 					{
-					    SendClientMessage(playerid, COLOR_WHITE, "USAGE: /givelicense flyinglicense [playerid/PartOfName]");
+					    SendClientMessage(playerid, COLOR_WHITE, "Uzycie: /givelicense flyinglicense [playerid/PartOfName]");
 					    return 1;
 					}
 					giveplayerid = ReturnUser(tmp);
@@ -9057,7 +9057,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 		            tmp = strtok(cmdtext, idx);
 					if(!strlen(tmp))
 					{
-					    SendClientMessage(playerid, COLOR_WHITE, "USAGE: /givelicense sailinglicense [playerid/PartOfName]");
+					    SendClientMessage(playerid, COLOR_WHITE, "Uzycie: /givelicense sailinglicense [playerid/PartOfName]");
 					    return 1;
 					}
 					giveplayerid = ReturnUser(tmp);
@@ -9086,7 +9086,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 		            tmp = strtok(cmdtext, idx);
 					if(!strlen(tmp))
 					{
-					    SendClientMessage(playerid, COLOR_WHITE, "USAGE: /givelicense fishinglicense [playerid/PartOfName]");
+					    SendClientMessage(playerid, COLOR_WHITE, "Uzycie: /givelicense fishinglicense [playerid/PartOfName]");
 					    return 1;
 					}
 					giveplayerid = ReturnUser(tmp);
@@ -9115,7 +9115,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 		            tmp = strtok(cmdtext, idx);
 					if(!strlen(tmp))
 					{
-					    SendClientMessage(playerid, COLOR_WHITE, "USAGE: /givelicense weaponlicense [playerid/PartOfName]");
+					    SendClientMessage(playerid, COLOR_WHITE, "Uzycie: /givelicense weaponlicense [playerid/PartOfName]");
 					    return 1;
 					}
 					giveplayerid = ReturnUser(tmp);
@@ -9157,7 +9157,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 	            tmp = strtok(cmdtext, idx);
 				if(!strlen(tmp))
 				{
-				    SendClientMessage(playerid, COLOR_WHITE, "USAGE: /startlesson [playerid/PartOfName]");
+				    SendClientMessage(playerid, COLOR_WHITE, "Uzycie: /startlesson [playerid/PartOfName]");
 				    return 1;
 				}
 				giveplayerid = ReturnUser(tmp);
@@ -9197,7 +9197,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 	            tmp = strtok(cmdtext, idx);
 				if(!strlen(tmp))
 				{
-				    SendClientMessage(playerid, COLOR_WHITE, "USAGE: /stoplesson [playerid/PartOfName]");
+				    SendClientMessage(playerid, COLOR_WHITE, "Uzycie: /stoplesson [playerid/PartOfName]");
 				    return 1;
 				}
 				giveplayerid = ReturnUser(tmp);
@@ -9291,7 +9291,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 			    new x_nr[256];
 				x_nr = strtok(cmdtext, idx);
 				if(!strlen(x_nr)) {
-					SendClientMessage(playerid, COLOR_WHITE, "USAGE: /adjust [name]");
+					SendClientMessage(playerid, COLOR_WHITE, "Uzycie: /adjust [name]");
 					SendClientMessage(playerid, COLOR_WHITE, "Available Names: Name, MOTD, Color, Spawn, Invite, Uninvite, Rank");
 					return 1;
 				}
@@ -9312,7 +9312,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 					result[idx - offset] = EOS;
 					if(!strlen(result))
 					{
-						SendClientMessage(playerid, COLOR_GRAD2, "USAGE: /adjust Name [Family Name]");
+						SendClientMessage(playerid, COLOR_GRAD2, "Uzycie: /adjust Name [Family Name]");
 						return 1;
 					}
 					strmid(FamilyInfo[family][FamilyName], result, 0, strlen(result), 255);
@@ -9336,7 +9336,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 					result[idx - offset] = EOS;
 					if(!strlen(result))
 					{
-						SendClientMessage(playerid, COLOR_GRAD2, "USAGE: /adjust MOTD [Family MOTD Text]");
+						SendClientMessage(playerid, COLOR_GRAD2, "Uzycie: /adjust MOTD [Family MOTD Text]");
 						return 1;
 					}
 					strmid(FamilyInfo[family][FamilyMOTD], result, 0, strlen(result), 255);
@@ -9360,7 +9360,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 					result[idx - offset] = EOS;
 					if(!strlen(result))
 					{
-						SendClientMessage(playerid, COLOR_GRAD2, "USAGE: /adjust color [Family Color Sample: 0xFFFFFFAA]");
+						SendClientMessage(playerid, COLOR_GRAD2, "Uzycie: /adjust color [Family Color Sample: 0xFFFFFFAA]");
 						return 1;
 					}
 					if(offset < 10)
@@ -9389,7 +9389,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 				    }
 					tmp = strtok(cmdtext, idx);
 					if(!strlen(x_nr)) {
-					    SendClientMessage(playerid, COLOR_WHITE, "USAGE: /adjust invite [playerid/PartOfName]");
+					    SendClientMessage(playerid, COLOR_WHITE, "Uzycie: /adjust invite [playerid/PartOfName]");
 					    return 1;
 					}
 					giveplayerid = ReturnUser(tmp);
@@ -9425,7 +9425,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 				{
 				    tmp = strtok(cmdtext, idx);
 					if(!strlen(x_nr)) {
-					    SendClientMessage(playerid, COLOR_WHITE, "USAGE: /adjust uninvite [playerid/PartOfName]");
+					    SendClientMessage(playerid, COLOR_WHITE, "Uzycie: /adjust uninvite [playerid/PartOfName]");
 					    return 1;
 					}
 					giveplayerid = ReturnUser(tmp);
@@ -9461,14 +9461,14 @@ public OnPlayerCommandText(playerid, cmdtext[])
 				{
 				    tmp = strtok(cmdtext, idx);
 					if(!strlen(x_nr)) {
-					    SendClientMessage(playerid, COLOR_WHITE, "USAGE: /adjust rank [RankNr] [playerid/PartOfName]");
+					    SendClientMessage(playerid, COLOR_WHITE, "Uzycie: /adjust rank [RankNr] [playerid/PartOfName]");
 					    return 1;
 					}
 					new rank = strval(tmp);
 					if(rank < 1 || rank > 6) { SendClientMessage(playerid, COLOR_GREY, "   RankNr can't be below 1 or above 6 !"); return 1; }
 					tmp = strtok(cmdtext, idx);
 					if(!strlen(x_nr)) {
-					    SendClientMessage(playerid, COLOR_WHITE, "USAGE: /adjust rank [RankNr] [playerid/PartOfName]");
+					    SendClientMessage(playerid, COLOR_WHITE, "Uzycie: /adjust rank [RankNr] [playerid/PartOfName]");
 					    return 1;
 					}
 					giveplayerid = ReturnUser(tmp);
@@ -9519,7 +9519,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 	        {
 	            tmp = strtok(cmdtext, idx);
 				if(!strlen(tmp)) {
-					SendClientMessage(playerid, COLOR_WHITE, "USAGE: /giveturf [FamilyNr]");
+					SendClientMessage(playerid, COLOR_WHITE, "Uzycie: /giveturf [FamilyNr]");
 					return 1;
 				}
 				new family = strval(tmp);
@@ -9570,7 +9570,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 	        {
 	            tmp = strtok(cmdtext, idx);
 				if(!strlen(tmp)) {
-					SendClientMessage(playerid, COLOR_WHITE, "USAGE: /allowcreation [FamilyNr] [playerid/PartOfName]");
+					SendClientMessage(playerid, COLOR_WHITE, "Uzycie: /allowcreation [FamilyNr] [playerid/PartOfName]");
 					return 1;
 				}
 				new family = strval(tmp);
@@ -9579,7 +9579,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 				else if(PlayerInfo[playerid][pLeader] == 6 && family < 6) { SendClientMessage(playerid, COLOR_GREY, "   Yakuza Leader can only take FamilyNr 6 till 10 !"); return 1; }
 	            tmp = strtok(cmdtext, idx);
 				if(!strlen(tmp)) {
-					SendClientMessage(playerid, COLOR_WHITE, "USAGE: /allowcreation [FamilyNr] [playerid/PartOfName]");
+					SendClientMessage(playerid, COLOR_WHITE, "Uzycie: /allowcreation [FamilyNr] [playerid/PartOfName]");
 					return 1;
 				}
 				giveplayerid = ReturnUser(tmp);
@@ -9637,7 +9637,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 	        {
 	            tmp = strtok(cmdtext, idx);
 				if(!strlen(tmp)) {
-					SendClientMessage(playerid, COLOR_WHITE, "USAGE: /deletecreation [FamilyNr]");
+					SendClientMessage(playerid, COLOR_WHITE, "Uzycie: /deletecreation [FamilyNr]");
 					return 1;
 				}
 				new family = strval(tmp);
@@ -9700,7 +9700,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 				}
 				tmp = strtok(cmdtext, idx);
 				if(!strlen(tmp)) {
-					SendClientMessage(playerid, COLOR_WHITE, "USAGE: /camera [number 1 - 6]  (6 = OFF)");
+					SendClientMessage(playerid, COLOR_WHITE, "Uzycie: /camera [number 1 - 6]  (6 = OFF)");
 					return 1;
 				}
 				new number = strval(tmp);
@@ -9739,7 +9739,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 	        }
 	        tmp = strtok(cmdtext, idx);
 			if(!strlen(tmp)) {
-				SendClientMessage(playerid, COLOR_WHITE, "USAGE: /divorce [Playerid/PartOfName]");
+				SendClientMessage(playerid, COLOR_WHITE, "Uzycie: /divorce [Playerid/PartOfName]");
 				return 1;
 			}
 			giveplayerid = ReturnUser(tmp);
@@ -9809,7 +9809,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 	        }
 	        tmp = strtok(cmdtext, idx);
 			if(!strlen(tmp)) {
-				SendClientMessage(playerid, COLOR_WHITE, "USAGE: /propose [Playerid/PartOfName]");
+				SendClientMessage(playerid, COLOR_WHITE, "Uzycie: /propose [Playerid/PartOfName]");
 				return 1;
 			}
 			giveplayerid = ReturnUser(tmp);
@@ -9864,7 +9864,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 	    {
 	        tmp = strtok(cmdtext, idx);
 			if(!strlen(tmp)) {
-				SendClientMessage(playerid, COLOR_WHITE, "USAGE: /witness [Playerid/PartOfName]");
+				SendClientMessage(playerid, COLOR_WHITE, "Uzycie: /witness [Playerid/PartOfName]");
 				return 1;
 			}
 			giveplayerid = ReturnUser(tmp);
@@ -9905,8 +9905,8 @@ public OnPlayerCommandText(playerid, cmdtext[])
 	        new x_nr[256];
 			x_nr = strtok(cmdtext, idx);
 			if(!strlen(x_nr)) {
-				SendClientMessage(playerid, COLOR_WHITE, "USAGE: (/irc join [channelnr] or /irc join [channelnr] [password])  (/irc Leave)  (/irc Admins)");
-				SendClientMessage(playerid, COLOR_WHITE, "USAGE: /irc [name] [channelnr]");
+				SendClientMessage(playerid, COLOR_WHITE, "Uzycie: (/irc join [channelnr] or /irc join [channelnr] [password])  (/irc Leave)  (/irc Admins)");
+				SendClientMessage(playerid, COLOR_WHITE, "Uzycie: /irc [name] [channelnr]");
 				SendClientMessage(playerid, COLOR_WHITE, "Available names: MOTD, Password, NeedPass, Lock, Kick, Status");
 				return 1;
 			}
@@ -9915,7 +9915,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 			    tmp = strtok(cmdtext, idx);
 			    if(!strlen(tmp))
 				{
-				    SendClientMessage(playerid, COLOR_WHITE, "USAGE: /irc join [channelnr] or /irc join [channelnr] [password]");
+				    SendClientMessage(playerid, COLOR_WHITE, "Uzycie: /irc join [channelnr] or /irc join [channelnr] [password]");
 				    return 1;
 				}
 				new channel = strval(tmp);
@@ -9933,7 +9933,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 				        if(!strlen(tmp))
 						{
 						    SendClientMessage(playerid, COLOR_WHITE, "There's a password required to join this Channel.");
-							SendClientMessage(playerid, COLOR_WHITE, "USAGE: /irc join [channelnr] [password]");
+							SendClientMessage(playerid, COLOR_WHITE, "Uzycie: /irc join [channelnr] [password]");
 							return 1;
 						}
 						JoinChannel(playerid,channel,tmp);
@@ -9959,7 +9959,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 			    tmp = strtok(cmdtext, idx);
 			    if(!strlen(tmp))
 				{
-				    SendClientMessage(playerid, COLOR_WHITE, "USAGE: /irc password [channelnr] [password]");
+				    SendClientMessage(playerid, COLOR_WHITE, "Uzycie: /irc password [channelnr] [password]");
 				    return 1;
 				}
 				new channel = strval(tmp);
@@ -9974,7 +9974,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 				    tmp = strtok(cmdtext, idx);
 				    if(!strlen(tmp))
 					{
-					    SendClientMessage(playerid, COLOR_WHITE, "USAGE: /irc password [channelnr] [password]");
+					    SendClientMessage(playerid, COLOR_WHITE, "Uzycie: /irc password [channelnr] [password]");
 					    return 1;
 					}
 					strmid(IRCInfo[channel][iPassword], tmp, 0, strlen(tmp), 255);
@@ -9994,7 +9994,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 			    tmp = strtok(cmdtext, idx);
 			    if(!strlen(tmp))
 				{
-				    SendClientMessage(playerid, COLOR_WHITE, "USAGE: /irc needpass [channelnr]");
+				    SendClientMessage(playerid, COLOR_WHITE, "Uzycie: /irc needpass [channelnr]");
 				    return 1;
 				}
 				new channel = strval(tmp);
@@ -10030,7 +10030,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 			    tmp = strtok(cmdtext, idx);
 			    if(!strlen(tmp))
 				{
-				    SendClientMessage(playerid, COLOR_WHITE, "USAGE: /irc lock [channelnr]");
+				    SendClientMessage(playerid, COLOR_WHITE, "Uzycie: /irc lock [channelnr]");
 				    return 1;
 				}
 				new channel = strval(tmp);
@@ -10066,7 +10066,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 			    tmp = strtok(cmdtext, idx);
 			    if(!strlen(tmp))
 				{
-				    SendClientMessage(playerid, COLOR_WHITE, "USAGE: /irc motd [channelnr] [motdtext]");
+				    SendClientMessage(playerid, COLOR_WHITE, "Uzycie: /irc motd [channelnr] [motdtext]");
 				    return 1;
 				}
 				new channel = strval(tmp);
@@ -10093,7 +10093,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 					result[idx - offset] = EOS;
 					if(!strlen(result))
 					{
-						SendClientMessage(playerid, COLOR_GRAD2, "USAGE: /irc motd [motdtext]");
+						SendClientMessage(playerid, COLOR_GRAD2, "Uzycie: /irc motd [motdtext]");
 						return 1;
 					}
 					strmid(IRCInfo[channel][iMOTD], result, 0, strlen(result), 255);
@@ -10149,7 +10149,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 				    tmp = strtok(cmdtext, idx);
 				    if(!strlen(tmp))
 					{
-					    SendClientMessage(playerid, COLOR_WHITE, "USAGE: /irc kick [playerid/PartOfName]");
+					    SendClientMessage(playerid, COLOR_WHITE, "Uzycie: /irc kick [playerid/PartOfName]");
 					    return 1;
 					}
 					giveplayerid = ReturnUser(tmp);
@@ -10227,7 +10227,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 			result[idx - offset] = EOS;
 			if(!strlen(result))
 			{
-				SendClientMessage(playerid, COLOR_GRAD2, "USAGE: /i [irc chat]");
+				SendClientMessage(playerid, COLOR_GRAD2, "Uzycie: /i [irc chat]");
 				return 1;
 			}
 			format(string, sizeof(string), "** IRC %s: %s. **", sendername, result);
@@ -10283,7 +10283,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 	        }
 	        tmp = strtok(cmdtext, idx);
 	        if(!strlen(tmp)) {
-				SendClientMessage(playerid, COLOR_WHITE, "USAGE: /settax [ammount]");
+				SendClientMessage(playerid, COLOR_WHITE, "Uzycie: /settax [ammount]");
 				return 1;
 			}
 			moneys = strval(tmp);
@@ -10354,7 +10354,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 			new x_job[256];
 			x_job = strtok(cmdtext, idx);
 			if(!strlen(x_job)) {
-				SendClientMessage(playerid, COLOR_WHITE, "USAGE: /read [name]");
+				SendClientMessage(playerid, COLOR_WHITE, "Uzycie: /read [name]");
 				SendClientMessage(playerid, COLOR_GREY, "Available names: Paper, TestPaper");
 				return 1;
 			}
@@ -10394,7 +10394,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 			    {
 				    tmp = strtok(cmdtext, idx);
 					if(!strlen(tmp)) {
-						SendClientMessage(playerid, COLOR_WHITE, "USAGE: /read testpaper [papernr]");
+						SendClientMessage(playerid, COLOR_WHITE, "Uzycie: /read testpaper [papernr]");
 						return 1;
 					}
 					new paper = strval(tmp);
@@ -10433,7 +10433,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 			}
 			else
 			{
-			    SendClientMessage(playerid, COLOR_WHITE, "USAGE: /read testpaper [papernr]");
+			    SendClientMessage(playerid, COLOR_WHITE, "Uzycie: /read testpaper [papernr]");
 				return 1;
 			}
 		}
@@ -10455,7 +10455,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 					tmp = strtok(cmdtext, idx);
 					if(!strlen(tmp))
 					{
-						SendClientMessage(playerid, COLOR_GRAD1, "USAGE: /deliver [playerid/PartOfName]");
+						SendClientMessage(playerid, COLOR_GRAD1, "Uzycie: /deliver [playerid/PartOfName]");
 						return 1;
 					}
 			        giveplayerid = ReturnUser(tmp);
@@ -10506,7 +10506,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 			        tmp = strtok(cmdtext, idx);
 					if(!strlen(tmp))
 					{
-						SendClientMessage(playerid, COLOR_GRAD1, "USAGE: /deliver [playerid/PartOfName]");
+						SendClientMessage(playerid, COLOR_GRAD1, "Uzycie: /deliver [playerid/PartOfName]");
 						return 1;
 					}
 			        giveplayerid = ReturnUser(tmp);
@@ -10560,7 +10560,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 			    tmp = strtok(cmdtext, idx);
 				if(!strlen(tmp))
 				{
-					SendClientMessage(playerid, COLOR_GRAD1, "USAGE: /bring [papernr]");
+					SendClientMessage(playerid, COLOR_GRAD1, "Uzycie: /bring [papernr]");
 					return 1;
 				}
 		        new paper = strval(tmp);
@@ -10650,7 +10650,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 				new x_nr[256];
 				x_nr = strtok(cmdtext, idx);
 				if(!strlen(x_nr)) {
-					SendClientMessage(playerid, COLOR_WHITE, "USAGE: /paper write [papernr] or /paper delete [papernr]");
+					SendClientMessage(playerid, COLOR_WHITE, "Uzycie: /paper write [papernr] or /paper delete [papernr]");
 				    return 1;
 				}
 			    if(strcmp(x_nr,"write",true) == 0)
@@ -10658,7 +10658,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 		            tmp = strtok(cmdtext, idx);
 				    if(!strlen(tmp))
 					{
-					    SendClientMessage(playerid, COLOR_WHITE, "USAGE: /paper write [papernr]");
+					    SendClientMessage(playerid, COLOR_WHITE, "Uzycie: /paper write [papernr]");
 					    return 1;
 					}
 					new paper = strval(tmp);
@@ -10683,7 +10683,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 				        tmp = strtok(cmdtext, idx);
 					    if(!strlen(tmp))
 						{
-						    SendClientMessage(playerid, COLOR_WHITE, "USAGE: /paper delete [papernr]");
+						    SendClientMessage(playerid, COLOR_WHITE, "Uzycie: /paper delete [papernr]");
 						    return 1;
 						}
 						new paper = strval(tmp);
@@ -10702,7 +10702,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 				}
 				else
 				{
-				    SendClientMessage(playerid, COLOR_WHITE, "USAGE: /paper write [papernr] or /paper delete [papernr]");
+				    SendClientMessage(playerid, COLOR_WHITE, "Uzycie: /paper write [papernr] or /paper delete [papernr]");
 				    return 1;
 				}
 			}
@@ -10793,7 +10793,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 			result[idx - offset] = EOS;
 			if(!strlen(result))
 			{
-				SendClientMessage(playerid, COLOR_GRAD2, "USAGE: /report [text]");
+				SendClientMessage(playerid, COLOR_GRAD2, "Uzycie: /report [text]");
 				return 1;
 			}
 			format(string, sizeof(string), "Report from %s: %s", sendername, (result));
@@ -10869,7 +10869,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 	        }
 	        tmp = strtok(cmdtext, idx);
 			if(!strlen(tmp)) {
-				SendClientMessage(playerid, COLOR_WHITE,"USAGE: /lotto [number]");
+				SendClientMessage(playerid, COLOR_WHITE,"Uzycie: /lotto [number]");
 				return 1;
 			}
 			new lottonr = strval(tmp);
@@ -10897,7 +10897,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 				x_nr = strtok(cmdtext, idx);
 				if(!strlen(x_nr)) {
 					SendClientMessage(playerid, COLOR_WHITE, "|__________________ Take Licenses __________________|");
-					SendClientMessage(playerid, COLOR_WHITE, "USAGE: /take [licensename] [playerid/PartOfName]");
+					SendClientMessage(playerid, COLOR_WHITE, "Uzycie: /take [licensename] [playerid/PartOfName]");
 			  		SendClientMessage(playerid, COLOR_GREY, "Available names: Driverslicense, Flyinglicense, Boatlicense, Gunlicense, Weapons, Drugs, Materials");
 					SendClientMessage(playerid, COLOR_WHITE, "|___________________________________________________|");
 					return 1;
@@ -10906,7 +10906,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 				{
 				    tmp = strtok(cmdtext, idx);
 					if(!strlen(tmp)) {
-						SendClientMessage(playerid, COLOR_WHITE, "USAGE: /take driverslicense [playerid/PartOfName]");
+						SendClientMessage(playerid, COLOR_WHITE, "Uzycie: /take driverslicense [playerid/PartOfName]");
 						return 1;
 					}
 					giveplayerid = ReturnUser(tmp);
@@ -10939,7 +10939,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 				{
 				    tmp = strtok(cmdtext, idx);
 					if(!strlen(tmp)) {
-						SendClientMessage(playerid, COLOR_WHITE, "USAGE: /take flyinglicense [playerid/PartOfName]");
+						SendClientMessage(playerid, COLOR_WHITE, "Uzycie: /take flyinglicense [playerid/PartOfName]");
 						return 1;
 					}
 					giveplayerid = ReturnUser(tmp);
@@ -10972,7 +10972,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 				{
 				    tmp = strtok(cmdtext, idx);
 					if(!strlen(tmp)) {
-						SendClientMessage(playerid, COLOR_WHITE, "USAGE: /take driverslicense [playerid/PartOfName]");
+						SendClientMessage(playerid, COLOR_WHITE, "Uzycie: /take driverslicense [playerid/PartOfName]");
 						return 1;
 					}
 					giveplayerid = ReturnUser(tmp);
@@ -11005,7 +11005,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 				{
 				    tmp = strtok(cmdtext, idx);
 					if(!strlen(tmp)) {
-						SendClientMessage(playerid, COLOR_WHITE, "USAGE: /take boatlicense [playerid/PartOfName]");
+						SendClientMessage(playerid, COLOR_WHITE, "Uzycie: /take boatlicense [playerid/PartOfName]");
 						return 1;
 					}
 					giveplayerid = ReturnUser(tmp);
@@ -11038,7 +11038,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 				{
 				    tmp = strtok(cmdtext, idx);
 					if(!strlen(tmp)) {
-						SendClientMessage(playerid, COLOR_WHITE, "USAGE: /take weapons [playerid/PartOfName]");
+						SendClientMessage(playerid, COLOR_WHITE, "Uzycie: /take weapons [playerid/PartOfName]");
 						return 1;
 					}
 					giveplayerid = ReturnUser(tmp);
@@ -11075,7 +11075,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 				{
 				    tmp = strtok(cmdtext, idx);
 					if(!strlen(tmp)) {
-						SendClientMessage(playerid, COLOR_WHITE, "USAGE: /take drugs [playerid/PartOfName]");
+						SendClientMessage(playerid, COLOR_WHITE, "Uzycie: /take drugs [playerid/PartOfName]");
 						return 1;
 					}
 					giveplayerid = ReturnUser(tmp);
@@ -11108,7 +11108,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 				{
 				    tmp = strtok(cmdtext, idx);
 					if(!strlen(tmp)) {
-						SendClientMessage(playerid, COLOR_WHITE, "USAGE: /take materials [playerid/PartOfName]");
+						SendClientMessage(playerid, COLOR_WHITE, "Uzycie: /take materials [playerid/PartOfName]");
 						return 1;
 					}
 					giveplayerid = ReturnUser(tmp);
@@ -11164,7 +11164,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 					x_nr = strtok(cmdtext, idx);
 					if(!strlen(x_nr)) {
 						SendClientMessage(playerid, COLOR_WHITE, "|__________________ Bar Drinks __________________|");
-						SendClientMessage(playerid, COLOR_WHITE, "USAGE: /drink [drinkname]");
+						SendClientMessage(playerid, COLOR_WHITE, "Uzycie: /drink [drinkname]");
 				  		SendClientMessage(playerid, COLOR_GREY, "Available names: Beer ($6), Vodka ($10), Whiskey ($10), Water ($2), Soda($2)");
 						SendClientMessage(playerid, COLOR_WHITE, "|________________________________________________|");
 						return 1;
@@ -11267,7 +11267,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 	            tmp = strtok(cmdtext, idx);
 				if(!strlen(tmp))
 				{
-					SendClientMessage(playerid, COLOR_GRAD1, "USAGE: /setchamp [playerid/PartOfName]");
+					SendClientMessage(playerid, COLOR_GRAD1, "Uzycie: /setchamp [playerid/PartOfName]");
 					return 1;
 				}
 				//giveplayerid = strval(tmp);
@@ -11372,7 +11372,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 	        }
 	        tmp = strtok(cmdtext, idx);
 			if(!strlen(tmp)) {
-				SendClientMessage(playerid, COLOR_WHITE, "USAGE: /fight [Playerid/PartOfName]");
+				SendClientMessage(playerid, COLOR_WHITE, "Uzycie: /fight [Playerid/PartOfName]");
 				return 1;
 			}
 			giveplayerid = ReturnUser(tmp);
@@ -11416,7 +11416,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 				x_nr = strtok(cmdtext, idx);
 				if(!strlen(x_nr)) {
 					SendClientMessage(playerid, COLOR_WHITE, "|__________________ Music __________________|");
-					SendClientMessage(playerid, COLOR_WHITE, "USAGE: /music [name]");
+					SendClientMessage(playerid, COLOR_WHITE, "Uzycie: /music [name]");
 			  		SendClientMessage(playerid, COLOR_GREY, "Available names: On, Off, Next");
 					SendClientMessage(playerid, COLOR_WHITE, "|___________________________________________|");
 					return 1;
@@ -11466,7 +11466,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 			x_nr = strtok(cmdtext, idx);
 			if(!strlen(x_nr)) {
 				SendClientMessage(playerid, COLOR_WHITE, "|__________________ Service Names __________________|");
-				SendClientMessage(playerid, COLOR_WHITE, "USAGE: /service [name]");
+				SendClientMessage(playerid, COLOR_WHITE, "Uzycie: /service [name]");
 		  		SendClientMessage(playerid, COLOR_GREY, "Available names: Taxi, Bus, Medic, Mechanic");
 				SendClientMessage(playerid, COLOR_WHITE, "|________________________________________________|");
 				return 1;
@@ -11558,7 +11558,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 			    }
 			    tmp = strtok(cmdtext, idx);
 				if(!strlen(tmp)) {
-					SendClientMessage(playerid, COLOR_WHITE, "USAGE: /tie [Playerid/PartOfName]");
+					SendClientMessage(playerid, COLOR_WHITE, "Uzycie: /tie [Playerid/PartOfName]");
 					return 1;
 				}
 				giveplayerid = ReturnUser(tmp);
@@ -11628,7 +11628,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 			    }
 			    tmp = strtok(cmdtext, idx);
 				if(!strlen(tmp)) {
-					SendClientMessage(playerid, COLOR_WHITE, "USAGE: /untie [Playerid/PartOfName]");
+					SendClientMessage(playerid, COLOR_WHITE, "Uzycie: /untie [Playerid/PartOfName]");
 					return 1;
 				}
 				giveplayerid = ReturnUser(tmp);
@@ -11685,7 +11685,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 			x_nr = strtok(cmdtext, idx);
 			if(!strlen(x_nr)) {
 				SendClientMessage(playerid, COLOR_WHITE, "|__________________ Selling __________________|");
-				SendClientMessage(playerid, COLOR_WHITE, "USAGE: /sell [name]");
+				SendClientMessage(playerid, COLOR_WHITE, "Uzycie: /sell [name]");
 		  		SendClientMessage(playerid, COLOR_GREY, "Available names: Fish, Cooked");
 				SendClientMessage(playerid, COLOR_WHITE, "|_____________________________________________|");
 				return 1;
@@ -11699,7 +11699,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 				}
 			    tmp = strtok(cmdtext, idx);
 				if(!strlen(tmp)) {
-					SendClientMessage(playerid, COLOR_WHITE, "USAGE: /sell fish [fish]");
+					SendClientMessage(playerid, COLOR_WHITE, "Uzycie: /sell fish [fish]");
 					return 1;
 				}
 				new price;
@@ -11827,7 +11827,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 			{
 			    tmp = strtok(cmdtext, idx);
 			    if(!strlen(tmp)) {
-					SendClientMessage(playerid, COLOR_WHITE, "USAGE: /sell cooked [cooknumber] [playerid/PartOfName]");
+					SendClientMessage(playerid, COLOR_WHITE, "Uzycie: /sell cooked [cooknumber] [playerid/PartOfName]");
 					return 1;
 				}
 				new cookid = strval(tmp);
@@ -11839,7 +11839,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 				else if(cookid == 5 && Cooking[playerid][pCWeight5] < 1) { SendClientMessage(playerid, COLOR_GREY, "   You didnt even Cook something at that number(5) !"); return 1; }
 				tmp = strtok(cmdtext, idx);
 			    if(!strlen(tmp)) {
-					SendClientMessage(playerid, COLOR_WHITE, "USAGE: /sell cooked [cooknumber] [playerid/PartOfName]");
+					SendClientMessage(playerid, COLOR_WHITE, "Uzycie: /sell cooked [cooknumber] [playerid/PartOfName]");
 					return 1;
 				}
 				giveplayerid = ReturnUser(tmp);
@@ -12215,7 +12215,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 					    tmp = strtok(cmdtext, idx);
 						if(!strlen(tmp))
 						{
-							SendClientMessage(playerid, COLOR_WHITE, "USAGE: /fare [price]");
+							SendClientMessage(playerid, COLOR_WHITE, "Uzycie: /fare [price]");
 							return 1;
 						}
 						moneys = strval(tmp);
@@ -12238,7 +12238,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 					    tmp = strtok(cmdtext, idx);
 						if(!strlen(tmp))
 						{
-							SendClientMessage(playerid, COLOR_WHITE, "USAGE: /fare [price]");
+							SendClientMessage(playerid, COLOR_WHITE, "Uzycie: /fare [price]");
 							return 1;
 						}
 						moneys = strval(tmp);
@@ -12278,7 +12278,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 	        }
 	        tmp = strtok(cmdtext, idx);
 			if(!strlen(tmp)) {
-				SendClientMessage(playerid, COLOR_WHITE, "USAGE: /eat [cook number]");
+				SendClientMessage(playerid, COLOR_WHITE, "Uzycie: /eat [cook number]");
 				return 1;
 			}
 			new cookid = strval(tmp);
@@ -12385,7 +12385,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 	            new x_nr[256];
 	            x_nr = strtok(cmdtext, idx);
 				if(!strlen(x_nr)) {
-					SendClientMessage(playerid, COLOR_WHITE, "USAGE: /cook [name]");
+					SendClientMessage(playerid, COLOR_WHITE, "Uzycie: /cook [name]");
 					SendClientMessage(playerid, COLOR_WHITE, "Available names: Lastfish, Fish, Chicken, Hamburger, Pizza.");
 					return 1;
 				}
@@ -12468,7 +12468,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 				    tmp = strtok(cmdtext, idx);
 					if(!strlen(tmp))
 					{
-						SendClientMessage(playerid, COLOR_WHITE, "USAGE: /cook fish [fishnumber]");
+						SendClientMessage(playerid, COLOR_WHITE, "Uzycie: /cook fish [fishnumber]");
 						return 1;
 					}
 					new fishid = strval(tmp);
@@ -13208,7 +13208,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 			tmp = strtok(cmdtext, idx);
 			if(!strlen(tmp))
 			{
-				SendClientMessage(playerid, COLOR_WHITE, "USAGE: /releasefish [fish]");
+				SendClientMessage(playerid, COLOR_WHITE, "Uzycie: /releasefish [fish]");
 				return 1;
 			}
 			new fishid = strval(tmp);
@@ -13296,7 +13296,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 	        tmp = strtok(cmdtext, idx);
 			if(!strlen(tmp))
 			{
-				SendClientMessage(playerid, COLOR_WHITE, "USAGE: /showlicenses [playerid/PartOfName]");
+				SendClientMessage(playerid, COLOR_WHITE, "Uzycie: /showlicenses [playerid/PartOfName]");
 				return 1;
 			}
 			giveplayerid = ReturnUser(tmp);
@@ -13359,7 +13359,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 	        tmp = strtok(cmdtext, idx);
 			if(!strlen(tmp))
 			{
-				SendClientMessage(playerid, COLOR_WHITE, "USAGE: /frisk [playerid/PartOfName]");
+				SendClientMessage(playerid, COLOR_WHITE, "Uzycie: /frisk [playerid/PartOfName]");
 				return 1;
 			}
 			giveplayerid = ReturnUser(tmp);
@@ -13425,7 +13425,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 			tmp = strtok(cmdtext, idx);
 			if(!strlen(tmp))
 			{
-				SendClientMessage(playerid, COLOR_WHITE, "USAGE: /sellcar [playerid/PartOfName] [price]");
+				SendClientMessage(playerid, COLOR_WHITE, "Uzycie: /sellcar [playerid/PartOfName] [price]");
 				return 1;
 			}
 			//giveplayerid = strval(tmp);
@@ -13433,7 +13433,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 			tmp = strtok(cmdtext, idx);
 			if(!strlen(tmp))
 			{
-				SendClientMessage(playerid, COLOR_WHITE, "USAGE: /sellcar [playerid/PartOfName] [price]");
+				SendClientMessage(playerid, COLOR_WHITE, "Uzycie: /sellcar [playerid/PartOfName] [price]");
 				return 1;
 			}
 			new money = strval(tmp);
@@ -13523,7 +13523,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 			new x_nr[256];
 			x_nr = strtok(cmdtext, idx);
 			if(!strlen(x_nr)) {
-				SendClientMessage(playerid, COLOR_WHITE, "USAGE: /materials [name]");
+				SendClientMessage(playerid, COLOR_WHITE, "Uzycie: /materials [name]");
 				SendClientMessage(playerid, COLOR_WHITE, "Available names: Get, Deliver.");
 				return 1;
 			}
@@ -13538,7 +13538,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 			        }
 			        tmp = strtok(cmdtext, idx);
 			        if(!strlen(tmp)) {
-						SendClientMessage(playerid, COLOR_WHITE, "USAGE: /materials get [ammount]");
+						SendClientMessage(playerid, COLOR_WHITE, "Uzycie: /materials get [ammount]");
 						return 1;
 					}
 					moneys = strval(tmp);
@@ -13608,7 +13608,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 			tmp = strtok(cmdtext, idx);
 			if(!strlen(tmp))
 			{
-				SendClientMessage(playerid, COLOR_GRAD1, "USAGE: /sellgun [playerid/PartOfName] [weaponname]");
+				SendClientMessage(playerid, COLOR_GRAD1, "Uzycie: /sellgun [playerid/PartOfName] [weaponname]");
 				SendClientMessage(playerid, COLOR_GREY, "Weapons: flowers(25) sdpistol(100) eagle(150) mp5(200) shotgun(200)");
 				SendClientMessage(playerid, COLOR_GREY, "Weapons: ak47(600) m4(600) rifle (600)");
 				return 1;
@@ -13623,7 +13623,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 					{
 						SendClientMessage(playerid, COLOR_GREEN, "________________________________________________");
 						SendClientMessage(playerid, COLOR_WHITE, "*** Sell Guns ***");
-						SendClientMessage(playerid, COLOR_GREY, "USAGE: /sellgun [playerid/PartOfName] [weaponname]");
+						SendClientMessage(playerid, COLOR_GREY, "Uzycie: /sellgun [playerid/PartOfName] [weaponname]");
 						SendClientMessage(playerid, COLOR_GREY, "Weapons: flowers(25) sdpistol(100) eagle(200) mp5(200) shotgun(200)");
 						SendClientMessage(playerid, COLOR_GREY, "Weapons: ak47(600) m4(600) rifle(600)");
 						SendClientMessage(playerid, COLOR_GREEN, "________________________________________________");
@@ -13691,7 +13691,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 
 			if(!strlen(x_job)) {
 				SendClientMessage(playerid, COLOR_WHITE, "|__________________ Get __________________|");
-				SendClientMessage(playerid, COLOR_WHITE, "USAGE: /get [name]");
+				SendClientMessage(playerid, COLOR_WHITE, "Uzycie: /get [name]");
 		  		SendClientMessage(playerid, COLOR_GREY, "Available names: Drugs, Fuel");
 				SendClientMessage(playerid, COLOR_GREEN, "|_________________________________________|");
 				return 1;
@@ -13711,7 +13711,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 			    tmp = strtok(cmdtext, idx);
 				if(!strlen(tmp))
 				{
-					SendClientMessage(playerid, COLOR_GRAD2, "USAGE: /get drugs [ammount]");
+					SendClientMessage(playerid, COLOR_GRAD2, "Uzycie: /get drugs [ammount]");
 					return 1;
 				}
 				new level = PlayerInfo[playerid][pDrugsSkill];
@@ -14000,7 +14000,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 			{
 			    tmp = strtok(cmdtext, idx);
 				if(!strlen(tmp)) {
-					SendClientMessage(playerid, COLOR_WHITE, "USAGE: /cuff [Playerid/PartOfName]");
+					SendClientMessage(playerid, COLOR_WHITE, "Uzycie: /cuff [Playerid/PartOfName]");
 					return 1;
 				}
 				giveplayerid = ReturnUser(tmp);
@@ -14071,7 +14071,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 			{
 			    tmp = strtok(cmdtext, idx);
 				if(!strlen(tmp)) {
-					SendClientMessage(playerid, COLOR_WHITE, "USAGE: /uncuff [Playerid/PartOfName]");
+					SendClientMessage(playerid, COLOR_WHITE, "Uzycie: /uncuff [Playerid/PartOfName]");
 					return 1;
 				}
 				giveplayerid = ReturnUser(tmp);
@@ -14142,7 +14142,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 		    tmp = strtok(cmdtext, idx);
 			if(!strlen(tmp))
 			{
-				SendClientMessage(playerid, COLOR_GRAD2, "USAGE: /find [playerid/PartOfName]");
+				SendClientMessage(playerid, COLOR_GRAD2, "Uzycie: /find [playerid/PartOfName]");
 				return 1;
 			}
 			giveplayerid = ReturnUser(tmp);
@@ -14200,7 +14200,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 			tmp = strtok(cmdtext, idx);
 			if(!strlen(tmp))
 			{
-				SendClientMessage(playerid, COLOR_GRAD2, "USAGE: /guard [playerid/PartOfName] [price]");
+				SendClientMessage(playerid, COLOR_GRAD2, "Uzycie: /guard [playerid/PartOfName] [price]");
 				return 1;
 			}
 			new money;
@@ -14258,7 +14258,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 			tmp = strtok(cmdtext, idx);
 			if(!strlen(tmp))
 			{
-				SendClientMessage(playerid, COLOR_GRAD2, "USAGE: /free [playerid/PartOfName]");
+				SendClientMessage(playerid, COLOR_GRAD2, "Uzycie: /free [playerid/PartOfName]");
 				return 1;
 			}
 			giveplayerid = ReturnUser(tmp);
@@ -14311,7 +14311,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 			x_job = strtok(cmdtext, idx);
 			if(!strlen(x_job)) {
 				SendClientMessage(playerid, COLOR_WHITE, "|__________________ Cancel __________________|");
-				SendClientMessage(playerid, COLOR_WHITE, "USAGE: /cancel [name]");
+				SendClientMessage(playerid, COLOR_WHITE, "Uzycie: /cancel [name]");
 				SendClientMessage(playerid, COLOR_GREY, "Available names: Sex, Drugs, Repair, Lawyer, Bodyguard, Live, Refill, Car, Boxing");
 				SendClientMessage(playerid, COLOR_GREY, "Available names: Taxi, Bus, Medic, Mechanic, Paper, Ticket, Witness, Marriage, Divorce");
 				SendClientMessage(playerid, COLOR_WHITE, "|____________________________________________|");
@@ -14416,7 +14416,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 			x_job = strtok(cmdtext, idx);
 			if(!strlen(x_job)) {
 				SendClientMessage(playerid, COLOR_WHITE, "|__________________ Accept __________________|");
-				SendClientMessage(playerid, COLOR_WHITE, "USAGE: accept [name]");
+				SendClientMessage(playerid, COLOR_WHITE, "Uzycie: accept [name]");
 				SendClientMessage(playerid, COLOR_GREY, "Available names: Sex, Drugs, Repair, Lawyer, Bodyguard, Job, Live, Refill");
 				SendClientMessage(playerid, COLOR_GREY, "Available names: Car, Taxi, Bus, Boxing, Medic, Mechanic, Paper, Ticket");
 				SendClientMessage(playerid, COLOR_WHITE, "|____________________________________________|");
@@ -15062,7 +15062,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 			    tmp = strtok(cmdtext, idx);
 				if(!strlen(tmp))
 				{
-					SendClientMessage(playerid, COLOR_GRAD2, "USAGE: /accept lawyer [playerid/PartOfName]");
+					SendClientMessage(playerid, COLOR_GRAD2, "Uzycie: /accept lawyer [playerid/PartOfName]");
 					return 1;
 				}
 				giveplayerid = ReturnUser(tmp);
@@ -15371,7 +15371,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 			tmp = strtok(cmdtext, idx);
 			if(!strlen(tmp))
 			{
-				SendClientMessage(playerid, COLOR_GRAD2, "USAGE: /refill [playerid/PartOfName] [price]");
+				SendClientMessage(playerid, COLOR_GRAD2, "Uzycie: /refill [playerid/PartOfName] [price]");
 				return 1;
 			}
 			new playa;
@@ -15421,7 +15421,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 			tmp = strtok(cmdtext, idx);
 			if(!strlen(tmp))
 			{
-				SendClientMessage(playerid, COLOR_GRAD2, "USAGE: /repair [playerid/PartOfName] [price]");
+				SendClientMessage(playerid, COLOR_GRAD2, "Uzycie: /repair [playerid/PartOfName] [price]");
 				return 1;
 			}
 			new playa;
@@ -15505,7 +15505,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 			result[idx - offset] = EOS;
 			if(!strlen(result))
 			{
-				SendClientMessage(playerid, COLOR_GRAD2, "USAGE: (/f)amily [family chat]");
+				SendClientMessage(playerid, COLOR_GRAD2, "Uzycie: (/f)amily [family chat]");
 				return 1;
 			}
 			if (gTeam[playerid] >= 5 || PlayerInfo[playerid][pFMember] < 255)
@@ -15644,7 +15644,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 					result[idx - offset] = EOS;
 					if(!strlen(result))
 					{
-						SendClientMessage(playerid, COLOR_GRAD2, "USAGE: /news [newstext]");
+						SendClientMessage(playerid, COLOR_GRAD2, "Uzycie: /news [newstext]");
 						return 1;
 					}
 					format(string, sizeof(string), "NR %s: %s", sendername, result);
@@ -15696,7 +15696,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 				tmp = strtok(cmdtext, idx);
 				if(!strlen(tmp))
 				{
-					SendClientMessage(playerid, COLOR_GRAD1, "USAGE: /live [playerid/PartOfName]");
+					SendClientMessage(playerid, COLOR_GRAD1, "Uzycie: /live [playerid/PartOfName]");
 					return 1;
 				}
 				//giveplayerid = strval(tmp);
@@ -15748,7 +15748,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 			tmp = strtok(cmdtext, idx);
 			if(!strlen(tmp))
 			{
-				SendClientMessage(playerid, COLOR_GRAD2, "USAGE: /selldrugs [playerid/PartOfName] [ammount] [price]");
+				SendClientMessage(playerid, COLOR_GRAD2, "Uzycie: /selldrugs [playerid/PartOfName] [ammount] [price]");
 				return 1;
 			}
 			new playa;
@@ -15889,7 +15889,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 				tmp = strtok(cmdtext, idx);
 				if(!strlen(tmp))
 				{
-					SendClientMessage(playerid, COLOR_GRAD2, "USAGE: /eject [playerid/PartOfName]");
+					SendClientMessage(playerid, COLOR_GRAD2, "Uzycie: /eject [playerid/PartOfName]");
 					return 1;
 				}
 				new playa;
@@ -15946,7 +15946,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 				tmp = strtok(cmdtext, idx);
 				if(!strlen(tmp))
 				{
-					SendClientMessage(playerid, COLOR_GRAD1, "USAGE: /sex [playerid/PartOfName] [price]");
+					SendClientMessage(playerid, COLOR_GRAD1, "Uzycie: /sex [playerid/PartOfName] [price]");
 					return 1;
 				}
 				//giveplayerid = strval(tmp);
@@ -16163,7 +16163,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 				tmp = strtok(cmdtext, idx);
 				if(!strlen(tmp))
 				{
-					SendClientMessage(playerid, COLOR_GRAD1, "USAGE: /clear [playerid/PartOfName]");
+					SendClientMessage(playerid, COLOR_GRAD1, "Uzycie: /clear [playerid/PartOfName]");
 					return 1;
 				}
 				giveplayerid = ReturnUser(tmp);
@@ -16198,7 +16198,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 			    tmp = strtok(cmdtext, idx);
 				if(!strlen(tmp))
 				{
-					SendClientMessage(playerid, COLOR_GRAD1, "USAGE: /clear [playerid/PartOfName]");
+					SendClientMessage(playerid, COLOR_GRAD1, "Uzycie: /clear [playerid/PartOfName]");
 					return 1;
 				}
 				giveplayerid = ReturnUser(tmp);
@@ -16270,14 +16270,14 @@ public OnPlayerCommandText(playerid, cmdtext[])
 	    	tmp = strtok(cmdtext, idx);
 			if(!strlen(tmp))
 			{
-				SendClientMessage(playerid, COLOR_GRAD2, "USAGE: /ticket [playerid/PartOfName] [price] [reason]");
+				SendClientMessage(playerid, COLOR_GRAD2, "Uzycie: /ticket [playerid/PartOfName] [price] [reason]");
 				return 1;
 			}
 			giveplayerid = ReturnUser(tmp);
             tmp = strtok(cmdtext, idx);
 			if(!strlen(tmp))
 			{
-				SendClientMessage(playerid, COLOR_GRAD2, "USAGE: /ticket [playerid/PartOfName] [price] [reason]");
+				SendClientMessage(playerid, COLOR_GRAD2, "Uzycie: /ticket [playerid/PartOfName] [price] [reason]");
 				return 1;
 			}
 			moneys = strval(tmp);
@@ -16305,7 +16305,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 						result[idx - offset] = EOS;
 						if(!strlen(result))
 						{
-							SendClientMessage(playerid, COLOR_GRAD2, "USAGE: /ticket [playerid/PartOfName] [price] [reason]");
+							SendClientMessage(playerid, COLOR_GRAD2, "Uzycie: /ticket [playerid/PartOfName] [price] [reason]");
 							return 1;
 						}
 						format(string, sizeof(string), "* You gave %s a Ticket costing $%d, reason: %s", giveplayer, moneys, (result));
@@ -16351,7 +16351,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 				tmp = strtok(cmdtext, idx);
 				if(!strlen(tmp))
 				{
-					SendClientMessage(playerid, COLOR_GRAD2, "USAGE: /arrest [price] [time (minutes)] [bail (0=no 1=yes)] [bailprice]");
+					SendClientMessage(playerid, COLOR_GRAD2, "Uzycie: /arrest [price] [time (minutes)] [bail (0=no 1=yes)] [bailprice]");
 					return 1;
 				}
 				moneys = strval(tmp);
@@ -16359,7 +16359,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 				tmp = strtok(cmdtext, idx);
 				if(!strlen(tmp))
 				{
-					SendClientMessage(playerid, COLOR_GRAD2, "USAGE: /arrest [price] [time (minutes)] [bail (0=no 1=yes)] [bailprice]");
+					SendClientMessage(playerid, COLOR_GRAD2, "Uzycie: /arrest [price] [time (minutes)] [bail (0=no 1=yes)] [bailprice]");
 					return 1;
 				}
 				new time = strval(tmp);
@@ -16367,7 +16367,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 				tmp = strtok(cmdtext, idx);
 				if(!strlen(tmp))
 				{
-					SendClientMessage(playerid, COLOR_GRAD2, "USAGE: /arrest [price] [time (minutes)] [bail (0=no 1=yes)] [bailprice]");
+					SendClientMessage(playerid, COLOR_GRAD2, "Uzycie: /arrest [price] [time (minutes)] [bail (0=no 1=yes)] [bailprice]");
 					return 1;
 				}
 				new bail = strval(tmp);
@@ -16375,7 +16375,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 				tmp = strtok(cmdtext, idx);
 				if(!strlen(tmp))
 				{
-					SendClientMessage(playerid, COLOR_GRAD2, "USAGE: /arrest [price] [time (minutes)] [bail (0=no 1=yes)] [bailprice]");
+					SendClientMessage(playerid, COLOR_GRAD2, "Uzycie: /arrest [price] [time (minutes)] [bail (0=no 1=yes)] [bailprice]");
 					return 1;
 				}
 				new bailprice = strval(tmp);
@@ -16457,14 +16457,14 @@ public OnPlayerCommandText(playerid, cmdtext[])
 			tmp = strtok(cmdtext, idx);
 			if(!strlen(tmp))
 			{
-				SendClientMessage(playerid, COLOR_GRAD1, "USAGE: /contract [playerid/PartOfName] [amount]");
+				SendClientMessage(playerid, COLOR_GRAD1, "Uzycie: /contract [playerid/PartOfName] [amount]");
 				return 1;
 			}
 			giveplayerid = ReturnUser(tmp);
 			tmp = strtok(cmdtext, idx);
 			if(!strlen(tmp))
 			{
-				SendClientMessage(playerid, COLOR_GRAD1, "USAGE: /contract [playerid/PartOfName] [amount]");
+				SendClientMessage(playerid, COLOR_GRAD1, "Uzycie: /contract [playerid/PartOfName] [amount]");
 				return 1;
 			}
 			moneys = strval(tmp);
