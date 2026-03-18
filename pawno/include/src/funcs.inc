@@ -7,6 +7,22 @@
 	Desc: Server functions.
 */
 
+stock ConnectingMySQL() {
+	mySQLHandle = mysql_init(LOG_ALL, 1);
+	mysql_connect(MYSQL_HOST, MYSQL_USER, MYSQL_PASSWORD, MYSQL_DB, mySQLHandle, 1);
+
+	if(!mysql_ping()) {
+		printf("[MYSQL] Pomyslnie polaczono z baza danych!");
+	} else {
+		new error[64];
+
+		mysql_error(error);
+
+		printf("[MYSQL] Brak polacznia z baza danych! Blad: %s", error);
+		SendRconCommand("exit");
+	}
+}
+
 stock Float:GetDistanceBetweenPlayers(p1,p2)
 {
 	new Float:x1,Float:y1,Float:z1,Float:x2,Float:y2,Float:z2;
@@ -370,59 +386,6 @@ stock IsATruck(carid)
 		return 1;
 	}
 	return 0;
-}
-
-stock JoinChannel(playerid, number, line[])
-{
-    if(IsPlayerConnected(playerid))
-	{
-	    if(strcmp(IRCInfo[number][iPassword],line, true ) == 0 )
-		{
-	        JoinChannelNr(playerid, number);
-	    }
-	    else
-	    {
-	        SendClientMessage(playerid, COLOR_GREY, "   Wrong Channel Password !");
-	    }
-	}
-	return 1;
-}
-
-stock JoinChannelNr(playerid, number)
-{
-	if(IsPlayerConnected(playerid))
-	{
-	    new string[256];
-		new sendername[MAX_PLAYER_NAME];
-		GetPlayerName(playerid, sendername, sizeof(sendername));
-		if(PlayersChannel[playerid] < 999)
-	    {
-			format(string, sizeof(string), "* %s has left the Channel.", sendername);
-			SendIRCMessage(PlayersChannel[playerid], COLOR_GREEN, string);
-			IRCInfo[PlayersChannel[playerid]][iPlayers] -= 1;
-	    }
-		new channel; channel = number; channel += 1;
-	    PlayersChannel[playerid] = number;
-	    IRCInfo[PlayersChannel[playerid]][iPlayers] += 1;
-    	new wstring[128];
-		format(string, sizeof(string), "%s", sendername);
-		strmid(wstring, string, 0, strlen(string), 255);
-		if(strcmp(IRCInfo[number][iAdmin],wstring, true ) == 0 )
-		{
-		    format(string, sizeof(string), "* You have joined IRC Channel %d as the Administrator.", channel);
-			SendClientMessage(playerid, COLOR_YELLOW, string);
-		}
-		else
-		{
-		    format(string, sizeof(string), "* You have joined IRC Channel %d, Admin: %s.", channel, IRCInfo[number][iAdmin]);
-			SendClientMessage(playerid, COLOR_YELLOW, string);
-		}
-		format(string, sizeof(string), "MOTD: %s.", IRCInfo[number][iMOTD]);
-		SendClientMessage(playerid, COLOR_YELLOW, string);
-		format(string, sizeof(string), "* %s has joined the Channel.", sendername);
-		SendIRCMessage(number, COLOR_GREEN, string);
-	}
-	return 1;
 }
 
 stock ClearCK(ck)
@@ -1965,59 +1928,6 @@ stock SaveStuff()
 	return 1;
 }
 
-stock LoadIRC()
-{
-	new arrCoords[5][64];
-	new strFromFile2[256];
-	new File: file = fopen("channels.cfg", io_read);
-	if (file)
-	{
-		new idx;
-		while (idx < sizeof(IRCInfo))
-		{
-			fread(file, strFromFile2);
-			split(strFromFile2, arrCoords, '|');
-			strmid(IRCInfo[idx][iAdmin], arrCoords[0], 0, strlen(arrCoords[0]), 255);
-			strmid(IRCInfo[idx][iMOTD], arrCoords[1], 0, strlen(arrCoords[1]), 255);
-			strmid(IRCInfo[idx][iPassword], arrCoords[2], 0, strlen(arrCoords[2]), 255);
-			IRCInfo[idx][iNeedPass] = strval(arrCoords[3]);
-			IRCInfo[idx][iLock] = strval(arrCoords[4]);
-			printf("IRC:%d Admin:%s MOTD: %s Password: %s NeedPass: %d Lock: %d",idx,IRCInfo[idx][iAdmin],IRCInfo[idx][iMOTD],IRCInfo[idx][iPassword],IRCInfo[idx][iNeedPass],IRCInfo[idx][iLock]);
-			idx++;
-		}
-		fclose(file);
-	}
-	return 1;
-}
-
-stock SaveIRC()
-{
-	new idx;
-	new File: file2;
-	while (idx < sizeof(IRCInfo))
-	{
-		new coordsstring[256];
-		format(coordsstring, sizeof(coordsstring), "%s|%s|%s|%d|%d\n",
-		IRCInfo[idx][iAdmin],
-		IRCInfo[idx][iMOTD],
-		IRCInfo[idx][iPassword],
-		IRCInfo[idx][iNeedPass],
-		IRCInfo[idx][iLock]);
-		if(idx == 0)
-		{
-			file2 = fopen("channels.cfg", io_write);
-		}
-		else
-		{
-			file2 = fopen("channels.cfg", io_append);
-		}
-		fwrite(file2, coordsstring);
-		idx++;
-		fclose(file2);
-	}
-	return 1;
-}
-
 stock LoadTurfs()
 {
 	new arrCoords[6][64];
@@ -2226,7 +2136,7 @@ stock SavePapers()
 {
 	new idx;
 	new File: file2;
-	while (idx < sizeof(IRCInfo))
+	while (idx < sizeof(PaperInfo))
 	{
 		new coordsstring[256];
 		format(coordsstring, sizeof(coordsstring), "%d|%s|%s|%s|%s|%s|%s|%s|%s|%s|%d\n",
@@ -2705,23 +2615,6 @@ stock strtok(const string[], &index)
 	}
 	result[index - offset] = EOS;
 	return result;
-}
-
-stock split(const strsrc[], strdest[][], delimiter)
-{
-	new i, li;
-	new aNum;
-	new len;
-	while(i <= strlen(strsrc)){
-	    if(strsrc[i]==delimiter || i==strlen(strsrc)){
-	        len = strmid(strdest[aNum], strsrc, li, i, 128);
-	        strdest[aNum][len] = 0;
-	        li = i+1;
-	        aNum++;
-		}
-		i++;
-	}
-	return 1;
 }
 
 stock OnPlayerRegister(playerid, password[])
@@ -3307,20 +3200,6 @@ stock SendFamilyMessage(family, color, string[])
                 {
 					SendClientMessage(i, color, string);
 				}
-			}
-		}
-	}
-}
-
-stock SendIRCMessage(channel, color, string[])
-{
-	for(new i = 0; i < MAX_PLAYERS; i++)
-	{
-		if(IsPlayerConnected(i))
-		{
-		    if(PlayersChannel[i] == channel)
-		    {
-				SendClientMessage(i, color, string);
 			}
 		}
 	}

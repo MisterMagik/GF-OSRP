@@ -7,28 +7,39 @@
 	Desc: Server player/vehicle callbacks.
 */
 
-sampCallback OnGameModeInit()
-{
+sampCallback OnGameModeInit() {
+	new callSecs = gettime();
+
+	EnableStuntBonusForAll(0);
+	DisableInteriorEnterExits();
+	AllowInteriorWeapons(1);
+	EnableVehicleFriendlyFire();
+	ManualVehicleEngineAndLights();
+	ShowPlayerMarkers(PLAYER_MARKERS_MODE_OFF);
+	AddPlayerClassEx(0, 0, 0.0, 0.0, 0.0, 0.0, 0, 0, 0, 0, 0, 0);
+	SetPDistance(10);
+	AllowAdminTeleport(1);
+	SetGameModeText("OSRP v1.0");
+
+	ConnectingMySQL();
+
     new string[MAX_PLAYER_NAME];
     new string1[MAX_PLAYER_NAME];
-	for(new c=0;c<CAR_AMOUNT;c++)
-	{
+
+	for(new c=0;c<CAR_AMOUNT;c++) {
 		Gas[c] = GasMax;
 	}
+
 	LoadProperty();
 	LoadBizz();
 	LoadSBizz();
 	LoadBoxer();
 	LoadStuff();
-	LoadIRC();
 	LoadFamilies();
 	LoadCK();
 	LoadTurfs();
 	LoadPapers();
-	IRCInfo[0][iPlayers] = 0; IRCInfo[1][iPlayers] = 0; IRCInfo[2][iPlayers] = 0;
-	IRCInfo[3][iPlayers] = 0; IRCInfo[4][iPlayers] = 0; IRCInfo[5][iPlayers] = 0;
-	IRCInfo[6][iPlayers] = 0; IRCInfo[7][iPlayers] = 0; IRCInfo[8][iPlayers] = 0;
-	IRCInfo[9][iPlayers] = 0;
+
 	News[hTaken1] = 0; News[hTaken2] = 0; News[hTaken3] = 0; News[hTaken4] = 0; News[hTaken5] = 0;
 	format(string, sizeof(string), "Nothing");
 	strmid(News[hAdd1], string, 0, strlen(string), 255);
@@ -46,155 +57,43 @@ sampCallback OnGameModeInit()
 	PlayerHaul[79][pCapasity] = 100;
 	PlayerHaul[80][pCapasity] = 50;
 	PlayerHaul[81][pCapasity] = 50;
-	SetGameModeText("Old School RolePlay");
+
 	format(objstore, sizeof(objstore), "MOLE: I got nothing, check back with me later.");
 	format(cbjstore, sizeof(cbjstore), "HQ: There is nothing in your Vicinity, Out.");
 	format(motd, sizeof(motd), "Welcome to the Role Play - The Godfather Server.");
 	gettime(ghour, gminute, gsecond);
 	FixHour(ghour);
 	ghour = shifthour;
+
 	if(!realtime)
 	{
 		SetWorldTime(wtime);
 	}
-	SetPDistance(10);
-	EnableTirePopping(1);
-	//EnableZoneNames(1);
-	AllowInteriorWeapons(1);
-	AllowAdminTeleport(1);
-	UsePlayerPedAnims();
+
 	// CreatedCars check
 	for(new i = 0; i < sizeof(CreatedCars); i++)
 	{
 	    CreatedCars[i] = 0;
 	}
+
 	// Zones
 	for(new i = 0; i < sizeof(TurfInfo); i++)
 	{
 	    Turfs[i] = GangZoneCreate(TurfInfo[i][zMinX],TurfInfo[i][zMinY],TurfInfo[i][zMaxX],TurfInfo[i][zMaxY]);
 	}
+
 	// Player Class's
 	for(new i = 0; i <= sizeof(Peds)-1; i++)
 	{
 		AddPlayerClass(Peds[i][0],1958.3783,1343.1572,1100.3746,269.1425,-1,-1,-1,-1,-1,-1);
 	}
+
 	// Car Spawns
 	for(new h = 0; h < sizeof(HouseInfo); h++)
 	{
 		AddStaticVehicleEx(HouseInfo[h][hVec], HouseCarSpawns[h][0], HouseCarSpawns[h][1], HouseCarSpawns[h][2], HouseCarSpawns[h][3], HouseInfo[h][hVcol1], HouseInfo[h][hVcol2], 60000);
 		gCarLock[h+1] = 1;
 	}//34
-	AddStaticVehicleEx(596,-1381.9910,457.0832,6.9837,0.1452, 44, 86, 60000);/*Patriot cruiser*/
-	AddStaticVehicleEx(596,1558.392000,-1710.859000,5.466783,1.0, -1, -1, 60000);/*CopCruiser*/
-	AddStaticVehicleEx(596,1569.639000,-1710.859000,5.466783,1.0, -1, -1, 60000);/*CopCruiser*/
-	AddStaticVehicleEx(596,-2139.1995,-2393.7671,30.3452,140.7012, 0, 0, 60000);/*CopCruiser*/
-	AddStaticVehicleEx(425,-1279.8262,493.3734,18.0309,219.1345, -1, -1, 60000);/*Hunter*/
-	AddStaticVehicleEx(425,-1291.0063,492.3819,18.0305,223.8306, -1, -1, 60000);/*Hunter*/
-	AddStaticVehicleEx(596,1601.308000,-1621.916000,13.056540,90.0, -1, -1, 60000);/*CopCruiser*/
-	AddStaticVehicleEx(596,1535.8275,-1678.0283,13.1680,359.9876, -1, -1, 60000);/*CopCruiser*/
-	AddStaticVehicleEx(596,1561.860000,-1694.905000,6.139762,222.0,-1, -1, 60000);/*CopCruiser*/
-	AddStaticVehicleEx(470,-1375.1555,457.5534,6.9837,359.8331,-1, -1, 60000);/*Patriot*/
-	AddStaticVehicleEx(467,1067.1295,-295.5681,73.7826,179.6040, 90, -1, 60000);/*Hitman Oceanic*/
-	AddStaticVehicleEx(467,1077.3829,-295.1148,73.7812,180.2754, 90, -1, 60000);/*Hitman Oceanic*/
-	AddStaticVehicleEx(596,614.8,-588.5,17.4,240.0, -1, -1, 60000);/*CopCruiser*/
-	AddStaticVehicleEx(596,635.1,-561.5,16.5,180.0, -1, -1, 60000);/*CopCruiser*/
-	AddStaticVehicleEx(596,-2177.5759,-2362.5042,30.4296,141.0939, 0, 0, 60000);/*CopCruiser*/
-	AddStaticVehicleEx(490,1539.392000,-1646.262000,6.274928,180.0, -1, -1, 60000);/*FBI Rancher*/
-	AddStaticVehicleEx(490,1531.254000,-1647.431000,6.274976,200.0, -1, -1, 60000);/*FBI Rancher*/
-	AddStaticVehicleEx(470,-1363.1493,457.1042,6.9836,359.6740, -1, -1, 60000);/*Patriot*/
-	AddStaticVehicleEx(470,-1355.5931,456.7297,6.9836,0.0286, -1, -1, 60000);/*Patriot*/
-	AddStaticVehicleEx(596,1535.8459,-1668.7560,13.2653,359.7447,-1, -1, 60000);/*CopCruiser*/
-	AddStaticVehicleEx(407,-2550.1443,610.7148,14.3281,90.6597, -1, -1, 60000);/*FireTruck*/
-	AddStaticVehicleEx(596,-2181.2766,-2375.6953,30.3405,231.7148, 0, 0, 60000);/*CopCruiser*/
-	AddStaticVehicleEx(596,1545.7845,-1684.4004,5.6342,271.1593, 89, 1, 60000);/*General Car*/
-	AddStaticVehicleEx(596,1530.1611,-1676.0326,5.4563,231.7766, 89, 1, 60000);/*General Car*/
-	AddStaticVehicleEx(407,-2551.8792,587.1581,14.3281,90.4374,-1, -1, 60000);/*FireTruck*/
-	AddStaticVehicleEx(497, 1517.8,-1656.1,13.7,0.0, -1, -1, 60000);/*Police Maveric*/
-	AddStaticVehicleEx(416,-2637.0630,617.3499,14.3281,90.1464, -1, -1, 60000);/*Ambulance*/
-	AddStaticVehicleEx(416,-2661.4282,617.3460,14.3288,89.2072, -1, -1, 60000);/*Ambulance*/
-	AddStaticVehicleEx(416,-2662.4568,595.3354,14.3281,273.2716, -1, -1, 60000);/*Ambulance*/
-	AddStaticVehicleEx(431,1172.5,-1795.5,13.1,0.0, -1, -1, 60000);//64/*Bus*/
-	AddStaticVehicleEx(431,1182.1,-1795.9,13.1,0.0, -1, -1, 60000);//65/*Bus*/
-	AddStaticVehicleEx(430,-1443.4342,427.0862,-0.6994,268.8489,-1, -1, 60000);/*NG BOAT*/
-	AddStaticVehicleEx(430,-1442.0721,390.6206,-0.4339,270.1023,-1, -1, 60000);/*NG BOAT*/
-	AddStaticVehicleEx(467,1071.9189,-294.9166,73.7250,178.9444,90, -1, 60000);//68/*Hitman Oceanic*/
-	AddStaticVehicleEx(405,-2082.3562,-117.3896,34.9299,177.0056,17, 17, 60000);//69 Driving School /*Sentinel*/
-	AddStaticVehicleEx(405,-2072.5933,-117.4564,34.9383,178.0982,17, 17, 60000);//Driving School/*Sentinel*/
-	AddStaticVehicleEx(405,-2062.4253,-117.6652,34.9347,180.8394,17, 17, 60000);//Driving School/*Sentinel*/
-	AddStaticVehicleEx(434,551.7929,-1285.5260,16.9303,0.4147,-1, -1, 60000);//Rent car/*Hotknife*/
-	AddStaticVehicleEx(568,536.9888,-1286.5275,16.9993,359.1704,-1, -1, 60000); //Rent car/*Bandito*/
-	AddStaticVehicleEx(434,544.1793,-1286.1422,16.9492,7.3116,-1, -1, 60000);//Rent car/*Hotknife*/
-	AddStaticVehicleEx(434,-1949.9493,258.1949,35.1922,70.7581,-1, -1, 60000); //Rent car/*Hotknife*/
-	AddStaticVehicleEx(568,-1948.1650,264.8094,35.1930,72.6982,-1, -1, 60000); //Rent car/*Bandito*/
-	AddStaticVehicleEx(434,-1947.0601,270.3815,35.1954,66.0783,-1, -1, 60000); //Rent car/*Hotknife*/
-	AddStaticVehicleEx(456,2795.2,-2417.8,13.4,90.8,-1,-1,60000);//Component Truck/*Yankee*/
-	AddStaticVehicleEx(456,2783.9,-2417.9,13.4,90.8,-1,-1,60000);//Component Truck/*Yankee*/
-	AddStaticVehicleEx(440,2794.1,-2455.9,13.4,90.8,-1,-1,60000);//Component Truck/*Rumpo*/
-	AddStaticVehicleEx(440,2782.9,-2455.6,13.4,90.8,-1,-1,60000);//Component Truck/*Rumpo*/
-	AddStaticVehicleEx(420,-1986.4958,115.9394,27.3324,0.1277,-1, -1, 60000);//Taxi/*Taxi*/
-	AddStaticVehicleEx(487,-2703.3201,624.0250,14.1766,180.2649, 1, 3, 60000);//Medic Chopper/*Maverick*/
-	AddStaticVehicleEx(420,-1986.5049,129.1749,27.3299,359.6938,-1, -1, 60000);//Taxi/*Taxi*/
-	AddStaticVehicleEx(420,-1986.4310,150.1195,27.3299,0.0329,-1, -1, 60000);//Taxi //CAR ID 85/*Taxi*/
-	AddStaticVehicleEx(452,720.1,-1694.0,-0.4,179.4,-1,-1,60000);//Fishboat/*Speeder*/
-	AddStaticVehicleEx(452,721.2,-1629.4,-0.4,180.9,-1,-1,60000);//Fishboat/*Speeder*/
-	AddStaticVehicleEx(452,739.5,-1670.5,-0.6,177.5,-1,-1,60000);//Fishboat/*Speeder*/
-	AddStaticVehicleEx(452,-1474.4949,693.0169,0.1996,0.0751,-1,-1,60000);//Fishboat SF/*Speeder*/
-	AddStaticVehicleEx(452,-1720.0717,1439.6177,-0.4913,357.6789,-1,-1,60000);//Fishboat SF/*Speeder*/
-	AddStaticVehicleEx(520,-1430.4078,508.1596,18.9400,269.6329,44,86,60000);//NG Plane id 91
-	AddStaticVehicleEx(520,-1419.9038,493.5340,18.9350,269.6848,44,86,60000);//NG Plane id 92
-	AddStaticVehicleEx(520,-1398.6207,507.7513,18.9328,269.8143,44,86,60000); //NG Plane id 93
-	AddStaticVehicleEx(420,-1986.6089,163.8508,27.4837,359.5881,-1,-1,60000);//Taxi
-	AddStaticVehicleEx(487,1088.1736,-294.8004,73.7886,134.9237, 0, 1, 60000); //Hitman Chopper
-	AddStaticVehicleEx(488,-2044.1797,479.9963,35.1399,180.0648,-1,-1,60000); // newschopper
-	AddStaticVehicleEx(582,-2022.6146,458.6767,35.1414,0.7133,-1,-1,60000); // newsvan
-	AddStaticVehicleEx(582,-2031.3779,459.0133,35.1362,359.7429,-1,-1,60000); // newsvan
-	AddStaticVehicleEx(593,382.5172,2536.9561,16.5338,179.7261,-1,-1,60000);//Flyschool
-	AddStaticVehicleEx(513,348.3660,2536.9792,16.7418,178.8195,-1,-1,60000);//Flyschool
-	AddStaticVehicleEx(487,365.4068,2537.0327,16.6645,181.9959,-1,-1,60000);//Flyschool
-	AddStaticVehicleEx(593,-1429.2843,-505.8203,13.7824,205.7709,-1,-1,60000);//Airport SF
-	AddStaticVehicleEx(593,-1462.4779,-524.2803,13.7832,204.8137,-1,-1,60000);//Airport SF
-	AddStaticVehicleEx(593,1907.7614,-2624.4097,13.5416,53.1810,-1,-1,60000);//Airport LS
-	AddStaticVehicleEx(593,1887.0736,-2627.6543,13.5394,52.6116,-1,-1,60000);//Airport LS
-	AddStaticVehicleEx(513,-1354.3270,-466.5467,13.7827,162.0134,-1,-1,60000);//Airport SF
-	AddStaticVehicleEx(513,-1390.3510,-482.7985,13.7883,250.3124,-1,-1,60000);//Airport SF
-	AddStaticVehicleEx(513,1835.3215,-2624.1938,13.5405,56.0569,-1,-1,60000);//Airport LS
-	AddStaticVehicleEx(513,1813.2893,-2625.6296,13.5394,53.2858,-1,-1,60000);//Airport LS
-	AddStaticVehicleEx(571,2286.2141,-2354.5000,12.8306,225.8705,-1,-1,60000); // kart
-	AddStaticVehicleEx(571,2279.9412,-2348.4141,12.8312,225.8585,-1,-1,60000); // kart
-	AddStaticVehicleEx(571,2291.7932,-2345.5356,12.8305,227.3060,-1,-1,60000); // kart
-	AddStaticVehicleEx(571,2287.5615,-2341.6433,12.8306,226.5350,-1,-1,60000); // kart
-	AddStaticVehicleEx(571,2299.6785,-2338.3186,12.8307,224.3563,-1,-1,60000); // kart
-	AddStaticVehicleEx(571,2295.3887,-2334.9448,12.8307,227.9102,-1,-1,60000); // kart
-	CreateVehicle(494,-1401.0436,-210.0052,1042.9913,1.6623,1,0,60000); //hotring 116
-	CreateVehicle(494,-1400.4019,-219.9365,1043.0348,5.3554,1,3,60000); //hotring
-	CreateVehicle(494,-1394.4932,-207.7917,1042.9963,3.6872,0,6,60000); //hotring
-	CreateVehicle(494,-1393.7854,-217.9354,1043.0325,2.9556,1,2,60000); //hotring
-	CreateVehicle(468,-1445.6392,-592.3033,1055.7831,90.2133,-1,-1,60000); //bike 120
-	CreateVehicle(468,-1433.1708,-592.4930,1055.6533,92.4067,-1,-1,60000); //bike
-	CreateVehicle(468,-1448.5325,-584.4943,1055.4949,95.5400,-1,-1,60000); //bike
-	CreateVehicle(468,-1434.8973,-585.1266,1055.2488,91.1533,-1,-1,60000); //bike
-	CreateVehicle(468,-1449.2814,1610.7823,1052.5313,272.9406,-1,-1,60000); // bike 124
-	CreateVehicle(468,-1453.8767,1611.2418,1052.5313,89.0355,-1,-1,60000); // bike
-	CreateVehicle(468,-1454.4746,1614.3342,1052.5313,86.8422,-1,-1,60000); // bike
-	CreateVehicle(468,-1449.5795,1614.0684,1052.5313,269.2039,-1,-1,60000); // bike
-    CreateVehicle(514,-77.5039,-1108.1729,1.6683,161.8915,-1,-1,60000); // truck
-	CreateVehicle(514,-72.3507,-1109.7822,1.6670,161.7769,-1,-1,60000); // truck
-	CreateVehicle(514,-67.0126,-1111.7156,1.6688,160.4800,-1,-1,60000); // truck
-	CreateVehicle(435,-51.0638,-1135.2831,1.0781,68.3320,-1,-1,60000); // trailer
-	CreateVehicle(435,-53.6230,-1139.7546,1.0781,67.5604,-1,-1,60000); // trailer
-	CreateVehicle(435,-55.0517,-1144.3676,0.8018,68.1347,-1,-1,60000); // trailer
-	LinkVehicleToInterior(116, 7);
-	LinkVehicleToInterior(117, 7);
-	LinkVehicleToInterior(118, 7);
-	LinkVehicleToInterior(119, 7);
-	LinkVehicleToInterior(120, 4);
-	LinkVehicleToInterior(121, 4);
-	LinkVehicleToInterior(122, 4);
-	LinkVehicleToInterior(123, 4);
-	LinkVehicleToInterior(124, 14);
-	LinkVehicleToInterior(125, 14);
-	LinkVehicleToInterior(126, 14);
-	LinkVehicleToInterior(127, 14);
 	for(new h = 0; h < sizeof(HouseInfo); h++)
 	{
 		if(HouseInfo[h][hOwned] == 0)
@@ -279,16 +178,7 @@ sampCallback OnGameModeInit()
 	randa = random(sizeof(RandCars));carselect[12] = RandCars[randa][0];
 	randa = random(sizeof(RandCars));carselect[13] = RandCars[randa][0];
 	randa = random(sizeof(RandLCars));carselect[14] = RandLCars[randa][0];
-	AddStaticVehicleEx(carselect[14], 1279.4,-1337.0,13.5,1.0,-1, -1, -1);//long
-	AddStaticVehicleEx(409,1248.6779,-2045.4602,59.6498,268.3867,0,0,60000); // limo LaCosaNostra
-	AddStaticVehicleEx(507,1242.7739,-2031.1902,59.7773,178.8082,0,0,60000); // Elegant LaCosaNostra
-	AddStaticVehicleEx(507,1242.9808,-2015.0297,59.7788,180.6815,0,0,60000); // Elegant LaCosaNostra
-	AddStaticVehicleEx(507,1275.1589,-2046.2448,58.9736,87.6114,0,0,60000); // Elegant LaCosaNostra
-	AddStaticVehicleEx(409,-2274.3672,646.6611,49.1778,179.9364,50,50,60000); // limo Yakuza
-	AddStaticVehicleEx(421,-2176.6760,636.7382,49.2387,37.7510,50,50,60000); // Washington Yakuza
-	AddStaticVehicleEx(421,-2247.8093,649.9500,49.1645,0.0748,50,50,60000); // Washington Yakuza
-	AddStaticVehicleEx(421,-2247.4382,667.7339,49.1645,359.8687,50,50,60000); // Washington Yakuza
-	AddStaticVehicleEx(409,-2159.6860,-2393.2295,30.5070,52.5176,1,1,60000); // limo mayor
+
 	if (realtime)
 	{
 		new tmphour;
@@ -299,6 +189,7 @@ sampCallback OnGameModeInit()
 		tmphour = shifthour;
 		SetWorldTime(tmphour);
 	}
+
 	synctimer = SetTimer("SyncUp", 60000, 1);
 	unjailtimer = SetTimer("SetPlayerUnjail", 1000, 1);
 	othtimer = SetTimer("OtherTimer", 1000, 1);
@@ -628,10 +519,6 @@ sampCallback OnPlayerDisconnect(playerid)
 	if(PlayerKarting[playerid] > 0 && PlayerInKart[playerid] > 0)
 	{
 	    KartingPlayers --;
-	}
-	if(PlayersChannel[playerid] < 999)
-	{
-		IRCInfo[PlayersChannel[playerid]][iPlayers] -= 1;
 	}
 	if(HireCar[playerid] != 299)
 	{

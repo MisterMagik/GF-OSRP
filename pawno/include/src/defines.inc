@@ -20,6 +20,12 @@
 #define Callback%0(%1) \
 	forward %0(%1); public %0(%1)
 
+// MySQL
+#define MYSQL_HOST "145.239.236.240"
+#define MYSQL_USER "srv82617"
+#define MYSQL_PASSWORD "ZDIfB3h0gxelO5hM"
+#define MYSQL_DB "srv82617"
+
 // Kolory:
 #define COLOR_GRAD1 0xB4B5B7FF
 #define COLOR_GRAD2 0xBFC0C2FF

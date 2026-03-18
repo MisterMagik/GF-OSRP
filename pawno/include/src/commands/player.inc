@@ -4673,95 +4673,6 @@ CMD:makeadmin(playerid, params[]) {
 	return 1;
 }
 
-CMD:makeircadmin(playerid, params[]) {
-	new giveplayerid, channel;
-
-	if(sscanf(params, "ii", giveplayerid, channel))
-	{
-		SendClientMessage(playerid, COLOR_GRAD2, "Uzycie: /makeircadmin [playerid/PartOfName] [ChannelNr]");
-		return 1;
-	}
-
-	if(channel > 10 || channel < 0) { SendClientMessage(playerid, COLOR_GREY, "   Dont go below number 0, or above number 10!"); return 1; }
-	if (PlayerInfo[playerid][pAdmin] >= 1337)
-	{
-		if(IsPlayerConnected(giveplayerid))
-		{
-			format(gString, sizeof(gString), "* You've made %s an IRC Admin over Channel %d.", PlayerInfo[giveplayerid][pName], channel);
-			SendClientMessage(playerid, COLOR_LIGHTBLUE, gString);
-			format(gString, sizeof(gString), "* %s has made you an IRC Admin over Channel %d.", PlayerInfo[playerid][pName], channel);
-			SendClientMessage(giveplayerid, COLOR_LIGHTBLUE, gString);
-			format(gString, sizeof(gString), "%s", PlayerInfo[giveplayerid][pName]);
-			switch(channel)
-			{
-				case 1:
-				{
-					strmid(IRCInfo[0][iAdmin], gString, 0, strlen(gString), 255);
-					IRCInfo[0][iNeedPass] = 0; IRCInfo[0][iLock] = 0;
-				}
-				case 2:
-				{
-					strmid(IRCInfo[1][iAdmin], gString, 0, strlen(gString), 255);
-					IRCInfo[1][iNeedPass] = 0; IRCInfo[1][iLock] = 0;
-				}
-				case 3:
-				{
-					strmid(IRCInfo[2][iAdmin], gString, 0, strlen(gString), 255);
-					IRCInfo[2][iNeedPass] = 0; IRCInfo[2][iLock] = 0;
-				}
-				case 4:
-				{
-					strmid(IRCInfo[3][iAdmin], gString, 0, strlen(gString), 255);
-					IRCInfo[3][iNeedPass] = 0; IRCInfo[3][iLock] = 0;
-				}
-				case 5:
-				{
-					strmid(IRCInfo[4][iAdmin], gString, 0, strlen(gString), 255);
-					IRCInfo[4][iNeedPass] = 0; IRCInfo[4][iLock] = 0;
-				}
-				case 6:
-				{
-					strmid(IRCInfo[5][iAdmin], gString, 0, strlen(gString), 255);
-					IRCInfo[5][iNeedPass] = 0; IRCInfo[5][iLock] = 0;
-				}
-				case 7:
-				{
-					strmid(IRCInfo[6][iAdmin], gString, 0, strlen(gString), 255);
-					IRCInfo[6][iNeedPass] = 0; IRCInfo[6][iLock] = 0;
-				}
-				case 8:
-				{
-					strmid(IRCInfo[7][iAdmin], gString, 0, strlen(gString), 255);
-					IRCInfo[7][iNeedPass] = 0; IRCInfo[7][iLock] = 0;
-				}
-				case 9:
-				{
-					strmid(IRCInfo[8][iAdmin], gString, 0, strlen(gString), 255);
-					IRCInfo[8][iNeedPass] = 0; IRCInfo[8][iLock] = 0;
-				}
-				case 10:
-				{
-					strmid(IRCInfo[9][iAdmin], gString, 0, strlen(gString), 255);
-					IRCInfo[9][iNeedPass] = 0; IRCInfo[9][iLock] = 0;
-				}
-			}
-
-			SaveIRC();
-		}
-		else
-		{
-			SendClientMessage(playerid, COLOR_GREY, "   That player is Offline !");
-			return 1;
-		}
-	}
-	else
-	{
-		SendClientMessage(playerid, COLOR_GREY, "   you are not authorized to do that !");
-		return 1;
-	}
-	return 1;
-}
-
 CMD:makeleader(playerid, params[]) {
 	new para1;
 	new level;
@@ -5915,7 +5826,7 @@ CMD:help(playerid, params[]) {
 	{
 		SendClientMessage(playerid, COLOR_GRAD6, "*** ADMIN *** (/a)dmin (/ah)elp");
 	}
-	SendClientMessage(playerid, COLOR_GRAD6,"*** OTHER *** /cellphonehelp /househelp /renthelp /businesshelp /leaderhelp /fishhelp /cookhelp /irchelp");
+	SendClientMessage(playerid, COLOR_GRAD6,"*** OTHER *** /cellphonehelp /househelp /renthelp /businesshelp /leaderhelp /fishhelp /cookhelp");
 	return 1;
 }
 
@@ -5930,7 +5841,7 @@ CMD:cellphonehelp(playerid, params[]) {
 	{
 		SendClientMessage(playerid, COLOR_WHITE,"*** HELP *** type a command for more help");
 		SendClientMessage(playerid, COLOR_GRAD3,"*** CELLPHONE *** /call 'eg: /call 911' /sms (/p)ickup (/h)angup /number");
-		SendClientMessage(playerid, COLOR_GRAD4,"*** OTHER *** /help /househelp /renthelp /businesshelp /leaderhelp /fishhelp /cookhelp /irchelp");
+		SendClientMessage(playerid, COLOR_GRAD4,"*** OTHER *** /help /househelp /renthelp /businesshelp /leaderhelp /fishhelp /cookhelp");
 	}
 	else
 	{
@@ -5944,7 +5855,7 @@ CMD:househelp(playerid, params[]) {
 	SendClientMessage(playerid, COLOR_WHITE,"*** HOUSE HELP *** type a command for more help");
 	SendClientMessage(playerid, COLOR_GRAD3,"*** HOUSE *** /enter /exit /open /home /heal /houseupgrade (/hu) /setrentable /tv (off/player)");
 	SendClientMessage(playerid, COLOR_GRAD3,"*** HOUSE *** /carupgrade /carcolor /evictall /towcar /fixcar /modcar /modst /modlr /setrent /evict /housewithdraw");
-	SendClientMessage(playerid, COLOR_GRAD4,"*** OTHER *** /cellphonehelp /help /renthelp /businesshelp /leaderhelp /fishhelp /cookhelp /irchelp");
+	SendClientMessage(playerid, COLOR_GRAD4,"*** OTHER *** /cellphonehelp /help /renthelp /businesshelp /leaderhelp /fishhelp /cookhelp");
 	return 1;
 }
 
@@ -5952,7 +5863,7 @@ CMD:renthelp(playerid, params[]) {
 	SendClientMessage(playerid, COLOR_GREEN,"_______________________________________");
 	SendClientMessage(playerid, COLOR_WHITE,"*** RENTING HELP *** type a command for more help");
 	SendClientMessage(playerid, COLOR_GRAD3,"*** RENT *** /unrent /enter /exit /lock /home");
-	SendClientMessage(playerid, COLOR_GRAD4,"*** OTHER *** /cellphonehelp /househelp /help /businesshelp /leaderhelp /fishhelp /cookhelp /irchelp");
+	SendClientMessage(playerid, COLOR_GRAD4,"*** OTHER *** /cellphonehelp /househelp /help /businesshelp /leaderhelp /fishhelp /cookhelp");
 	return 1;
 }
 
@@ -5985,15 +5896,6 @@ CMD:leaderhelp(playerid, params[]) {
 	{
 		SendClientMessage(playerid, COLOR_GREY, "   You are not a Leader!");
 	}
-	return 1;
-}
-
-CMD:irchelp(playerid, params[]) {
-	SendClientMessage(playerid, COLOR_GREEN,"_______________________________________");
-	SendClientMessage(playerid, COLOR_WHITE,"*** IRC HELP *** Type a command for more help");
-	SendClientMessage(playerid, COLOR_WHITE,"*** IRC *** (/irc join [channelnr] or /irc join [channelnr] [password])  (/irc leave)");
-	SendClientMessage(playerid, COLOR_WHITE,"*** IRC *** (/irc Password [channelnr])  (/irc NeedPass [channelnr])  (/irc Lock [channelnr])");
-	SendClientMessage(playerid, COLOR_WHITE,"*** IRC *** (/irc Admins)  (/irc MOTD [motdtext])  (/irc status [channelnr])  (/i [text])");
 	return 1;
 }
 
@@ -7421,295 +7323,6 @@ CMD:witness(playerid, params[]) {
 		SendClientMessage(playerid, COLOR_GREY, "   That player is Offline !");
 		return 1;
 	}
-	return 1;
-}
-
-CMD:irc(playerid, params[]) {
-	new x_nr[256];
-	if(!strlen(x_nr)) {
-		SendClientMessage(playerid, COLOR_WHITE, "Uzycie: (/irc join [channelnr] or /irc join [channelnr] [password])  (/irc Leave)  (/irc Admins)");
-		SendClientMessage(playerid, COLOR_WHITE, "Uzycie: /irc [name] [channelnr]");
-		SendClientMessage(playerid, COLOR_WHITE, "Available names: MOTD, Password, NeedPass, Lock, Kick, Status");
-		return 1;
-	}
-	if(strcmp(x_nr,"join",true) == 0)
-	{
-		//if(!strlen(tmp))
-		{
-			SendClientMessage(playerid, COLOR_WHITE, "Uzycie: /irc join [channelnr] or /irc join [channelnr] [password]");
-			return 1;
-		}
-		new channel;
-		if(channel < 1 || channel > 10) { SendClientMessage(playerid, COLOR_GREY, "   Channel Number can't be below 1 or above 10 !"); return 1; }
-		channel -= 1;
-		if(IRCInfo[channel][iLock] == 0)
-		{
-			if(IRCInfo[channel][iNeedPass] == 0)
-			{
-				JoinChannelNr(playerid, channel);
-			}
-			else
-			{
-				//if(!strlen(tmp))
-				{
-					SendClientMessage(playerid, COLOR_WHITE, "There's a password required to join this Channel.");
-					SendClientMessage(playerid, COLOR_WHITE, "Uzycie: /irc join [channelnr] [password]");
-					return 1;
-				}
-				JoinChannel(playerid,channel,tmp);
-			}
-		}
-		else
-		{
-			SendClientMessage(playerid, COLOR_GREY, "   That Channel is Locked, please choose a different one !");
-			return 1;
-		}
-	}
-	else if(strcmp(x_nr,"status",true) == 0)
-	{
-		for(new i = 0; i < sizeof(IRCInfo); i++)
-		{
-			format(gString, sizeof(gString), "Channel %d: %d Players Connected.",i + 1, IRCInfo[i][iPlayers]);
-			SendClientMessage(playerid, COLOR_WHITE, gString);
-		}
-		return 1;
-	}
-	else if(strcmp(x_nr,"password",true) == 0)
-	{
-		//if(!strlen(tmp))
-		{
-			SendClientMessage(playerid, COLOR_WHITE, "Uzycie: /irc password [channelnr] [password]");
-			return 1;
-		}
-		new channel;
-		if(channel < 1 || channel > 10) { SendClientMessage(playerid, COLOR_GREY, "   Channel Number can't be below 1 or above 10 !"); return 1; }
-		channel -= 1;
-		new wstring[128];
-		format(gString, sizeof(gString), "%s", PlayerInfo[playerid][pName]);
-		strmid(wstring, gString, 0, strlen(gString), 255);
-		if(strcmp(IRCInfo[channel][iAdmin],wstring, true ) == 0 )
-		{
-			//if(!strlen(tmp))
-			{
-				SendClientMessage(playerid, COLOR_WHITE, "Uzycie: /irc password [channelnr] [password]");
-				return 1;
-			}
-			strmid(IRCInfo[channel][iPassword], tmp, 0, strlen(tmp), 255);
-			format(gString, sizeof(gString), "You've changed the IRC Channel's Password to: %s.",IRCInfo[channel][iPassword]);
-			SendClientMessage(playerid, COLOR_YELLOW, gString);
-			SaveIRC();
-			return 1;
-		}
-		else
-		{
-			SendClientMessage(playerid, COLOR_GREY, "   You are not the Admin of that Channel !");
-			return 1;
-		}
-	}
-	else if(strcmp(x_nr,"needpass",true) == 0)
-	{
-		//if(!strlen(tmp))
-		{
-			SendClientMessage(playerid, COLOR_WHITE, "Uzycie: /irc needpass [channelnr]");
-			return 1;
-		}
-		new channel;
-		if(channel < 1 || channel > 10) { SendClientMessage(playerid, COLOR_GREY, "   Channel Number can't be below 1 or above 10 !"); return 1; }
-		channel -= 1;
-		new wstring[128];
-		format(gString, sizeof(gString), "%s", PlayerInfo[playerid][pName]);
-		strmid(wstring, gString, 0, strlen(gString), 255);
-		if(strcmp(IRCInfo[channel][iAdmin],wstring, true ) == 0 )
-		{
-			if(IRCInfo[channel][iNeedPass] != 0)
-			{
-				IRCInfo[channel][iNeedPass] = 0;
-				SendClientMessage(playerid, COLOR_YELLOW, "Players won't have to fill in a password in order to join the IRC Channel now.");
-			}
-			else
-			{
-				IRCInfo[channel][iNeedPass] = 1;
-				SendClientMessage(playerid, COLOR_YELLOW, "Players must fill in a password in order to join the IRC Channel now.");
-			}
-			SaveIRC();
-			return 1;
-		}
-		else
-		{
-			SendClientMessage(playerid, COLOR_GREY, "   You are not the Admin of that Channel !");
-			return 1;
-		}
-	}
-	else if(strcmp(x_nr,"lock",true) == 0)
-	{
-		//if(!strlen(tmp))
-		{
-			SendClientMessage(playerid, COLOR_WHITE, "Uzycie: /irc lock [channelnr]");
-			return 1;
-		}
-		new channel;
-		if(channel < 1 || channel > 10) { SendClientMessage(playerid, COLOR_GREY, "   Channel Number can't be below 1 or above 10 !"); return 1; }
-		channel -= 1;
-		new wstring[128];
-		format(gString, sizeof(gString), "%s", PlayerInfo[playerid][pName]);
-		strmid(wstring, gString, 0, strlen(gString), 255);
-		if(strcmp(IRCInfo[channel][iAdmin],wstring, true ) == 0 )
-		{
-			if(IRCInfo[channel][iLock] != 0)
-			{
-				IRCInfo[channel][iLock] = 0;
-				SendClientMessage(playerid, COLOR_YELLOW, "You've unlocked the IRC Channel.");
-			}
-			else
-			{
-				IRCInfo[channel][iLock] = 1;
-				SendClientMessage(playerid, COLOR_YELLOW, "You've locked the IRC Channel.");
-			}
-			SaveIRC();
-			return 1;
-		}
-		else
-		{
-			SendClientMessage(playerid, COLOR_GREY, "   You are not the Admin of that Channel !");
-			return 1;
-		}
-	}
-	else if(strcmp(x_nr,"motd",true) == 0)
-	{
-		//if(!strlen(tmp))
-		{
-			SendClientMessage(playerid, COLOR_WHITE, "Uzycie: /irc motd [channelnr] [motdtext]");
-			return 1;
-		}
-		new channel;
-		if(channel < 1 || channel > 10) { SendClientMessage(playerid, COLOR_GREY, "   Channel Number can't be below 1 or above 10 !"); return 1; }
-		channel -= 1;
-		new wstring[128];
-		format(gString, sizeof(gString), "%s", PlayerInfo[playerid][pName]);
-		strmid(wstring, gString, 0, strlen(gString), 255);
-		if(strcmp(IRCInfo[channel][iAdmin],wstring, true ) == 0 )
-		{
-			new result[64];
-			if(!strlen(result))
-			{
-				SendClientMessage(playerid, COLOR_GRAD2, "Uzycie: /irc motd [motdtext]");
-				return 1;
-			}
-			strmid(IRCInfo[channel][iMOTD], result, 0, strlen(result), 255);
-			SendClientMessage(playerid, COLOR_YELLOW, "You've adjusted the IRC Channel's MOTD Text.");
-			SaveIRC();
-			return 1;
-		}
-		else
-		{
-			SendClientMessage(playerid, COLOR_GREY, "   You are not the Admin of that Channel !");
-			return 1;
-		}
-	}
-	else if(strcmp(x_nr,"leave",true) == 0)
-	{
-		if(PlayersChannel[playerid] < 999)
-		{
-			format(gString, sizeof(gString), "* %s has left the Channel.", PlayerInfo[playerid][pName]);
-			SendIRCMessage(PlayersChannel[playerid], COLOR_GREEN, gString);
-			IRCInfo[PlayersChannel[playerid]][iPlayers] -= 1;
-			PlayersChannel[playerid] = 999;
-			return 1;
-		}
-		else
-		{
-			SendClientMessage(playerid, COLOR_GREY, "   You are not in an IRC Channel !");
-			return 1;
-		}
-	}
-	else if(strcmp(x_nr,"admins",true) == 0)
-	{
-		for(new i = 0; i < sizeof(IRCInfo); i++)
-		{
-			format(gString, sizeof(gString), "Channel %d: %s.", i + 1, IRCInfo[i][iAdmin]);
-			SendClientMessage(playerid, COLOR_WHITE, gString);
-		}
-		return 1;
-	}
-	else if(strcmp(x_nr,"kick",true) == 0)
-	{
-		if(PlayersChannel[playerid] == 999)
-		{
-			SendClientMessage(playerid, COLOR_GREY, "   You are not in an IRC Channel !");
-			return 1;
-		}
-		new wstring[128];
-		format(gString, sizeof(gString), "%s", PlayerInfo[playerid][pName]);
-		strmid(wstring, gString, 0, strlen(gString), 255);
-		if(strcmp(IRCInfo[PlayersChannel[playerid]][iAdmin],wstring, true ) == 0 )
-		{
-			//if(!strlen(tmp))
-			{
-				SendClientMessage(playerid, COLOR_WHITE, "Uzycie: /irc kick [playerid/PartOfName]");
-				return 1;
-			}
-			new giveplayerid;
-			if(IsPlayerConnected(giveplayerid))
-			{
-				if(giveplayerid != INVALID_PLAYER_ID)
-				{
-					if(PlayersChannel[giveplayerid] == PlayersChannel[playerid])
-					{
-						format(gString, sizeof(gString), "* You've kicked %s out of your IRC Channel.",PlayerInfo[giveplayerid][pName]);
-						SendClientMessage(playerid, COLOR_YELLOW, gString);
-						format(gString, sizeof(gString), "* You've been kicked out of the IRC Channel by Channel Admin: %s.",PlayerInfo[playerid][pName]);
-						SendClientMessage(giveplayerid, COLOR_YELLOW, gString);
-						format(gString, sizeof(gString), "* %s has left the Channel (Kicked).", PlayerInfo[playerid][pName]);
-						SendIRCMessage(PlayersChannel[playerid], COLOR_GREEN, gString);
-						IRCInfo[PlayersChannel[giveplayerid]][iPlayers] -= 1;
-						PlayersChannel[giveplayerid] = 999;
-					}
-					else
-					{
-						SendClientMessage(playerid, COLOR_GREY, "   That player is not in your IRC Channel !");
-						return 1;
-					}
-				}
-			}
-			else
-			{
-				SendClientMessage(playerid, COLOR_GREY, "   That player is Offline !");
-				return 1;
-			}
-		}
-		else
-		{
-			SendClientMessage(playerid, COLOR_GREY, "   You are not the Admin of the Channel !");
-			return 1;
-		}
-	}
-	else
-	{
-		SendClientMessage(playerid, COLOR_GREY, "   Invalid IRC Channel Number ! ");
-		return 1;
-	}
-	return 1;
-}
-
-CMD:i(playerid, params[]) {
-	if(PlayersChannel[playerid] == 999)
-	{
-		SendClientMessage(playerid, COLOR_GREY, "   You are not in an IRC Channel !");
-		return 1;
-	}
-	if(PlayerInfo[playerid][pMuted] == 1)
-	{
-		SendClientMessage(playerid, TEAM_CYAN_COLOR, "You cannot speak, you have been silenced");
-		return 1;
-	}
-	new result[64];
-	if(!strlen(result))
-	{
-		SendClientMessage(playerid, COLOR_GRAD2, "Uzycie: /i [irc chat]");
-		return 1;
-	}
-	format(gString, sizeof(gString), "** IRC %s: %s. **", PlayerInfo[playerid][pName], result);
-	SendIRCMessage(PlayersChannel[playerid], COLOR_YELLOW2, gString);
 	return 1;
 }
 

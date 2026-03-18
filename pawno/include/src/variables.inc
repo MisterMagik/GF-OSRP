@@ -7,6 +7,7 @@
 	Desc: All server vars, including arrays.
 */
 
+new MySQL:mySQLHandle;
 stock gString[256];
 new gTeam[MAX_PLAYERS];
 new Security = 0;
@@ -353,7 +354,6 @@ new PlayerHaul[100][pHaul];
 new PlayerCrime[MAX_PLAYERS][pCrime];
 new MissionInfo[mInfo];
 new PlayMission[kInfo];
-new IRCInfo[10][iInfo];
 
 new RandCars[20][1] = {
 {496},{542},{507},{585},
