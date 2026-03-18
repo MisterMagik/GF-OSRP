@@ -15,10 +15,11 @@
 #include <mysql>
 
 #include "src/defines"
-#include "src/dialogs"
 #include "src/enums"
 #include "src/variables"
+#include "src/textdraws"
 #include "src/callbacks"
+#include "src/dialogs"
 #include "src/funcs"
 
 main() {
@@ -31,5 +32,5 @@ main() {
 	printf(" By: Fear & parts of Astro & steeZ & MisterMagik");
 	printf(" ");
 
-	printf("[MAIN] Funkcja main zaladowana w %0.1d sek.", gettime() - callSecs);
+	printf("[MAIN] main (%0.1d sec)", gettime() - callSecs);
 }

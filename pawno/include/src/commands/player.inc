@@ -722,47 +722,6 @@ CMD:upgrade(playerid, params[]) {
 	return 1;
 }
 
-CMD:login(playerid, params[]) {
-	new tmppass[64];
-
-	if(gPlayerLogged[playerid] == 1) {
-		return SendClientMessage(playerid, COLOR_WHITE, "SERVER: Jestes zalogowany.");
-	}
-
-	if(sscanf(params, "s[64]", tmppass)) {
-		return SendClientMessage(playerid, COLOR_GRAD1, "Uzycie: /login [password]");
-	}
-
-	Encrypt(tmppass);
-	OnPlayerLogin(playerid,tmppass);
-	return 1;
-}
-
-CMD:register(playerid, params[]) {
-	if(gPlayerLogged[playerid] == 1) {
-		return SendClientMessage(playerid, COLOR_WHITE, "SERVER: Jestes zalogowany.");
-	}
-
-	format(gString, sizeof(gString), "%s.ini", PlayerInfo[playerid][pName]);
-
-	new File: hFile = fopen(gString, io_read);
-
-	if(hFile) {
-		SendClientMessage(playerid, COLOR_YELLOW, "That Username is already taken, please choose a different one.");
-		return fclose(hFile);
-	}
-
-	new tmppass[64];
-
-	if(sscanf(params, "s[64]", tmppass)) {
-		return SendClientMessage(playerid, COLOR_GRAD1, "Uzycie: /register [password]");
-	}
-
-	Encrypt(tmppass);
-	OnPlayerRegister(playerid,tmppass);
-	return 1;
-}
-
 CMD:ooc(playerid, params[]) {
 	if(!gPlayerLogged[playerid]) {
 		return SendClientMessage(playerid, COLOR_GREY, "   You havent logged in yet !");

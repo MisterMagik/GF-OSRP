@@ -23,6 +23,27 @@ stock ConnectingMySQL() {
 	}
 }
 
+stock osrp_ShowPlayerDialog(playerid, dialogid, style, caption[], info[], button1[], button2[]) {
+	PlayerInfo[playerid][pDialog] = dialogid;
+	return ShowPlayerDialog(playerid, dialogid, style, caption, info, button1, button2);
+}
+
+stock osrp_TogglePlayerSpectating(playerid, toggle) {
+	PlayerInfo[playerid][pToggle] = bool:toggle;
+	TogglePlayerSpectating(playerid, toggle);
+}
+
+stock GeneratePasswordSalt() {
+	new salt[17];
+
+	for(new i = 0; i < 16; i++) {
+		salt[i] = random(79) + 47;
+	}
+
+	salt[16] = 0;
+	return salt;
+}
+
 stock Float:GetDistanceBetweenPlayers(p1,p2)
 {
 	new Float:x1,Float:y1,Float:z1,Float:x2,Float:y2,Float:z2;
@@ -148,19 +169,6 @@ stock DollahScoreUpdate()
 			SetPlayerScore(i, LevScore);
 		}
 	}
-	return 1;
-}
-
-stock Encrypt(string[])
-{
-	for(new x=0; x < strlen(string); x++)
-	  {
-		  string[x] += (3^x) * (x % 15);
-		  if(string[x] > (0xff))
-		  {
-			  string[x] -= 256;
-		  }
-	  }
 	return 1;
 }
 
@@ -1235,54 +1243,6 @@ stock InitLockDoors(playerid)
 		}
 	}
 	return 1;
-}
-
-stock SetupPlayerForClassSelection(playerid)
-{
-	switch (gTeam[playerid])
-	{
-		case TEAM_BLUE:
-		{
-			SetPlayerInterior(playerid,5);
-			SetPlayerPos(playerid,323.4,305.6,999.1);
-			SetPlayerFacingAngle(playerid, 90.0);
-			SetPlayerCameraPos(playerid,323.4-1.5-1.0,305.6,999.1+0.7);
-			SetPlayerCameraLookAt(playerid,323.4-1.0,305.6,999.1+0.7);
-
-		}
-		case TEAM_ADMIN:
-		{
-		    SetPlayerInterior(playerid,3);
-			SetPlayerPos(playerid,-2654.4,1424.2,912.4);
-			SetPlayerFacingAngle(playerid, 90.0);
-			SetPlayerCameraPos(playerid,-2654.4-1.5,1424.2,912.4+0.7);
-			SetPlayerCameraLookAt(playerid,-2654.4,1424.2,912.4+0.7);
-		}
-		default:
-		{
-		    SetPlayerInterior(playerid,0);
-			SetPlayerPos(playerid,-1657.5237,1207.6644,13.6719);
-			SetPlayerFacingAngle(playerid,357.6906);
-		    SetPlayerCameraPos(playerid, -1657.4678,1211.2292,13.6781);
-		    SetPlayerCameraLookAt(playerid,-1657.5237,1207.6644,13.6719);
-		}
-	}
-}
-
-//---------------------------------------------------------
-
-stock SetPlayerTeamFromClass(playerid,classid)
-{
- 	if (classid >= 1 && classid <= 11)
-	{
-		gTeam[playerid] = 11; //admin
-		PlayerInfo[playerid][pTeam] = 11;
-	}
-	else
-	{
-	    gTeam[playerid] = 3;
-	    PlayerInfo[playerid][pTeam] = 3;
-	}
 }
 
 //---------------------------------------------------------
@@ -3884,58 +3844,4 @@ stock ReturnUser(text[], playerid = INVALID_PLAYER_ID)
 		userid = INVALID_PLAYER_ID;
 	}
 	return userid; // INVALID_USER_ID for bad return
-}
-
-new pdistance = 1;
-forward NameTimer();
-Float:GetPointDistanceToPointExMorph(Float:x1,Float:y1,Float:z1,Float:x2,Float:y2,Float:z2)
-{
-new Float:x, Float:y, Float:z;
-x = x1-x2;
-y = y1-y2;
-z = z1-z2;
-return floatsqroot(x*x+y*y+z*z);
-}
-stock SetPDistance(dista)
-{
-pdistance = dista;
-}
-stock GetPDistance()
-{
-return pdistance;
-}
-stock EnableDistancedNameTag(delay)
-{
-SetTimer("NameTimer",delay,1);
-}
-forward NameTimer();
-public NameTimer()
-	{
-	for(new i = 0;i < MAX_PLAYERS;i++)
- 	{
- 	if(IsPlayerConnected(i))
- 	{
- 	for(new q = 0;q < MAX_PLAYERS;q++)
- 	{
-	if(IsPlayerConnected(q))
-	{
- 	new Float:p1x;
-	new Float:p1y;
-	new Float:p1z;
-	new Float:p2x;
-	new Float:p2y;
-	new Float:p2z;
-	if(IsPlayerConnected(i) && IsPlayerConnected(q))
-	{
-	GetPlayerPos(i,p1x,p1y,p1z);
-    GetPlayerPos(q,p2x,p2y,p2z);
-	if(GetPointDistanceToPointExMorph(p1x,p1y,p1z,p2x,p2y,p2z) < pdistance)
-		{
-	    ShowPlayerNameTagForPlayer(i,q,1);
-	    }
-	else
-		{
-		ShowPlayerNameTagForPlayer(i,q,0);
-		}
-	}}}}}
 }

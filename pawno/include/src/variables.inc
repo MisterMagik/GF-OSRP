@@ -8,7 +8,19 @@
 */
 
 new MySQL:mySQLHandle;
-stock gString[256];
+
+new queryStr[1024];
+new mainStr[512];
+
+new oocName[MAX_PLAYERS][24];
+new escapedName[MAX_PLAYERS][24];
+
+new playerPass[MAX_PLAYERS][65];
+new playerSalt[MAX_PLAYERS][17];
+new accountID[MAX_PLAYERS];
+
+new bool:loadedIntro[MAX_PLAYERS];
+
 new gTeam[MAX_PLAYERS];
 new Security = 0;
 new CreatedCars[100];
@@ -709,3 +721,6 @@ new CarSpawns[182][eCars] = {
 	{550,1695.1428,-1519.2667,13.1671,0.7121},
 	{551,1694.7080,-1501.7454,13.1675,357.8150}
     };
+
+new Text:SplashScreen;
+new Text:Intro[4];

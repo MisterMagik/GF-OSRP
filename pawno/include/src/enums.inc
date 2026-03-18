@@ -180,6 +180,7 @@ enum pInfo
 	pReg,
 	pSex,
 	pAge,
+	pContinent,
 	pOrigin,
 	pCK,
 	pMuted,
@@ -262,6 +263,8 @@ enum pInfo
 	pFuel,
 	pMarried,
 	pMarriedTo[128],
+	pDialog,
+	bool:pToggle
 };
 
 enum hInfo

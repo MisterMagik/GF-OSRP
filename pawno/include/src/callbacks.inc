@@ -17,7 +17,6 @@ sampCallback OnGameModeInit() {
 	ManualVehicleEngineAndLights();
 	ShowPlayerMarkers(PLAYER_MARKERS_MODE_OFF);
 	AddPlayerClassEx(0, 0, 0.0, 0.0, 0.0, 0.0, 0, 0, 0, 0, 0, 0);
-	SetPDistance(10);
 	AllowAdminTeleport(1);
 	SetGameModeText("OSRP v1.0");
 
@@ -30,7 +29,7 @@ sampCallback OnGameModeInit() {
 		Gas[c] = GasMax;
 	}
 
-	LoadProperty();
+	/*LoadProperty();
 	LoadBizz();
 	LoadSBizz();
 	LoadBoxer();
@@ -38,7 +37,8 @@ sampCallback OnGameModeInit() {
 	LoadFamilies();
 	LoadCK();
 	LoadTurfs();
-	LoadPapers();
+	LoadPapers();*/
+	TextDrawsInit();
 
 	News[hTaken1] = 0; News[hTaken2] = 0; News[hTaken3] = 0; News[hTaken4] = 0; News[hTaken5] = 0;
 	format(string, sizeof(string), "Nothing");
@@ -201,12 +201,13 @@ sampCallback OnGameModeInit() {
 	accountstimer = SetTimer("SaveAccounts", 1800000, 1); //30 mins every account saved
 	checkgastimer = SetTimer("CheckGas", RunOutTime, 1);
     stoppedvehtimer = SetTimer("StoppedVehicle", RunOutTime, 1);
-	//for(new i = 0; i < sizeof(CarSpawns); i++)
 	for(new i = 0; i < 165; i++)
 	{
 		AddCar(i);
 	}
 	CarInit();
+
+	printf("[CALLBACK] OnGameModeInit (%0.1d sec)", gettime() - callSecs);
 	return 1;
 }
 
@@ -215,78 +216,26 @@ sampCallback OnGameModeExit()
 	return 1;
 }
 
-sampCallback OnPlayerRequestClass(playerid, classid)
-{
-	new string[128];
-	PlayerPlaySound(playerid, 1187, 0.0, 0.0, 0.0);
-	PlayerInfo[playerid][pModel] = Peds[classid][0];
- 	if (classid == 1)
-	{
-			format(string, sizeof(string), "~y~> ~p~Police Chief ~y~< ~n~Leaders only!");
-			GameTextForPlayer(playerid,string,3500,6);
+sampCallback OnPlayerRequestClass(playerid, classid) {
+	new callSecs = gettime();
+
+	SetSpawnInfo(playerid, 0, 0, 0.0, 0.0, 0.0, 0.0, 0, 0, 0, 0, 0, 0);
+	osrp_TogglePlayerSpectating(playerid, 1);
+
+	if(!loadedIntro[playerid]) {
+		SetTimerEx("LoadIntro", 3000, false, "i", playerid);
 	}
-	else if (classid == 2)
-	{
-			format(string, sizeof(string), "~y~> ~p~FBI/ATF Leader ~y~< ~n~Leaders only!");
-			GameTextForPlayer(playerid,string,3500,6);
-	}
-	else if (classid == 3)
-	{
-			format(string, sizeof(string), "~y~> ~p~National Guard General ~y~< ~n~Leaders only!");
-			GameTextForPlayer(playerid,string,3500,6);
-	}
-	else if (classid == 4)
-	{
-			format(string, sizeof(string), "~y~> ~p~Fire/Ambulance Chief ~y~< ~n~Leaders only!");
-			GameTextForPlayer(playerid,string,3500,6);
-	}
-	else if (classid == 5)
-	{
-			format(string, sizeof(string), "~y~> ~p~La Cosa Nostra Leader ~y~< ~n~Leaders only!");
-			GameTextForPlayer(playerid,string,3500,6);
-	}
-	else if (classid == 6)
-	{
-			format(string, sizeof(string), "~y~> ~p~Yakuza Leader ~y~< ~n~Leaders only!");
-			GameTextForPlayer(playerid,string,3500,6);
-	}
-	else if (classid == 7)
-	{
-			format(string, sizeof(string), "~y~> ~p~Mayor ~y~< ~n~Leaders only!");
-			GameTextForPlayer(playerid,string,3500,6);
-	}
-	else if (classid == 8)
-	{
-			format(string, sizeof(string), "~y~> ~p~Hitman Leader ~y~< ~n~Leaders only!");
-			GameTextForPlayer(playerid,string,3500,6);
-	}
-	else if (classid == 9)
-	{
-			format(string, sizeof(string), "~y~> ~p~News Leader ~y~< ~n~Leaders only!");
-			GameTextForPlayer(playerid,string,3500,6);
-	}
-	else if (classid == 10)
-	{
-			format(string, sizeof(string), "~y~> ~p~Taxi Cab Company Leader ~y~< ~n~Leaders only!");
-			GameTextForPlayer(playerid,string,3500,6);
-	}
-	else if (classid == 11)
-	{
-			format(string, sizeof(string), "~y~> ~p~License Faction Leader ~y~< ~n~Leaders only!");
-			GameTextForPlayer(playerid,string,3500,6);
-	}
-	else
-	{
-		format(string, sizeof(string), "~y~> ~g~Civilian ~y~<");
-		GameTextForPlayer(playerid,string,3500,6);
-	}
-	SetPlayerTeamFromClass(playerid,classid);
-	SetupPlayerForClassSelection(playerid);
 	return 1;
 }
 
 sampCallback OnPlayerConnect(playerid)
 {
+	GetPlayerName(playerid, oocName[playerid], sizeof(oocName));
+	mysql_real_escape_string(oocName[playerid], escapedName[playerid]);
+
+	TextDrawShowForPlayer(playerid, SplashScreen);
+	PlayerPlaySound(playerid, 1187, 0.0, 0.0, 0.0);
+
 	if(Security != 0)
 	{
 	    SendClientMessage(playerid, COLOR_YELLOW, "Host has broken one of the Agreement rules, action has been taken.");
@@ -295,8 +244,6 @@ sampCallback OnPlayerConnect(playerid)
 	}
 	gActivePlayers[playerid]++;
 	numplayers++;
-	new plname[MAX_PLAYER_NAME];
-	new string[MAX_PLAYER_NAME];
 	SelectChar[playerid] = 0; HidePM[playerid] = 0; PhoneOnline[playerid] = 0;
 	SelectCharID[playerid] = 0; SelectCharPlace[playerid] = 0; ChosenSkin[playerid] = 0;
 	GettingJob[playerid] = 0; GuardOffer[playerid] = 999; GuardPrice[playerid] = 0;
@@ -432,21 +379,7 @@ sampCallback OnPlayerConnect(playerid)
 	ClearGroceries(playerid);
 	ClearMarriage(playerid);
 	SetPlayerColor(playerid,COLOR_GRAD2);
-	GetPlayerName(playerid, plname, sizeof(plname));
-	format(string, sizeof(string), "%s.ini", plname);
-	if(fexist(string))
-	{
-		gPlayerAccount[playerid] = 1;
-		SendClientMessage(playerid, COLOR_YELLOW, "SERVER: That nick is registered, please login");
-		SendClientMessage(playerid, COLOR_WHITE, "HINT: You can now login by typing /login <password>");
-		return 1;
-	}
-	else
-	{
-		gPlayerAccount[playerid] = 0;
-		SendClientMessage(playerid,COLOR_YELLOW,"You dont have an account. Please register by using /register [password]");
-		return 1;
-	}
+	return 1;
 }
 
 sampCallback OnPlayerDisconnect(playerid)
@@ -2429,6 +2362,10 @@ sampCallback OnRconCommand(cmd[])
 	return 1;
 }
 
+public OnPlayerRequestSpawn(playerid) {
+	return 0;
+}
+
 sampCallback OnObjectMoved(objectid)
 {
 	return 1;
@@ -4327,4 +4264,56 @@ Callback IdleKick()
 			}
 		}
 	}
+}
+
+Callback LoadIntro(playerid) {
+	if(gPlayerLogged[playerid]) {
+		return 1;
+	}
+
+	loadedIntro[playerid] = true;
+
+	for(new i = 0; i < 20; i++) {
+		SendClientMessage(playerid, COLOR_WHITE, " ");
+	}
+
+	SendClientMessage(playerid, COLOR_YELLOW, "Witaj w Old School Role Play: Proszê czekaæ na za³adowanie mapy OSRP v1.0.");
+	TextDrawHideForPlayer(playerid, SplashScreen);
+
+	for(new i = 0; i < 4; i++) {
+		TextDrawShowForPlayer(playerid, Intro[i]);
+	}
+
+	SetPlayerCameraPos(playerid, 2902.5500, -1953.4100, 106.9900);
+	SetPlayerCameraLookAt(playerid, 2901.5400, -1953.3800, 106.8900);
+
+	if(loadedIntro[playerid]) {
+		queryStr[0] = EOS;
+		format(queryStr, sizeof(queryStr), "SELECT `Name` FROM `Accounts` WHERE `Name` = '%s' LIMIT 1", escapedName[playerid]);
+		mysql_query(queryStr);
+
+		mysql_store_result();
+
+		if(mysql_result_stored()) {
+			if(mysql_num_rows() < 1) {
+				gPlayerAccount[playerid] = 0;
+				SendClientMessage(playerid, COLOR_YELLOW2, "Serwer: To konto nie jest jeszcze zarejestrowane, aby zagraæ musisz siê zarejestrowaæ.");
+
+				mainStr[0] = EOS;
+				strcat(mainStr, "{FFFFFF}Kompletny regulamin serwera Old School Role Play znajduje siê na naszej stronie internetowej www.osrp.pl.\n");
+				strcat(mainStr, "Prosimy o zapoznanie siê z nim, poniewa¿ jego nieznajomoœæ nie jest usprawiedliwieniem do ³amania go.\n");
+				strcat(mainStr, "Za nieprzestrzeganie regulaminu gro¿¹ kary.\n\n");
+				strcat(mainStr, "Klikaj¹c przycisk Akceptuj zobowi¹zujesz siê do przestrzegania regulaminu, Odrzuæ wi¹¿e siê z opuszczeniem serwera.");
+				osrp_ShowPlayerDialog(playerid, DIALOG_REGISTER_RULES, DIALOG_STYLE_MSGBOX, "Regulamin:", mainStr, "Akceptuj", "Odrzuæ");
+			} else {
+				gPlayerAccount[playerid] = 1;
+				SendClientMessage(playerid, COLOR_YELLOW2, "Serwer: To konto jest ju¿ zarejestrowane. Mo¿esz siê zalogowaæ.");
+
+				osrp_ShowPlayerDialog(playerid, DIALOG_LOGIN, DIALOG_STYLE_PASSWORD, "Zaloguj:", "{FFFFFF}To konto ju¿ istnieje.\nWpisz has³o, aby siê zalogowaæ.", "Zaloguj", "WyjdŸ");
+			}
+
+			mysql_free_result();
+		}
+	}
+	return 1;
 }
