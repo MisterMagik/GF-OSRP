@@ -3907,6 +3907,13 @@ stock AddsOn()
 	return 1;
 }
 
+stock osrp_Usage(playerid, const message[]) {
+	new str[128];
+
+	format(str, sizeof(str), "U¿yj: %s", message);
+	SendClientMessage(playerid, COLOR_GRAD1, str);
+}
+
 // Stuff from old incs
 stock IsNumeric(const string[])
 {

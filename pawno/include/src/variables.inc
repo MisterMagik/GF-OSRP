@@ -7,6 +7,7 @@
 	Desc: All server vars, including arrays.
 */
 
+new gString[256];
 new gTeam[MAX_PLAYERS];
 new Security = 0;
 new CreatedCars[100];

@@ -8,6 +8,8 @@
 */
 
 #include <a_samp>
+#include <Pawn.CMD>
+#include <sscanf2>
 
 #include "src/defines"
 #include "src/dialogs"
@@ -17,12 +19,11 @@
 #include "src/commands/player"
 #include "src/funcs"
 
-main()
-{
-print(" ");
-print(" ");
-print(" The Godfather: LS/SF");
-print("_____________________");
-print(" By: Fear & parts of Astro");
-print(" ");
+main() {
+	printf(" ");
+	printf(" ");
+	printf(" The Godfather: LS/SF");
+	printf("_____________________");
+	printf(" By: Fear & parts of Astro & steeZ & MisterMagik");
+	printf(" ");
 }
