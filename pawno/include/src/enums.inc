@@ -171,6 +171,7 @@ enum hNews
 enum pInfo
 {
 	pKey[128],
+	pName[24],
 	pLevel,
 	pAdmin,
 	pDonateRank,

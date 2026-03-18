@@ -9,14 +9,16 @@
 
 #include <a_samp>
 #include <Pawn.CMD>
+#include <streamer>
 #include <sscanf2>
+#include <foreach>
 
 #include "src/defines"
 #include "src/dialogs"
 #include "src/enums"
 #include "src/variables"
 #include "src/callbacks"
-#include "src/commands/player"
+//#include "src/commands/player"
 #include "src/funcs"
 
 main() {
