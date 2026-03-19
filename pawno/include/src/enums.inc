@@ -170,7 +170,7 @@ enum hNews
 
 enum pInfo
 {
-	pKey[128],
+	pAID,
 	pName[24],
 	pLevel,
 	pAdmin,

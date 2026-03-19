@@ -8419,20 +8419,19 @@ CMD:music(playerid, params[]) {
 	return 1;
 }
 
-CMD:service(playerid, params[]) {
+CMD:wezwij(playerid, params[]) {
 	new x_nr[256];
 	if(!strlen(x_nr)) {
-		SendClientMessage(playerid, COLOR_WHITE, "|__________________ Service Names __________________|");
-		SendClientMessage(playerid, COLOR_WHITE, "Uzycie: /service [name]");
-		SendClientMessage(playerid, COLOR_GREY, "Available names: Taxi, Bus, Medic, Mechanic");
-		SendClientMessage(playerid, COLOR_WHITE, "|________________________________________________|");
+		SendClientMessage(playerid, COLOR_WHITE, "Nazwy serwisów:");
+		SendClientMessage(playerid, COLOR_GREY, "Wpisz: /wezwij [nazwa]");
+		SendClientMessage(playerid, COLOR_GREY, "Dostępne nazwy: {FFFFFF}Taxi, Bus, Medyk, Mechanik");
 		return 1;
 	}
 	if(strcmp(x_nr,"taxi",true) == 0)
 	{
 		if(TaxiDrivers < 1)
 		{
-			SendClientMessage(playerid, COLOR_GREY, "   There are no Taxi Drivers On Duty at the moment, try again later !");
+			SendClientMessage(playerid, COLOR_GREY, "Obecnie nie ma żadnych taksówkarzy na służbie. Spróbuj później.");
 			return 1;
 		}
 		if(TransportDuty[playerid] > 0)
@@ -8464,14 +8463,14 @@ CMD:service(playerid, params[]) {
 		BusCall = playerid;
 		return 1;
 	}
-	else if(strcmp(x_nr,"medic",true) == 0)
+	else if(strcmp(x_nr,"medyk",true) == 0)
 	{
 		if(Medics < 1)
 		{
 			SendClientMessage(playerid, COLOR_GREY, "   There are no Medics On Duty at the moment, try again later !");
 			return 1;
 		}
-		format(gString, sizeof(gString), "** %s is in need of a Medic. (use /accept medic to accept the call)", PlayerInfo[playerid][pName]);
+		format(gString, sizeof(gString), "* %s potrzebuje medyka. (wpisz /akceptuj medyk, aby zaakceptować wezwanie)", PlayerInfo[playerid][pName]);
 		SendRadioMessage(4, TEAM_AZTECAS_COLOR, gString);
 		SendClientMessage(playerid, COLOR_LIGHTBLUE, "* You have called for a Medic, wait for a reply.");
 		MedicCall = playerid;
@@ -11636,7 +11635,7 @@ CMD:accept(playerid, params[]) {
 			return 1;
 		}
 	}
-	else if(strcmp(x_job,"medic",true) == 0)
+	else if(strcmp(x_job,"medyk",true) == 0)
 	{
 		if(PlayerInfo[playerid][pMember] == 4 || PlayerInfo[playerid][pLeader] == 4)
 		{
@@ -11654,9 +11653,9 @@ CMD:accept(playerid, params[]) {
 			{
 				if(IsPlayerConnected(MedicCall))
 				{
-					format(gString, sizeof(gString), "* You have accepted the Medic Call from %s, you have 30 Seconds to get there.",PlayerInfo[MedicCall][pName]);
+					format(gString, sizeof(gString), "* Akceptowałeś wezwanie medyka %s. Jedź do czerwonego koła (masz 30 sekund).", PlayerInfo[MedicCall][pName]);
 					SendClientMessage(playerid, COLOR_LIGHTBLUE, gString);
-					SendClientMessage(playerid, COLOR_LIGHTBLUE, "* After the 30 Seconds the Red Marker will dissapear.");
+					SendClientMessage(playerid, COLOR_LIGHTBLUE, "* Po 30 sekundach czerwony marker zniknie.");
 					format(gString, sizeof(gString), "* Medic %s has accepted your Medic Call please wait at your current Position.",PlayerInfo[playerid][pName]);
 					SendClientMessage(MedicCall, COLOR_LIGHTBLUE, gString);
 					new Float:X,Float:Y,Float:Z;

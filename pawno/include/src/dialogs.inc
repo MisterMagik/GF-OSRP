@@ -66,6 +66,10 @@ sampCallback OnDialogResponse(playerid, dialogid, response, listitem, inputtext[
 				return osrp_ShowPlayerDialog(playerid, DIALOG_LOGIN, DIALOG_STYLE_PASSWORD, "Zaloguj:", "{FFFFFF}Pomyœlnie zarejestrowa³eœ konto.\nProsze wpisaæ has³o, aby siê teraz zalogowaæ.", "Zaloguj", "WyjdŸ");
 			}
 
+			queryStr[0] = EOS;
+			format(queryStr, sizeof(queryStr), "UPDATE `Accounts` SET `Recommender` = '%s' WHERE `Name` = '%s'", oocName[playerid]);
+			mysql_query(queryStr);
+
 			osrp_ShowPlayerDialog(playerid, DIALOG_LOGIN, DIALOG_STYLE_PASSWORD, "Zaloguj:", "{FFFFFF}Pomyœlnie zarejestrowa³eœ konto.\nProsze wpisaæ has³o, aby siê teraz zalogowaæ.", "Zaloguj", "WyjdŸ");
 		}
 		case DIALOG_LOGIN: {
@@ -75,29 +79,38 @@ sampCallback OnDialogResponse(playerid, dialogid, response, listitem, inputtext[
 
 			new hash[64];
 
-			SHA256_PassHash(inputtext, playerSalt[playerid], hash, sizeof(hash));
+			SHA256_PassHash(inputtext, playerSalt[playerid], hash, 64);
 
 			if(!strcmp(hash, playerPass[playerid], false)) {
-				SendClientMessage(playerid, COLOR_YELLOW, "Witaj na serwerze Old School Role Play.");
+				SendClientMessage(playerid, COLOR_YELLOW, motd);
 
 				mainStr[0] = EOS;
 				format(mainStr, sizeof(mainStr), "Serwer: Pomyœlnie zalogowa³eœ siê na konto %s.", oocName[playerid]);
 				SendClientMessage(playerid, COLOR_YELLOW, mainStr);
 
-				gPlayerLogged[playerid] = 1;
+				queryStr[0] = EOS;
+				format(queryStr, sizeof(queryStr), "SELECT `ID` FROM `Accounts` WHERE `Name` = '%s' LIMIT 1", oocName[playerid]);
+				mysql_query(queryStr);
+
+				mysql_store_result();
+
+				if(mysql_result_stored()) {
+					PlayerInfo[playerid][pAID] = mysql_fetch_int();
+					mysql_free_result();
+				}
 
 				mainStr[0] = EOS;
 				format(mainStr, sizeof(mainStr), "Opcje konta %s:", oocName[playerid]);
 				osrp_ShowPlayerDialog(playerid, DIALOG_ACCOUNT_OPTIONS, DIALOG_STYLE_LIST, mainStr, "{FFFFFF}Zaloguj siê na postaæ\nStwórz now¹ postaæ\nUsuñ istniej¹c¹ postaæ\nAnty Crash\nZmieñ has³o do konta", "Dalej", "");
 			} else {
-				osrp_ShowPlayerDialog(playerid, DIALOG_LOGIN, DIALOG_STYLE_PASSWORD, "Zaloguj:", "{FFFFFF}Pomyœlnie zarejestrowa³eœ konto.\nProsze wpisaæ has³o, aby siê teraz zalogowaæ.", "Zaloguj", "WyjdŸ");
+				osrp_ShowPlayerDialog(playerid, DIALOG_LOGIN, DIALOG_STYLE_PASSWORD, "Zaloguj:", "{FFFFFF}To konto ju¿ istnieje.\nWpisz has³o, aby siê zalogowaæ.", "Zaloguj", "WyjdŸ");
 			}
 		}
 		case DIALOG_ACCOUNT_OPTIONS: {
 			switch(listitem) {
 				case 0: {
 					queryStr[0] = EOS;
-					format(queryStr, sizeof(queryStr), "SELECT `Name`, `Respect` FROM `Characters` WHERE `AID` = '%d'", accountID[playerid]);
+					format(queryStr, sizeof(queryStr), "SELECT `Name`, `Respect` FROM `Characters` WHERE `AID` = '%d'", PlayerInfo[playerid][pAID]);
 					mysql_query(queryStr);
 
 					mysql_store_result();
@@ -113,7 +126,7 @@ sampCallback OnDialogResponse(playerid, dialogid, response, listitem, inputtext[
 					if(mysql_result_stored()) {
 						while(mysql_fetch_row(queryStr, "|")) {
 							sscanf(queryStr, "p<|>s[24]i", Characters[count][Name], Characters[count][Hours]);
-							format(charStr, sizeof(charStr), "%s\n{FFFFFF}", charStr, Characters[count][Name], Characters[count][Hours]);
+							format(charStr, sizeof(charStr), "%s\n{FFFFFF}%s (%d przegranych godzin)", charStr, Characters[count][Name], Characters[count][Hours]);
 
 							count++;
 						}
@@ -126,7 +139,7 @@ sampCallback OnDialogResponse(playerid, dialogid, response, listitem, inputtext[
 
 						mainStr[0] = EOS;
 						format(mainStr, sizeof(mainStr), "Postacie konta %s:", oocName[playerid]);
-						osrp_ShowPlayerDialog(playerid, DIALOG_ACCOUNT_CHARACTERS, DIALOG_STYLE_LIST, mainStr, "{FFFFFF}Zaloguj siê na postaæ\nStwórz now¹ postaæ\nUsuñ istniej¹c¹ postaæ\nAnty Crash\nZmieñ has³o do konta", "Zaloguj", "Cofnij");
+						osrp_ShowPlayerDialog(playerid, DIALOG_ACCOUNT_CHARACTERS, DIALOG_STYLE_LIST, mainStr, charStr, "Zaloguj", "Cofnij");
 					}
 				}
 				case 1: {
@@ -143,12 +156,46 @@ sampCallback OnDialogResponse(playerid, dialogid, response, listitem, inputtext[
 				}
 			}
 		}
+		case DIALOG_ACCOUNT_CHARACTERS: {
+			if(!response) {
+				mainStr[0] = EOS;
+				format(mainStr, sizeof(mainStr), "Opcje konta %s:", oocName[playerid]);
+				return osrp_ShowPlayerDialog(playerid, DIALOG_ACCOUNT_OPTIONS, DIALOG_STYLE_LIST, mainStr, "{FFFFFF}Zaloguj siê na postaæ\nStwórz now¹ postaæ\nUsuñ istniej¹c¹ postaæ\nAnty Crash\nZmieñ has³o do konta", "Dalej", "");
+			}
+
+			if(strlen(inputtext)) {
+				new name[24], tmp[64];
+
+				sscanf(inputtext, "s[24]s[64]", name, tmp);
+				OnPlayerLogin(playerid, name);
+			}
+		}
 		case DIALOG_ACCOUNT_CREATE_CHAR: {
 			if(!response) {
 				mainStr[0] = EOS;
 				format(mainStr, sizeof(mainStr), "Opcje konta %s:", oocName[playerid]);
 				return osrp_ShowPlayerDialog(playerid, DIALOG_ACCOUNT_OPTIONS, DIALOG_STYLE_LIST, mainStr, "{FFFFFF}Zaloguj siê na postaæ\nStwórz now¹ postaæ\nUsuñ istniej¹c¹ postaæ\nAnty Crash\nZmieñ has³o do konta", "Dalej", "");
 			}
+
+			format(PlayerInfo[playerid][pName], 24, inputtext);
+			osrp_ShowPlayerDialog(playerid, DIALOG_ACCOUNT_CHAR_SEX, DIALOG_STYLE_LIST, "Wybierz p³eæ Twojej postaci:", "{FFFFFF}Mê¿czyzna\nKobieta", "Dalej", "Cofnij");
+		}
+		case DIALOG_ACCOUNT_REMOVE_CHAR: {
+			
+		}
+		case DIALOG_ACCOUNT_ANTI_CRASH: {
+			
+		}
+		case DIALOG_ACCOUNT_CHANGE_PASS: {
+			
+		}
+		case DIALOG_ACCOUNT_CHAR_SEX: {
+			if(!response) {
+				
+			}
+
+			new age = strval(inputtext);
+			PlayerInfo[playerid][pAge] = age;
 
 			osrp_ShowPlayerDialog(playerid, DIALOG_ACCOUNT_CHAR_AGE, DIALOG_STYLE_INPUT, "Wybierz wiek swojej postaci:", "{FFFFFF}Wpisz wiek z przedzia³u od 18 do 65 lat.", "Dalej", "Cofnij");
 		}
@@ -167,8 +214,8 @@ sampCallback OnDialogResponse(playerid, dialogid, response, listitem, inputtext[
 				
 			}
 
-			new origin = strval(inputtext);
-			PlayerInfo[playerid][pOrigin] = origin;
+			new continent = listitem;
+			PlayerInfo[playerid][pContinent] = continent;
 
 			osrp_ShowPlayerDialog(playerid, DIALOG_ACCOUNT_CHAR_ORIGIN, DIALOG_STYLE_LIST, "Wybierz rasê Twojej postaci:", "{FFFFFF}Bia³a\nCzarna\n¯ó³ta", "Dalej", "Cofnij");
 		}
@@ -177,46 +224,29 @@ sampCallback OnDialogResponse(playerid, dialogid, response, listitem, inputtext[
 				
 			}
 
-			new origin = strval(inputtext);
+			new origin = listitem;
 			PlayerInfo[playerid][pOrigin] = origin;
 
 			mainStr[0] = EOS;
-			format(mainStr, sizeof(mainStr), "SprawdŸ czy dane podane poni¿ej siê zgadzaj¹:\n\nNick: %s\nP³eæ: %s\nWiek: %d\nPochodzenie: %s\nRasa: %s");
-			osrp_ShowPlayerDialog(playerid, DIALOG_ACCOUNT_CHAR_SUMMARY, DIALOG_STYLE_LIST, "Podsumowanie:", "{FFFFFF}Bia³a\nCzarna\n¯ó³ta", "Stwórz", "Cofnij");
+			format(mainStr, sizeof(mainStr), "SprawdŸ czy dane podane poni¿ej siê zgadzaj¹:\n\nNick: %s\nP³eæ: %s\nWiek: %d\nPochodzenie: %s\nRasa: %s",
+				PlayerInfo[playerid][pName],
+				GetPlayerSex(playerid),
+				PlayerInfo[playerid][pAge],
+				GetPlayerContinent(playerid),
+				GetPlayerOrigin(playerid)
+			);
+			osrp_ShowPlayerDialog(playerid, DIALOG_ACCOUNT_CHAR_SUMMARY, DIALOG_STYLE_MSGBOX, "Podsumowanie:", mainStr, "Stwórz", "Cofnij");
 		}
 		case DIALOG_ACCOUNT_CHAR_SUMMARY: {
 			if(!response) {
 				
 			}
 
-			queryStr[0] = EOS;
-			format(queryStr, sizeof(queryStr), "SELECT `ID` FROM `Accounts` WHERE `Name` = '%s' LIMIT 1", oocName[playerid]);
-			mysql_query(queryStr);
+			OnPlayerRegister(playerid);
 
-			mysql_store_result();
-
-			if(mysql_result_stored()) {
-				accountID[playerid] = mysql_fetch_int();
-				mysql_free_result();
-
-				queryStr[0] = EOS;
-				format(queryStr, sizeof(queryStr), "INSERT INTO `Accounts` (`AID`, `Name`, `Registered`, `Sex`, `Age`, `Continent`, `Origin`) VALUES ('%d', '%s', '%d', '%d', '%d', '%d', '%d')",
-					accountID[playerid],
-					PlayerInfo[playerid][pName],
-					gPlayerAccount[playerid],
-					PlayerInfo[playerid][pSex],
-					PlayerInfo[playerid][pAge],
-					PlayerInfo[playerid][pContinent],
-					PlayerInfo[playerid][pOrigin]
-				);
-				mysql_query(queryStr);
-
-				SendClientMessage(playerid, COLOR_YELLOW, "Postaæ zosta³a pomyœlnie stworzona. Teraz mo¿esz siê na ni¹ zalogowaæ.");
-
-				mainStr[0] = EOS;
-				format(mainStr, sizeof(mainStr), "Opcje konta %s:", oocName[playerid]);
-				osrp_ShowPlayerDialog(playerid, DIALOG_ACCOUNT_OPTIONS, DIALOG_STYLE_LIST, mainStr, "{FFFFFF}Zaloguj siê na postaæ\nStwórz now¹ postaæ\nUsuñ istniej¹c¹ postaæ\nAnty Crash\nZmieñ has³o do konta", "Dalej", "");
-			}
+			mainStr[0] = EOS;
+			format(mainStr, sizeof(mainStr), "Opcje konta %s:", oocName[playerid]);
+			osrp_ShowPlayerDialog(playerid, DIALOG_ACCOUNT_OPTIONS, DIALOG_STYLE_LIST, mainStr, "{FFFFFF}Zaloguj siê na postaæ\nStwórz now¹ postaæ\nUsuñ istniej¹c¹ postaæ\nAnty Crash\nZmieñ has³o do konta", "Dalej", "");
 		}
 	}
 	return 1;

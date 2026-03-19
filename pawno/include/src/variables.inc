@@ -9,7 +9,7 @@
 
 new MySQL:mySQLHandle;
 
-new queryStr[1024];
+new queryStr[2048];
 new mainStr[512];
 
 new oocName[MAX_PLAYERS][24];
@@ -17,9 +17,9 @@ new escapedName[MAX_PLAYERS][24];
 
 new playerPass[MAX_PLAYERS][65];
 new playerSalt[MAX_PLAYERS][17];
-new accountID[MAX_PLAYERS];
 
 new bool:loadedIntro[MAX_PLAYERS];
+new bool:createdChar[MAX_PLAYERS];
 
 new gTeam[MAX_PLAYERS];
 new Security = 0;
@@ -72,7 +72,6 @@ new TransportTime[MAX_PLAYERS];
 new TransportCost[MAX_PLAYERS];
 new TransportDriver[MAX_PLAYERS];
 new JobDuty[MAX_PLAYERS];
-new RegistrationStep[MAX_PLAYERS];
 new MapIconsShown[MAX_PLAYERS];
 new OnCK[MAX_PLAYERS];
 new GettingCK[MAX_PLAYERS];
@@ -126,9 +125,6 @@ new GoChase[MAX_PLAYERS];
 new GetChased[MAX_PLAYERS];
 new OrderReady[MAX_PLAYERS];
 new ConnectedToPC[MAX_PLAYERS];
-new MedicTime[MAX_PLAYERS];
-new NeedMedicTime[MAX_PLAYERS];
-new MedicBill[MAX_PLAYERS];
 new PlayerTied[MAX_PLAYERS];
 new PlayerCuffed[MAX_PLAYERS];
 new PlayerCuffedTime[MAX_PLAYERS];
@@ -218,7 +214,6 @@ new dollah = 1000; // Amount player recieves on spawn.
 new realtime = 1;
 new wtime = 15;
 new levelcost = 25000;
-new deathcost = 500;
 new callcost = 10; //20 seconds
 new realchat = 1;
 new timeshift = -1;
@@ -310,10 +305,6 @@ new Float:PaintballSpawns[7][3] = {
 {-384.0544,2206.2908,42.4235},
 {-395.7100,2214.9480,42.4297},
 {-445.3718,2222.5481,42.4297}
-};
-
-new Float:gRandomPlayerSpawns[1][3] = {
-{2223.8,-1147.1,1025.7} // sp1
 };
 
 stock Float:gInviteSpawns[10][4] = {

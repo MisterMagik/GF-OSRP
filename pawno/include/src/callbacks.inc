@@ -60,7 +60,7 @@ sampCallback OnGameModeInit() {
 
 	format(objstore, sizeof(objstore), "MOLE: I got nothing, check back with me later.");
 	format(cbjstore, sizeof(cbjstore), "HQ: There is nothing in your Vicinity, Out.");
-	format(motd, sizeof(motd), "Welcome to the Role Play - The Godfather Server.");
+	format(motd, sizeof(motd), "Witaj na serwerze Old School Role Play.");
 	gettime(ghour, gminute, gsecond);
 	FixHour(ghour);
 	ghour = shifthour;
@@ -244,6 +244,7 @@ sampCallback OnPlayerConnect(playerid)
 	}
 	gActivePlayers[playerid]++;
 	numplayers++;
+	loadedIntro[playerid] = false;
 	SelectChar[playerid] = 0; HidePM[playerid] = 0; PhoneOnline[playerid] = 0;
 	SelectCharID[playerid] = 0; SelectCharPlace[playerid] = 0; ChosenSkin[playerid] = 0;
 	GettingJob[playerid] = 0; GuardOffer[playerid] = 999; GuardPrice[playerid] = 0;
@@ -257,9 +258,9 @@ sampCallback OnPlayerConnect(playerid)
 	TalkingLive[playerid] = 255; LiveOffer[playerid] = 999; TakingLesson[playerid] = 0;
 	RefillOffer[playerid] = 999; RefillPrice[playerid] = 0; MapIconsShown[playerid] = 0;
 	DrugOffer[playerid] = 999; PlayerCuffed[playerid] = 0; PlayerCuffedTime[playerid] = 0;
-	DrugPrice[playerid] = 0; RegistrationStep[playerid] = 0; OnCK[playerid] = 999; GettingCK[playerid] = 999;
+	DrugPrice[playerid] = 0; OnCK[playerid] = 999; GettingCK[playerid] = 999;
 	DrugGram[playerid] = 0; ConnectedToPC[playerid] = 0; OrderReady[playerid] = 0;
-	JailPrice[playerid] = 0; MedicTime[playerid] = 0; NeedMedicTime[playerid] = 0; MedicBill[playerid] = 0; GotHit[playerid] = 0;
+	JailPrice[playerid] = 0; GotHit[playerid] = 0;
 	WantedPoints[playerid] = 0; GoChase[playerid] = 999; GetChased[playerid] = 999; PlacedNews[playerid] = 0;
 	OnDuty[playerid] = 0; WantedLevel[playerid] = 0; TestFishes[playerid] = 0;
 	BoxWaitTime[playerid] = 0; SchoolSpawn[playerid] = 0; ChangePos2[playerid][1] = 0;
@@ -524,14 +525,13 @@ sampCallback OnPlayerSpawn(playerid)
 	{
 		gTeam[playerid] = 3;
 	}
-	if(gPlayerLogged[playerid] == 0)
+	/*if(gPlayerLogged[playerid] == 0)
 	{
     	SendClientMessage(playerid, COLOR_LIGHTRED, "** This server requires a Login BEFORE spawn (Kicked) **");
         KickPlayer[playerid] = 1;
- 	}
+ 	}*/
 	if(gTeam[playerid] == 11 && PlayerInfo[playerid][pLeader] < 1)
 	{
-	    MedicBill[playerid] = 0;
 	    new rand = random(sizeof(CIV));
 		SendClientMessage(playerid, COLOR_LIGHTRED, "You are not an Approved Leader, you are now a Civilian !");
 		PlayerInfo[playerid][pTeam] = 3;
@@ -544,7 +544,6 @@ sampCallback OnPlayerSpawn(playerid)
 	{
 	    if(PlayerInfo[playerid][pMember] < 1)
 	    {
-	        MedicBill[playerid] = 0;
 	        new rand = random(sizeof(CIV));
 			SendClientMessage(playerid, COLOR_LIGHTRED, "You are not a Family Member, you are now a Civilian !");
 			PlayerInfo[playerid][pTeam] = 3;
@@ -558,7 +557,6 @@ sampCallback OnPlayerSpawn(playerid)
 	{
 	    if(PlayerInfo[playerid][pMember] != 8)
 	    {
-	        MedicBill[playerid] = 0;
 	        new rand = random(sizeof(CIV));
 			SendClientMessage(playerid, COLOR_LIGHTRED, "You are not a Member of this Agency, you are now a Civilian !");
 			PlayerInfo[playerid][pTeam] = 3;
@@ -570,7 +568,6 @@ sampCallback OnPlayerSpawn(playerid)
 	}
 	if(gTeam[playerid] == 2 && PlayerInfo[playerid][pMember] > 3)
 	{
-	    MedicBill[playerid] = 0;
 		new rand = random(sizeof(CIV));
 		SendClientMessage(playerid, COLOR_LIGHTRED, "You haven't applied for being an Officer / FBI / National Guard, you are now a Civilian !");
 		PlayerInfo[playerid][pTeam] = 3;
@@ -584,7 +581,6 @@ sampCallback OnPlayerSpawn(playerid)
 	    if(PlayerInfo[playerid][pMember] > 0 || PlayerInfo[playerid][pLeader] > 0)
 	    {
 			SendClientMessage(playerid, COLOR_LIGHTRED, "You are part of a Family/Force, you've been forced to the right Class + Char !");
-			MedicBill[playerid] = 0;
 			new model = PlayerInfo[playerid][pChar];
 			if(PlayerInfo[playerid][pMember] == 1) { SetSpawnInfo(playerid, 2, model,0.0,0.0,0.0,0,0,0,0,0,0,0); PlayerInfo[playerid][pTeam] = 2; gTeam[playerid] = 2; PlayerInfo[playerid][pModel] = model; }
 			else if(PlayerInfo[playerid][pMember] == 2) { SetSpawnInfo(playerid, 2, model,0.0,0.0,0.0,0,0,0,0,0,0,0); PlayerInfo[playerid][pTeam] = 2; gTeam[playerid] = 2; PlayerInfo[playerid][pModel] = model; }
@@ -1090,7 +1086,6 @@ sampCallback OnPlayerText(playerid, text[])
 		    SetSpawnInfo(playerid, PlayerInfo[playerid][pTeam], PlayerInfo[playerid][pModel],0.0,0.0,0.0,0,0,0,0,0,0,0);
 		    gTeam[playerid] = PlayerInfo[playerid][pTeam];
 			SetPlayerToTeamColor(playerid);
-			MedicBill[playerid] = 0;
 			SpawnPlayer(playerid);
 		    SelectCharPlace[playerid] = 0;
 		    SelectCharID[playerid] = 0;
@@ -1102,105 +1097,6 @@ sampCallback OnPlayerText(playerid, text[])
 		    SendClientMessage(playerid, COLOR_LIGHTBLUE, "* Use 'next', or 'done'.");
 		    return 0;
 		}
-	}
-	if(RegistrationStep[playerid] > 0)
-	{
-	    if(RegistrationStep[playerid] == 1)
-	    {
-	        new idx;
-	    	tmp = strtok(text, idx);
-		    if((strcmp("male", tmp, true, strlen(tmp)) == 0) && (strlen(tmp) == strlen("male")))
-			{
-			    PlayerInfo[playerid][pSex] = 1;
-			    SendClientMessage(playerid, COLOR_YELLOW2, "Ok, so you are a Male.");
-			    SendClientMessage(playerid, COLOR_LIGHTRED, "What is your birthdate? (Use dd/mm/yyyy)");
-			    RegistrationStep[playerid] = 2;
-			    return 0;
-			}
-			else if((strcmp("female", tmp, true, strlen(tmp)) == 0) && (strlen(tmp) == strlen("female")))
-			{
-			    PlayerInfo[playerid][pSex] = 2;
-			    SendClientMessage(playerid, COLOR_YELLOW2, "Ok, so you are a Female.");
-			    SendClientMessage(playerid, COLOR_LIGHTRED, "What is your birthdate? (Use dd/mm/yyyy)");
-			    RegistrationStep[playerid] = 2;
-			    return 0;
-			}
-			else
-			{
-			    SendClientMessage(playerid, COLOR_LIGHTRED, "Are you a Male or Female? (Type in what you are).");
-			}
-			return 0;
-		}
-		else if(RegistrationStep[playerid] == 2)
-	    {
-	        new year, month,day;
-			getdate(year, month, day);
-	        new DateInfo[3][20];
-			split(text, DateInfo, '/');
-			if(year - strval(DateInfo[2]) > 100 || strval(DateInfo[2]) < 1 || strval(DateInfo[2]) >= year)
-			{
-			    SendClientMessage(playerid, COLOR_LIGHTRED, "What is your Birthdate? (Use dd/mm/yyyy)");
-			    return 0;
-			}
-			new check = year - strval(DateInfo[2]);
-			if(check == year)
-			{
-			    SendClientMessage(playerid, COLOR_LIGHTRED, "What is your Birthdate? (Use dd/mm/yyyy)");
-			    return 0;
-			}
-			if(strval(DateInfo[1]) > month)
-			{
-			    check -= 1;
-			}
-			else if(strval(DateInfo[1]) == month && strval(DateInfo[0]) > day)
-			{
-			    check -= 1;
-			}
-			PlayerInfo[playerid][pAge] = check;
-			format(string, sizeof(string), "Ok, so you are %d year old.",PlayerInfo[playerid][pAge]);
-			SendClientMessage(playerid, COLOR_YELLOW2, string);
-			RegistrationStep[playerid] = 3;
-			SendClientMessage(playerid, COLOR_LIGHTRED, "What is your Origin? (Type in: USA, Europe or Asia)");
-			return 0;
-	    }
-	    else if(RegistrationStep[playerid] == 3)
-	    {
-	        new idx;
-	    	tmp = strtok(text, idx);
-		    if((strcmp("usa", tmp, true, strlen(tmp)) == 0) && (strlen(tmp) == strlen("usa")))
-			{
-			    PlayerInfo[playerid][pOrigin] = 1;
-			    SendClientMessage(playerid, COLOR_YELLOW2, "Ok, so you are from the USA.");
-			    SendClientMessage(playerid, COLOR_LIGHTRED, "Thank you for filling in all the information, now you will proceed to the Tutorial.");
-				RegistrationStep[playerid] = 0;
-			    TutTime[playerid] = 1;
-			    return 0;
-			}
-			else if((strcmp("europe", tmp, true, strlen(tmp)) == 0) && (strlen(tmp) == strlen("europe")))
-			{
-			    PlayerInfo[playerid][pOrigin] = 2;
-			    SendClientMessage(playerid, COLOR_YELLOW2, "Ok, so you are from Europe.");
-			    SendClientMessage(playerid, COLOR_LIGHTRED, "Thank you for filling in all the information, now you will proceed to the Tutorial.");
-				RegistrationStep[playerid] = 0;
-			    TutTime[playerid] = 1;
-			    return 0;
-			}
-			else if((strcmp("asia", tmp, true, strlen(tmp)) == 0) && (strlen(tmp) == strlen("asia")))
-			{
-			    PlayerInfo[playerid][pOrigin] = 3;
-			    SendClientMessage(playerid, COLOR_YELLOW2, "Ok, so you are from Asia.");
-			    SendClientMessage(playerid, COLOR_LIGHTRED, "Thank you for filling in all the information, now you will proceed to the Tutorial.");
-				RegistrationStep[playerid] = 0;
-			    TutTime[playerid] = 1;
-			    return 0;
-			}
-			else
-			{
-			    SendClientMessage(playerid, COLOR_LIGHTRED, "What is your Origin? (Type in: USA, Europe or Asia)");
-			}
-			return 0;
-	    }
-		return 0;
 	}
 	if(MarriageCeremoney[playerid] > 0)
 	{
@@ -2048,15 +1944,14 @@ sampCallback OnPlayerText(playerid, text[])
 		}
 		return 0;
 	}
-	if (realchat)
-	{
-	    if(gPlayerLogged[playerid] == 0)
-	    {
+
+	if(realchat) {
+	    if(gPlayerLogged[playerid] == 0) {
 	        return 0;
       	}
-		GetPlayerName(playerid, sendername, sizeof(sendername));
-		format(string, sizeof(string), "%s Says: %s", sendername, text);
-		ProxDetector(20.0, playerid, string,COLOR_FADE1,COLOR_FADE2,COLOR_FADE3,COLOR_FADE4,COLOR_FADE5);
+
+		format(string, sizeof(string), "%s mówi: %s", PlayerInfo[playerid][pName], text);
+		ProxDetector(20.0, playerid, string, COLOR_FADE1, COLOR_FADE2, COLOR_FADE3, COLOR_FADE4, COLOR_FADE5);
 		return 0;
 	}
 	return 1;
@@ -2573,10 +2468,10 @@ sampCallback OnPlayerStateChange(playerid, newstate, oldstate)
 		}
 		if(IsATruck(newcar))
 		{
-			format(string, sizeof(string), "Products: %d/%d", PlayerHaul[newcar][pLoad],PlayerHaul[newcar][pCapasity]);
+			format(string, sizeof(string), "Produkty: %d/%d", PlayerHaul[newcar][pLoad],PlayerHaul[newcar][pCapasity]);
 			SendClientMessage(playerid, TEAM_GROVE_COLOR, string);
-			SendClientMessage(playerid, COLOR_WHITE, "INFO: You can deliver Products to Businesses.");
-			SendClientMessage(playerid, COLOR_WHITE, "INFO: Commands are /load /buyprods /sellprods");
+			SendClientMessage(playerid, COLOR_WHITE, "Informacja: Mo¿esz dowoziæ produkty do biznesów. Obecna cena za 1 produkt: $23.");
+			SendClientMessage(playerid, COLOR_WHITE, "Komendy: /dostawy /load /buyprods /sellprods");
 		}
 		if(PlayerKarting[playerid] != 0)
 		{
@@ -2739,7 +2634,6 @@ sampCallback OnPlayerStateChange(playerid, newstate, oldstate)
 		WantedLevel[playerid] = 0;
 		if(PlayerInfo[playerid][pDonateRank] > 0) { SetPlayerHealth(playerid, 100.0); }
 		else { SetPlayerHealth(playerid, 50.0+PlayerInfo[playerid][pSHealth]); }
-		MedicBill[playerid] = 1;
 		TelePos[playerid][0] = 0.0;
 		TelePos[playerid][1] = 0.0;
 		gPlayerSpawned[playerid] = 1;
@@ -2775,7 +2669,6 @@ sampCallback OnPlayerUpdate(playerid)
 			if (hFile)
 			{
 				new var[32];
-				format(var, 32, "Key=%s\n", PlayerInfo[playerid][pKey]);fwrite(hFile, var);
 				PlayerInfo[playerid][pCash] = GetPlayerMoney(playerid);
 				format(var, 32, "Level=%d\n",PlayerInfo[playerid][pLevel]);fwrite(hFile, var);
 				format(var, 32, "AdminLevel=%d\n",PlayerInfo[playerid][pAdmin]);fwrite(hFile, var);
@@ -3081,7 +2974,6 @@ Callback Spectator()
 				SetSpawnInfo(i, PlayerInfo[i][pTeam], PlayerInfo[i][pModel], Unspec[i][sPx],  Unspec[i][sPy], Unspec[i][sPz]-1.0, 1.0, -1, -1, -1, -1, -1, -1);
 				gTeam[i] = PlayerInfo[i][pTeam];
 				SetPlayerToTeamColor(i);
-				MedicBill[i] = 0;
 				if(PlayerInfo[i][pDonateRank] > 0)
 		        {
 		            SetSpawnInfo(i, PlayerInfo[i][pTeam], PlayerInfo[i][pModel], Unspec[i][Coords][0], Unspec[i][Coords][1], Unspec[i][Coords][2], 10.0, -1, -1, -1, -1, -1, -1);
@@ -3187,7 +3079,7 @@ Callback OtherTimer()
 			{
 				if(gPlayerAccount[i] == 1 && gPlayerLogged[i] == 0)
 				{
-					SendClientMessage(i, COLOR_WHITE, "HINT: You can now login by typing /login <password>");
+					
 				}
 			}
 		    if(GetPlayerState(i) == 2)
@@ -3479,32 +3371,6 @@ Callback SetPlayerUnjail()
 				    UsedFind[i] = 0;
 				}
 		    }
-			if(MedicTime[i] > 0)
-			{
-			    if(MedicTime[i] == 3)
-			    {
-			        SetPlayerInterior(i, 5);
-			        new Float:X, Float:Y, Float:Z;
-			        GetPlayerPos(i, X,Y,Z);
-			        SetPlayerCameraPos(i, X + 3, Y, Z);
-			        SetPlayerCameraLookAt(i,X,Y,Z);
-			    }
-			    MedicTime[i] ++;
-			    if(MedicTime[i] >= NeedMedicTime[i])
-			    {
-					new cut = deathcost; //PlayerInfo[playerid][pLevel]*deathcost;
-					GivePlayerMoney(i, -cut);
-					format(string, sizeof(string), "DOC: Your Medical Bill comes to $%d, Have a nice day.", cut);
-					SendClientMessage(i, TEAM_CYAN_COLOR, string);
-					TogglePlayerControllable(i, 1);
-			        MedicBill[i] = 0;
-			        MedicTime[i] = 0;
-			        NeedMedicTime[i] = 0;
-			        PlayerInfo[i][pDeaths] += 1;
-			        PlayerFixRadio(i);
-			        SpawnPlayer(i);
-			    }
-			}
 			if(WantLawyer[i] >= 1)
 			{
 			    CallLawyer[i] = 111;
@@ -3623,7 +3489,6 @@ Callback SetPlayerUnjail()
 			        TutTime[i] = 0; PlayerInfo[i][pTut] = 1;
 					gOoc[i] = 0; gNews[i] = 0; gFam[i] = 0;
 					TogglePlayerControllable(i, 1);
-					MedicBill[i] = 0;
 					SetPlayerSpawn(i);
 			    }
 			}
@@ -4309,7 +4174,19 @@ Callback LoadIntro(playerid) {
 				gPlayerAccount[playerid] = 1;
 				SendClientMessage(playerid, COLOR_YELLOW2, "Serwer: To konto jest ju¿ zarejestrowane. Mo¿esz siê zalogowaæ.");
 
-				osrp_ShowPlayerDialog(playerid, DIALOG_LOGIN, DIALOG_STYLE_PASSWORD, "Zaloguj:", "{FFFFFF}To konto ju¿ istnieje.\nWpisz has³o, aby siê zalogowaæ.", "Zaloguj", "WyjdŸ");
+				queryStr[0] = EOS;
+				format(queryStr, sizeof(queryStr), "SELECT `Password`, `Salt` FROM `Accounts` WHERE `Name` = '%s' LIMIT 1", escapedName[playerid]);
+				mysql_query(queryStr);
+
+				mysql_store_result();
+
+				if(mysql_result_stored()) {
+					mysql_fetch_row(queryStr, " ");
+					sscanf(queryStr, "s[65]s[17]", playerPass[playerid], playerSalt[playerid]);
+
+					mysql_free_result();
+					osrp_ShowPlayerDialog(playerid, DIALOG_LOGIN, DIALOG_STYLE_PASSWORD, "Zaloguj:", "{FFFFFF}To konto ju¿ istnieje.\nWpisz has³o, aby siê zalogowaæ.", "Zaloguj", "WyjdŸ");
+				}
 			}
 
 			mysql_free_result();

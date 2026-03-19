@@ -751,11 +751,7 @@ stock SetPlayerSpawn(playerid)
 	{
 	    if(PlayerInfo[playerid][pTut] == 0)
 	    {
-			gOoc[playerid] = 1; gNews[playerid] = 1; gFam[playerid] = 1;
-			TogglePlayerControllable(playerid, 0);
-			RegistrationStep[playerid] = 1;
-			SendClientMessage(playerid, COLOR_YELLOW, "Welcome to Role Play - The Godfather server, please fill in some information to proceed.");
-			SendClientMessage(playerid, COLOR_LIGHTRED, "Are you a Male or Female? (Type in what you are).");
+			gOoc[playerid] = gNews[playerid] = gFam[playerid] = 1;
 	    }
 		new rand;
 		new house = PlayerInfo[playerid][pPhousekey];
@@ -780,36 +776,6 @@ stock SetPlayerSpawn(playerid)
 			SetPlayerPos(playerid,268.5777,1857.9351,9.8133);
 			SetPlayerWorldBounds(playerid, 337.5694,101.5826,1940.9759,1798.7453); //285.3481,96.9720,1940.9755,1799.0811
 			return 1;
-		}
-		if(MedicBill[playerid] == 1 && PlayerInfo[playerid][pJailed] == 0 && PlayerPaintballing[playerid] == 0)
-		{
-		    new string[256];
-		    new cut = deathcost; //PlayerInfo[playerid][pLevel]*deathcost;
-			GivePlayerMoney(playerid, -cut);
-			format(string, sizeof(string), "DOC: Your Medical Bill comes to $%d, Have a nice day.", cut);
-			SendClientMessage(playerid, TEAM_CYAN_COLOR, string);
-			MedicBill[playerid] = 0;
-			MedicTime[playerid] = 0;
-			NeedMedicTime[playerid] = 0;
-			PlayerInfo[playerid][pDeaths] += 1;
-			SetPlayerHealth(playerid, 25.0);
-		    /*SetPlayerInterior(playerid, 5);
-	        rand = random(sizeof(gMedicSpawns));
-			SetPlayerPos(playerid, gMedicSpawns[rand][0], gMedicSpawns[rand][1], gMedicSpawns[rand][2]); // Warp the player
-			SetPlayerFacingAngle(playerid, 270.0);
-	        TogglePlayerControllable(playerid, 0);
-	        GameTextForPlayer(playerid, "~n~~n~~n~~n~~n~~n~~n~~y~You are recovering from your ~r~wounds~y~...", 35000, 3);
-	        MedicTime[playerid] = 1;
-	        if(PlayerInfo[playerid][pDonateRank] > 0)
-	        {
-	            NeedMedicTime[playerid] = 30;
-	        }
-	        else
-	        {
-	        	NeedMedicTime[playerid] = 60;
-			}
-	        PlayerPlaySound(playerid, 1062, 0.0, 0.0, 0.0);
-		    return 1;*/
 		}
 		if(house !=255)
 		{
@@ -940,36 +906,11 @@ stock SetPlayerSpawn(playerid)
 	    else
 	    {
 			SetPlayerToTeamColor(playerid);
-			if(PlayerInfo[playerid][pOrigin] == 1)//USA
-			{
-			    SetPlayerPos(playerid,-2721.2612,-317.8447,7.8438);
-				SetPlayerFacingAngle(playerid, 46.8583);
-				SetPlayerInterior(playerid,0);
-				PlayerInfo[playerid][pInt] = 0;
-			}
-			else if(PlayerInfo[playerid][pOrigin] == 2)//Europe
-			{
-			    SetPlayerPos(playerid,477.8121,-1499.7649,20.5001);
-				SetPlayerFacingAngle(playerid, 262.9963);
-				SetPlayerInterior(playerid,0);
-				PlayerInfo[playerid][pInt] = 0;
-			}
-			else if(PlayerInfo[playerid][pOrigin] == 3)//Asia
-			{
-			    SetPlayerPos(playerid,-2155.4368,635.8173,52.3672);
-				SetPlayerFacingAngle(playerid, 272.3543);
-				SetPlayerInterior(playerid,0);
-				PlayerInfo[playerid][pInt] = 0;
-			}
-			else
-			{
-				rand = random(sizeof(gRandomPlayerSpawns));
-				SetPlayerPos(playerid, gRandomPlayerSpawns[rand][0], gRandomPlayerSpawns[rand][1], gRandomPlayerSpawns[rand][2]); // Warp the player
-				SetPlayerFacingAngle(playerid, 270.0);
-				SetPlayerInterior(playerid,15);
-				PlayerInfo[playerid][pInt] = 15;
-			}
-			return 1;
+			SetCameraBehindPlayer(playerid);
+			SetPlayerPos(playerid,1742.7944,-1864.1165,13.5742);
+			SetPlayerFacingAngle(playerid, 358.5073);
+			SetPlayerInterior(playerid,0);
+			PlayerInfo[playerid][pInt] = 0;
 		}
 	}
 	return 1;
@@ -2271,23 +2212,24 @@ stock LoadSBizz()
 	return 1;
 }
 
-stock SyncTime()
-{
+stock SyncTime() {
 	new string[64];
 	new tmphour;
 	new tmpminute;
 	new tmpsecond;
+
 	gettime(tmphour, tmpminute, tmpsecond);
 	FixHour(tmphour);
 	tmphour = shifthour;
-	if ((tmphour > ghour) || (tmphour == 0 && ghour == 23))
-	{
-		format(string, sizeof(string), "SERVER: The time is now %d:00 hours",tmphour);
-		BroadCast(COLOR_WHITE,string);
+
+	if((tmphour > ghour) || (tmphour == 0 && ghour == 23)) {
+		format(string, sizeof(string), "Serwer: Jest teraz godzina %d:00.", tmphour);
+		BroadCast(COLOR_WHITE, string);
+
 		ghour = tmphour;
 		PayDay();
-		if (realtime)
-		{
+
+		if(realtime) {
 			SetWorldTime(tmphour);
 		}
 	}
@@ -2432,128 +2374,124 @@ stock Checkprop()
 	return 1;
 }
 
-stock PayDay()
-{
+stock PayDay() {
 	new string[128];
-	new account,interest;
+	new account, interest;
 	new rent = 0;
-	for(new i = 0; i < MAX_PLAYERS; i++)
-	{
-		if(IsPlayerConnected(i))
-		{
-		    if(PlayerInfo[i][pLevel] > 0)
-		    {
-			    if(MoneyMessage[i]==1)
-				{
-				    SendClientMessage(i, COLOR_LIGHTRED, "You failed to pay your debt, Jail time.");
-				    GameTextForPlayer(i, "~r~Busted!", 2000, 1);
-				    SetPlayerInterior(i, 6);
-			   		SetPlayerPos(i, 264.6288,77.5742,1001.0391);
-		            PlayerInfo[i][pJailed] = 1;
-		            ResetPlayerWeapons(i);
-					WantedPoints[i] = 0;
-					PlayerInfo[i][pJailTime] = 240;
-					format(string, sizeof(string), "You are jailed for %d seconds.   Bail: Unable", PlayerInfo[i][pJailTime]);
-					SendClientMessage(i, COLOR_LIGHTBLUE, string);
-				}
-				new playername2[MAX_PLAYER_NAME];
-				GetPlayerName(i, playername2, sizeof(playername2));
-				account = PlayerInfo[i][pAccount];
-				new key = PlayerInfo[i][pPhousekey];
-				if(key != 255)
-				{
-					rent = HouseInfo[key][hRent];
-					if(strcmp(playername2, HouseInfo[key][hOwner], true) == 0)
-					{
-						rent = 0;
-					}
-					else if(rent > GetPlayerMoney(i))
-					{
-						PlayerInfo[i][pPhousekey] = 255;
-						SendClientMessage(i, COLOR_WHITE, "You have been evicted.");
-						rent = 0;
-					}
-					HouseInfo[key][hTakings] = HouseInfo[key][hTakings]+rent;
-				}
-				new tmpintrate;
-				if (key != 255 && strcmp(playername2, HouseInfo[key][hOwner], true) == 0)
-				{
-				    if(PlayerInfo[i][pDonateRank] > 0) { tmpintrate = intrate+4; }
-					else { tmpintrate = intrate+2; }//HouseInfo[key][hLevel]
-				}
-				else
-				{
-				    if(PlayerInfo[i][pDonateRank] > 0) { tmpintrate = 3; }
-					else { tmpintrate = 1; }
-				}
-				if(PlayerInfo[i][pPayDay] >= 5)
-				{
-				    Tax += TaxValue;//Should work for every player online
-				    PlayerInfo[i][pAccount] -= TaxValue;
-				    if(PlayerInfo[i][pDonateRank] > 0)
-					{
-					    new bonus = PlayerInfo[i][pPayCheck] / 2;
-					    PlayerInfo[i][pPayCheck] += bonus;
-					}
-					new checks = PlayerInfo[i][pPayCheck];
-				    new ebill = (PlayerInfo[i][pAccount]/10000)*(PlayerInfo[i][pLevel]);
-				    ConsumingMoney[i] = 1;
-				    GivePlayerMoney(i, checks);
-				    if(PlayerInfo[i][pAccount] > 0)
-				    {
-				    	PlayerInfo[i][pAccount] -= ebill;
-				    	SBizzInfo[4][sbTill] += ebill;
-					}
-					else
-					{
-					    ebill = 0;
-					}
-					interest = (PlayerInfo[i][pAccount]/1000)*(tmpintrate);
-					PlayerInfo[i][pExp]++;
-					PlayerPlayMusic(i);
-					PlayerInfo[i][pAccount] = account+interest;
-					SendClientMessage(i, COLOR_WHITE, "|___ BANK STATMENT ___|");
-					format(string, sizeof(string), "  Paycheck: $%d   Tax Money: -$%d", checks, TaxValue);
-					SendClientMessage(i, COLOR_GRAD1, string);
-					if(PlayerInfo[i][pPhousekey] != 255 || PlayerInfo[i][pPbiskey] != 255)
-					{
-					    format(string, sizeof(string), "  Electricity Bill: -$%d", ebill);
-						SendClientMessage(i, COLOR_GRAD1, string);
-					}
-					format(string, sizeof(string), "  Balance: $%d", account);
-					SendClientMessage(i, COLOR_GRAD1, string);
-					format(string, sizeof(string), "  Interest Rate: 0.%d percent",tmpintrate);
-					SendClientMessage(i, COLOR_GRAD2, string);
-					format(string, sizeof(string), "  Interest Gained $%d", interest);
-					SendClientMessage(i, COLOR_GRAD3, string);
-					SendClientMessage(i, COLOR_GRAD4, "|--------------------------------------|");
-					format(string, sizeof(string), "  New Balance: $%d", PlayerInfo[i][pAccount]);
-					SendClientMessage(i, COLOR_GRAD5, string);
-					format(string, sizeof(string), "  Rent: -$%d", rent);
-					SendClientMessage(i, COLOR_GRAD5, string);
-					format(string, sizeof(string), "~y~PayDay~n~~w~Paycheck");
-					GameTextForPlayer(i, string, 5000, 1);
+
+	foreach(new i : Player) {
+		if(PlayerInfo[i][pLevel] > 0) {
+			if(MoneyMessage[i] == 1) {
+				SendClientMessage(i, COLOR_LIGHTRED, "You failed to pay your debt, Jail time.");
+				GameTextForPlayer(i, "~r~Busted!", 2000, 1);
+				SetPlayerInterior(i, 6);
+				SetPlayerPos(i, 264.6288,77.5742,1001.0391);
+		        PlayerInfo[i][pJailed] = 1;
+		        ResetPlayerWeapons(i);
+				WantedPoints[i] = 0;
+				PlayerInfo[i][pJailTime] = 240;
+				format(string, sizeof(string), "You are jailed for %d seconds.   Bail: Unable", PlayerInfo[i][pJailTime]);
+				SendClientMessage(i, COLOR_LIGHTBLUE, string);
+			}
+
+			new playername2[MAX_PLAYER_NAME];
+			GetPlayerName(i, playername2, sizeof(playername2));
+			account = PlayerInfo[i][pAccount];
+			new key = PlayerInfo[i][pPhousekey];
+
+			if(key != 255) {
+				rent = HouseInfo[key][hRent];
+
+				if(strcmp(playername2, HouseInfo[key][hOwner], true) == 0) {
 					rent = 0;
-					PlayerInfo[i][pPayDay] = 0;
-					PlayerInfo[i][pPayCheck] = 0;
-					PlayerInfo[i][pConnectTime] += 1;
-					if(PlayerInfo[i][pDonateRank] > 0)
-					{
-					    PlayerInfo[i][pPayDayHad] += 1;
-					    if(PlayerInfo[i][pPayDayHad] >= 5)
-					    {
-					        PlayerInfo[i][pExp]++;
-					        PlayerInfo[i][pPayDayHad] = 0;
-					    }
+				} else if(rent > GetPlayerMoney(i)) {
+					PlayerInfo[i][pPhousekey] = 255;
+					SendClientMessage(i, COLOR_WHITE, "You have been evicted.");
+					rent = 0;
+				}
+
+				HouseInfo[key][hTakings] = HouseInfo[key][hTakings]+rent;
+			}
+
+			new tmpintrate;
+
+			if(key != 255 && strcmp(playername2, HouseInfo[key][hOwner], true) == 0) {
+				if(PlayerInfo[i][pDonateRank] > 0) { tmpintrate = intrate+4; }
+				else { tmpintrate = intrate+2; }//HouseInfo[key][hLevel]
+			} else {
+				if(PlayerInfo[i][pDonateRank] > 0) { tmpintrate = 3; }
+				else { tmpintrate = 1; }
+			}
+
+			if(PlayerInfo[i][pPayDay] >= 5) {
+				Tax += TaxValue;//Should work for every player online
+				PlayerInfo[i][pAccount] -= TaxValue;
+
+				if(PlayerInfo[i][pDonateRank] > 0) {
+					new bonus = PlayerInfo[i][pPayCheck] / 2;
+					PlayerInfo[i][pPayCheck] += bonus;
+				}
+
+				new checks = PlayerInfo[i][pPayCheck];
+				new ebill = (PlayerInfo[i][pAccount]/10000)*(PlayerInfo[i][pLevel]);
+
+				ConsumingMoney[i] = 1;
+				GivePlayerMoney(i, checks);
+
+				if(PlayerInfo[i][pAccount] > 0) {
+				    PlayerInfo[i][pAccount] -= ebill;
+				    SBizzInfo[4][sbTill] += ebill;
+				} else {
+					ebill = 0;
+				}
+
+				interest = (PlayerInfo[i][pAccount]/1000)*(tmpintrate);
+				PlayerInfo[i][pExp]++;
+				PlayerPlayMusic(i);
+				PlayerInfo[i][pAccount] = account+interest;
+
+				SendClientMessage(i, COLOR_WHITE, "|___ BANK STATMENT ___|");
+				format(string, sizeof(string), "  Paycheck: $%d   Tax Money: -$%d", checks, TaxValue);
+				SendClientMessage(i, COLOR_GRAD1, string);
+
+				if(PlayerInfo[i][pPhousekey] != 255 || PlayerInfo[i][pPbiskey] != 255) {
+					format(string, sizeof(string), "  Electricity Bill: -$%d", ebill);
+					SendClientMessage(i, COLOR_GRAD1, string);
+				}
+
+				format(string, sizeof(string), "  Balance: $%d", account);
+				SendClientMessage(i, COLOR_GRAD1, string);
+				format(string, sizeof(string), "  Interest Rate: 0.%d percent",tmpintrate);
+				SendClientMessage(i, COLOR_GRAD2, string);
+				format(string, sizeof(string), "  Interest Gained $%d", interest);
+				SendClientMessage(i, COLOR_GRAD3, string);
+				SendClientMessage(i, COLOR_GRAD4, "|--------------------------------------|");
+				format(string, sizeof(string), "  New Balance: $%d", PlayerInfo[i][pAccount]);
+				SendClientMessage(i, COLOR_GRAD5, string);
+				format(string, sizeof(string), "  Rent: -$%d", rent);
+				SendClientMessage(i, COLOR_GRAD5, string);
+				format(string, sizeof(string), "~y~Wyplata~n~~w~PayDay");
+				GameTextForPlayer(i, string, 5000, 1);
+
+				rent = 0;
+				PlayerInfo[i][pPayDay] = 0;
+				PlayerInfo[i][pPayCheck] = 0;
+				PlayerInfo[i][pConnectTime] += 1;
+
+				if(PlayerInfo[i][pDonateRank] > 0) {
+					PlayerInfo[i][pPayDayHad] += 1;
+
+					if(PlayerInfo[i][pPayDayHad] >= 5) {
+					    PlayerInfo[i][pExp]++;
+					    PlayerInfo[i][pPayDayHad] = 0;
 					}
 				}
-				else
-				{
-				    SendClientMessage(i, COLOR_LIGHTRED, "* You haven't played long enough to obtain a PayDay.");
-				}
+			} else {
+				SendClientMessage(i, COLOR_LIGHTRED, "* Nie gra³eœ wystarczaj¹co d³ugo, aby dostaæ wyp³atê.");
 			}
 		}
 	}
+
 	Checkprop();
 	return 1;
 }
@@ -2577,325 +2515,275 @@ stock strtok(const string[], &index)
 	return result;
 }
 
-stock OnPlayerRegister(playerid, password[])
-{
-	if(IsPlayerConnected(playerid))
-	{
-			new string3[32];
-			new playername3[MAX_PLAYER_NAME];
-			GetPlayerName(playerid, playername3, sizeof(playername3));
-			format(string3, sizeof(string3), "%s.ini", playername3);
-			new File: hFile = fopen(string3, io_write);
-			if (hFile)
-			{
-			    strmid(PlayerInfo[playerid][pKey], password, 0, strlen(password), 255);
-			    new var[32];
-				format(var, 32, "Key=%s\n", PlayerInfo[playerid][pKey]);fwrite(hFile, var);
-				PlayerInfo[playerid][pCash] = GetPlayerMoney(playerid);
-				format(var, 32, "Level=%d\n",PlayerInfo[playerid][pLevel]);fwrite(hFile, var);
-				format(var, 32, "AdminLevel=%d\n",PlayerInfo[playerid][pAdmin]);fwrite(hFile, var);
-				format(var, 32, "DonateRank=%d\n",PlayerInfo[playerid][pDonateRank]);fwrite(hFile, var);
-				format(var, 32, "UpgradePoints=%d\n",PlayerInfo[playerid][gPupgrade]);fwrite(hFile, var);
-				format(var, 32, "ConnectedTime=%d\n",PlayerInfo[playerid][pConnectTime]);fwrite(hFile, var);
-				format(var, 32, "Registered=%d\n",PlayerInfo[playerid][pReg]);fwrite(hFile, var);
-				format(var, 32, "Sex=%d\n",PlayerInfo[playerid][pSex]);fwrite(hFile, var);
-				format(var, 32, "Age=%d\n",PlayerInfo[playerid][pAge]);fwrite(hFile, var);
-				format(var, 32, "Origin=%d\n",PlayerInfo[playerid][pOrigin]);fwrite(hFile, var);
-				format(var, 32, "CK=%d\n",PlayerInfo[playerid][pCK]);fwrite(hFile, var);
-				format(var, 32, "Muted=%d\n",PlayerInfo[playerid][pMuted]);fwrite(hFile, var);
-				format(var, 32, "Respect=%d\n",PlayerInfo[playerid][pExp]);fwrite(hFile, var);
-				format(var, 32, "Money=%d\n",PlayerInfo[playerid][pCash]);fwrite(hFile, var);
-				format(var, 32, "Bank=%d\n",PlayerInfo[playerid][pAccount]);fwrite(hFile, var);
-				format(var, 32, "Crimes=%d\n",PlayerInfo[playerid][pCrimes]);fwrite(hFile, var);
-				format(var, 32, "Kills=%d\n",PlayerInfo[playerid][pKills]);fwrite(hFile, var);
-				format(var, 32, "Deaths=%d\n",PlayerInfo[playerid][pDeaths]);fwrite(hFile, var);
-				format(var, 32, "Arrested=%d\n",PlayerInfo[playerid][pArrested]);fwrite(hFile, var);
-				format(var, 32, "WantedDeaths=%d\n",PlayerInfo[playerid][pWantedDeaths]);fwrite(hFile, var);
-				format(var, 32, "Phonebook=%d\n",PlayerInfo[playerid][pPhoneBook]);fwrite(hFile, var);
-				format(var, 32, "LottoNr=%d\n",PlayerInfo[playerid][pLottoNr]);fwrite(hFile, var);
-				format(var, 32, "Fishes=%d\n",PlayerInfo[playerid][pFishes]);fwrite(hFile, var);
-				format(var, 32, "BiggestFish=%d\n",PlayerInfo[playerid][pBiggestFish]);fwrite(hFile, var);
-				format(var, 32, "Job=%d\n",PlayerInfo[playerid][pJob]);fwrite(hFile, var);
-				format(var, 32, "Paycheck=%d\n",PlayerInfo[playerid][pPayCheck]);fwrite(hFile, var);
-				format(var, 32, "HeadValue=%d\n",PlayerInfo[playerid][pHeadValue]);fwrite(hFile, var);
-				format(var, 32, "Jailed=%d\n",PlayerInfo[playerid][pJailed]);fwrite(hFile, var);
-				format(var, 32, "JailTime=%d\n",PlayerInfo[playerid][pJailTime]);fwrite(hFile, var);
-				format(var, 32, "Materials=%d\n",PlayerInfo[playerid][pMats]);fwrite(hFile, var);
-				format(var, 32, "Drugs=%d\n",PlayerInfo[playerid][pDrugs]);fwrite(hFile, var);
-				format(var, 32, "Leader=%d\n",PlayerInfo[playerid][pLeader]);fwrite(hFile, var);
-				format(var, 32, "Member=%d\n",PlayerInfo[playerid][pMember]);fwrite(hFile, var);
-				format(var, 32, "FMember=%d\n",PlayerInfo[playerid][pFMember]);fwrite(hFile, var);
-				format(var, 32, "Rank=%d\n",PlayerInfo[playerid][pRank]);fwrite(hFile, var);
-				format(var, 32, "Char=%d\n",PlayerInfo[playerid][pChar]);fwrite(hFile, var);
-				format(var, 32, "ContractTime=%d\n",PlayerInfo[playerid][pContractTime]);fwrite(hFile, var);
-				format(var, 32, "DetSkill=%d\n",PlayerInfo[playerid][pDetSkill]);fwrite(hFile, var);
-				format(var, 32, "SexSkill=%d\n",PlayerInfo[playerid][pSexSkill]);fwrite(hFile, var);
-				format(var, 32, "BoxSkill=%d\n",PlayerInfo[playerid][pBoxSkill]);fwrite(hFile, var);
-				format(var, 32, "LawSkill=%d\n",PlayerInfo[playerid][pLawSkill]);fwrite(hFile, var);
-				format(var, 32, "MechSkill=%d\n",PlayerInfo[playerid][pMechSkill]);fwrite(hFile, var);
-				format(var, 32, "JackSkill=%d\n",PlayerInfo[playerid][pJackSkill]);fwrite(hFile, var);
-				format(var, 32, "CarSkill=%d\n",PlayerInfo[playerid][pCarSkill]);fwrite(hFile, var);
-				format(var, 32, "NewsSkill=%d\n",PlayerInfo[playerid][pNewsSkill]);fwrite(hFile, var);
-				format(var, 32, "DrugsSkill=%d\n",PlayerInfo[playerid][pDrugsSkill]);fwrite(hFile, var);
-				format(var, 32, "CookSkill=%d\n",PlayerInfo[playerid][pCookSkill]);fwrite(hFile, var);
-				format(var, 32, "FishSkill=%d\n",PlayerInfo[playerid][pFishSkill]);fwrite(hFile, var);
-				format(var, 32, "pSHealth=%.1f\n",PlayerInfo[playerid][pSHealth]);fwrite(hFile, var);
-	            GetPlayerHealth(playerid,PlayerInfo[playerid][pHealth]);
-				format(var, 32, "pHealth=%.1f\n",PlayerInfo[playerid][pHealth]);fwrite(hFile, var);
-				format(var, 32, "Int=%d\n",PlayerInfo[playerid][pInt]);fwrite(hFile, var);
-				format(var, 32, "Local=%d\n",PlayerInfo[playerid][pLocal]);fwrite(hFile, var);
-				format(var, 32, "Team=%d\n",PlayerInfo[playerid][pTeam]);fwrite(hFile, var);
-				format(var, 32, "Model=%d\n",PlayerInfo[playerid][pModel]);fwrite(hFile, var);
-				format(var, 32, "PhoneNr=%d\n",PlayerInfo[playerid][pPnumber]);fwrite(hFile, var);
-				format(var, 32, "House=%d\n",PlayerInfo[playerid][pPhousekey]);fwrite(hFile, var);
-				format(var, 32, "Bizz=%d\n",PlayerInfo[playerid][pPbiskey]);fwrite(hFile, var);
-				if ((PlayerInfo[playerid][pPos_x]==0.0 && PlayerInfo[playerid][pPos_y]==0.0 && PlayerInfo[playerid][pPos_z]==0.0))
-				{
-					PlayerInfo[playerid][pPos_x] = 1684.9;
-					PlayerInfo[playerid][pPos_y] = -2244.5;
-					PlayerInfo[playerid][pPos_z] = 13.5;
-				}
-				if(Spectate[playerid] != 255)
-				{
-					PlayerInfo[playerid][pPos_x] = Unspec[playerid][sPx];
-					PlayerInfo[playerid][pPos_y] = Unspec[playerid][sPy];
-					PlayerInfo[playerid][pPos_z] = Unspec[playerid][sPz];
-					PlayerInfo[playerid][pInt] = Unspec[playerid][sPint];
-					PlayerInfo[playerid][pLocal] = Unspec[playerid][sLocal];
-				}
-				format(var, 32, "Pos_x=%.1f\n",PlayerInfo[playerid][pPos_x]);fwrite(hFile, var);
-				format(var, 32, "Pos_y=%.1f\n",PlayerInfo[playerid][pPos_y]);fwrite(hFile, var);
-				format(var, 32, "Pos_z=%.1f\n",PlayerInfo[playerid][pPos_z]);fwrite(hFile, var);
-				format(var, 32, "CarLic=%d\n",PlayerInfo[playerid][pCarLic]);fwrite(hFile, var);
-                format(var, 32, "FlyLic=%d\n",PlayerInfo[playerid][pFlyLic]);fwrite(hFile, var);
-				format(var, 32, "BoatLic=%d\n",PlayerInfo[playerid][pBoatLic]);fwrite(hFile, var);
-				format(var, 32, "FishLic=%d\n",PlayerInfo[playerid][pFishLic]);fwrite(hFile, var);
-				format(var, 32, "GunLic=%d\n",PlayerInfo[playerid][pGunLic]);fwrite(hFile, var);
-				format(var, 32, "Gun1=%d\n",PlayerInfo[playerid][pGun1]);fwrite(hFile, var);
-				format(var, 32, "Gun2=%d\n",PlayerInfo[playerid][pGun2]);fwrite(hFile, var);
-				format(var, 32, "Gun3=%d\n",PlayerInfo[playerid][pGun3]);fwrite(hFile, var);
-				format(var, 32, "Gun4=%d\n",PlayerInfo[playerid][pGun4]);fwrite(hFile, var);
-				format(var, 32, "Ammo1=%d\n",PlayerInfo[playerid][pAmmo1]);fwrite(hFile, var);
-				format(var, 32, "Ammo2=%d\n",PlayerInfo[playerid][pAmmo2]);fwrite(hFile, var);
-				format(var, 32, "Ammo3=%d\n",PlayerInfo[playerid][pAmmo3]);fwrite(hFile, var);
-				format(var, 32, "Ammo4=%d\n",PlayerInfo[playerid][pAmmo4]);fwrite(hFile, var);
-				format(var, 32, "CarTime=%d\n",PlayerInfo[playerid][pCarTime]);fwrite(hFile, var);
-				format(var, 32, "PayDay=%d\n",PlayerInfo[playerid][pPayDay]);fwrite(hFile, var);
-				format(var, 32, "PayDayHad=%d\n",PlayerInfo[playerid][pPayDayHad]);fwrite(hFile, var);
-				format(var, 32, "CDPlayer=%d\n",PlayerInfo[playerid][pCDPlayer]);fwrite(hFile, var);
-				format(var, 32, "Wins=%d\n",PlayerInfo[playerid][pWins]);fwrite(hFile, var);
-				format(var, 32, "Loses=%d\n",PlayerInfo[playerid][pLoses]);fwrite(hFile, var);
-				format(var, 32, "AlcoholPerk=%d\n",PlayerInfo[playerid][pAlcoholPerk]);fwrite(hFile, var);
-				format(var, 32, "DrugPerk=%d\n",PlayerInfo[playerid][pDrugPerk]);fwrite(hFile, var);
-				format(var, 32, "MiserPerk=%d\n",PlayerInfo[playerid][pMiserPerk]);fwrite(hFile, var);
-				format(var, 32, "PainPerk=%d\n",PlayerInfo[playerid][pPainPerk]);fwrite(hFile, var);
-				format(var, 32, "TraderPerk=%d\n",PlayerInfo[playerid][pTraderPerk]);fwrite(hFile, var);
-				format(var, 32, "Tutorial=%d\n",PlayerInfo[playerid][pTut]);fwrite(hFile, var);
-				format(var, 32, "Mission=%d\n",PlayerInfo[playerid][pMissionNr]);fwrite(hFile, var);
-				format(var, 32, "Warnings=%d\n",PlayerInfo[playerid][pWarns]);fwrite(hFile, var);
-				format(var, 32, "Adjustable=%d\n",PlayerInfo[playerid][pAdjustable]);fwrite(hFile, var);
-				format(var, 32, "Fuel=%d\n",PlayerInfo[playerid][pFuel]);fwrite(hFile, var);
-				format(var, 32, "Married=%d\n",PlayerInfo[playerid][pMarried]);fwrite(hFile, var);
-				format(var, 32, "MarriedTo=%s\n",PlayerInfo[playerid][pMarriedTo]);fwrite(hFile, var);
-				fclose(hFile);
-				SendClientMessage(playerid, COLOR_YELLOW, "Account registered, you can login now (/login [password]).");
-			}
+stock OnPlayerRegister(playerid) {
+	if(!gPlayerAccount[playerid]) {
+		return 1;
 	}
+
+	GetPlayerHealth(playerid,PlayerInfo[playerid][pHealth]);
+	PlayerInfo[playerid][pCash] = GetPlayerMoney(playerid);
+
+	if((PlayerInfo[playerid][pPos_x]==0.0 && PlayerInfo[playerid][pPos_y]==0.0 && PlayerInfo[playerid][pPos_z]==0.0)) {
+		PlayerInfo[playerid][pPos_x] = 1684.9;
+		PlayerInfo[playerid][pPos_y] = -2244.5;
+		PlayerInfo[playerid][pPos_z] = 13.5;
+	}
+
+	if(Spectate[playerid] != 255) {
+		PlayerInfo[playerid][pPos_x] = Unspec[playerid][sPx];
+		PlayerInfo[playerid][pPos_y] = Unspec[playerid][sPy];
+		PlayerInfo[playerid][pPos_z] = Unspec[playerid][sPz];
+		PlayerInfo[playerid][pInt] = Unspec[playerid][sPint];
+		PlayerInfo[playerid][pLocal] = Unspec[playerid][sLocal];
+	}
+
+	queryStr[0] = EOS;
+	strcat(queryStr, "INSERT INTO `Characters` (`AID`, `Name`, `Level`, `AdminLevel`, `DonateRank`, `UpgradePoints`, `ConnectedTime`, ");
+	strcat(queryStr, "`Registered`, `Sex`, `Age`, `Continent`, `Origin`, `CK`, `Muted`, `Respect`, `Money`, `Bank`, `Crimes`, `Kills`, ");
+	strcat(queryStr, "`Deaths`, `Arrested`, `WantedDeaths`, `Phonebook`, `LottoNr`, `Fishes`, `BiggestFish`, `Job`, `Paycheck`, ");
+	strcat(queryStr, "`HeadValue`, `Jailed`, `JailTime`, `Materials`, `Drugs`, `Leader`, `Member`, `FMember`, `Rank`, `Char`, ");
+	strcat(queryStr, "`ContractTime`, `DetSkill`, `SexSkill`, `BoxSkill`, `LawSkill`, `MechSkill`, `JackSkill`, `CarSkill`, ");
+	strcat(queryStr, "`NewsSkill`, `DrugsSkill`, `CookSkill`, `FishSkill`, `pSHealth`, `pHealth`, `Int`, `Local`, `Team`, `Model`, ");
+	strcat(queryStr, "`PhoneNr`, `House`, `Bizz`, `Pos_x`, `Pos_y`, `Pos_z`, `CarLic`, `FlyLic`, `BoatLic`, `FishLic`, `GunLic`, ");
+	strcat(queryStr, "`Gun1`, `Gun2`, `Gun3`, `Gun4`, `Ammo1`, `Ammo2`, `Ammo3`, `Ammo4`, `CarTime`, `PayDay`, `PayDayHad`, ");
+	strcat(queryStr, "`CDPlayer`, `Wins`, `Loses`, `AlcoholPerk`, `DrugPerk`, `MiserPerk`, `PainPerk`, `TraderPerk`, `Tutorial`, ");
+	strcat(queryStr, "`Mission`, `Warnings`, `Adjustable`, `Fuel`, `Married`, `MarriedTo`) ");
+	strcat(queryStr, "VALUES (");
+
+	new temp[256];
+
+	format(temp, sizeof(temp), "'%d', '%s', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', ",
+		PlayerInfo[playerid][pAID], PlayerInfo[playerid][pName], PlayerInfo[playerid][pLevel], PlayerInfo[playerid][pAdmin], PlayerInfo[playerid][pDonateRank], PlayerInfo[playerid][gPupgrade], PlayerInfo[playerid][pConnectTime],
+		PlayerInfo[playerid][pReg], PlayerInfo[playerid][pSex], PlayerInfo[playerid][pAge], PlayerInfo[playerid][pContinent], PlayerInfo[playerid][pOrigin], PlayerInfo[playerid][pCK], PlayerInfo[playerid][pMuted], PlayerInfo[playerid][pExp]);
+	strcat(queryStr, temp);
+
+	format(temp, sizeof(temp), "'%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', ",
+		PlayerInfo[playerid][pCash], PlayerInfo[playerid][pAccount], PlayerInfo[playerid][pCrimes], PlayerInfo[playerid][pKills], PlayerInfo[playerid][pDeaths], PlayerInfo[playerid][pArrested], PlayerInfo[playerid][pWantedDeaths],
+		PlayerInfo[playerid][pPhoneBook], PlayerInfo[playerid][pLottoNr], PlayerInfo[playerid][pFishes], PlayerInfo[playerid][pBiggestFish], PlayerInfo[playerid][pJob], PlayerInfo[playerid][pPayCheck], PlayerInfo[playerid][pHeadValue], PlayerInfo[playerid][pJailed]);
+	strcat(queryStr, temp);
+
+	format(temp, sizeof(temp), "'%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', ",
+		PlayerInfo[playerid][pJailTime], PlayerInfo[playerid][pMats], PlayerInfo[playerid][pDrugs], PlayerInfo[playerid][pLeader], PlayerInfo[playerid][pMember], PlayerInfo[playerid][pFMember],
+		PlayerInfo[playerid][pRank], PlayerInfo[playerid][pChar], PlayerInfo[playerid][pContractTime], PlayerInfo[playerid][pDetSkill], PlayerInfo[playerid][pSexSkill], PlayerInfo[playerid][pBoxSkill], PlayerInfo[playerid][pLawSkill],
+		PlayerInfo[playerid][pMechSkill], PlayerInfo[playerid][pJackSkill]);
+	strcat(queryStr, temp);
+
+	format(temp, sizeof(temp), "'%d', '%d', '%d', '%d', '%d', '%f', '%f', '%d', '%d', '%d', '%d', '%d', '%d', '%d', ",
+		PlayerInfo[playerid][pCarSkill], PlayerInfo[playerid][pNewsSkill], PlayerInfo[playerid][pDrugsSkill], PlayerInfo[playerid][pCookSkill], PlayerInfo[playerid][pFishSkill],
+		PlayerInfo[playerid][pSHealth], PlayerInfo[playerid][pHealth], PlayerInfo[playerid][pInt], PlayerInfo[playerid][pLocal], PlayerInfo[playerid][pTeam], PlayerInfo[playerid][pModel], PlayerInfo[playerid][pPnumber],
+		PlayerInfo[playerid][pPhousekey], PlayerInfo[playerid][pPbiskey]);
+	strcat(queryStr, temp);
+
+	format(temp, sizeof(temp), "'%f', '%f', '%f', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', ",
+		PlayerInfo[playerid][pPos_x], PlayerInfo[playerid][pPos_y], PlayerInfo[playerid][pPos_z], PlayerInfo[playerid][pCarLic], PlayerInfo[playerid][pFlyLic],
+		PlayerInfo[playerid][pBoatLic], PlayerInfo[playerid][pFishLic], PlayerInfo[playerid][pGunLic], PlayerInfo[playerid][pGun1], PlayerInfo[playerid][pGun2], PlayerInfo[playerid][pGun3], PlayerInfo[playerid][pGun4],
+		PlayerInfo[playerid][pAmmo1], PlayerInfo[playerid][pAmmo2], PlayerInfo[playerid][pAmmo3]);
+	strcat(queryStr, temp);
+
+	format(temp, sizeof(temp), "'%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', ",
+		PlayerInfo[playerid][pAmmo4], PlayerInfo[playerid][pCarTime], PlayerInfo[playerid][pPayDay], PlayerInfo[playerid][pPayDayHad], PlayerInfo[playerid][pCDPlayer], PlayerInfo[playerid][pWins], PlayerInfo[playerid][pLoses],
+		PlayerInfo[playerid][pAlcoholPerk], PlayerInfo[playerid][pDrugPerk], PlayerInfo[playerid][pMiserPerk], PlayerInfo[playerid][pPainPerk], PlayerInfo[playerid][pTraderPerk], PlayerInfo[playerid][pTut], PlayerInfo[playerid][pMissionNr], PlayerInfo[playerid][pWarns]);
+	strcat(queryStr, temp);
+
+	format(temp, sizeof(temp), "'%d', '%d', '%d', '%s')",
+		PlayerInfo[playerid][pAdjustable], PlayerInfo[playerid][pFuel], PlayerInfo[playerid][pMarried], PlayerInfo[playerid][pMarriedTo]);
+	strcat(queryStr, temp);
+	mysql_query(queryStr);
+
+	createdChar[playerid] = true;
+	SendClientMessage(playerid, COLOR_YELLOW, "Postaæ zosta³a pomyœlnie stworzona. Teraz mo¿esz siê na ni¹ zalogowaæ.");	
 	return 1;
 }
 
-stock OnPlayerLogin(playerid,password[])
-{
-	new tmp2[256];
-    new string2[64];
-	new playername2[MAX_PLAYER_NAME];
-    GetPlayerName(playerid, playername2, sizeof(playername2));
-	format(string2, sizeof(string2), "%s.ini", playername2);
-	new File: UserFile = fopen(string2, io_read);
-	if ( UserFile )
-	{
-	    new PassData[256];
-	    new keytmp[256], valtmp[256];
-	    fread( UserFile , PassData , sizeof( PassData ) );
-	    keytmp = ini_GetKey( PassData );
-	    if( strcmp( keytmp , "Key" , true ) == 0 )
-		{
-			valtmp = ini_GetValue( PassData );
-			strmid(PlayerInfo[playerid][pKey], valtmp, 0, strlen(valtmp)-1, 255);
+stock OnPlayerLogin(playerid, name[]) {
+	if(!createdChar[playerid] && strlen(name)) {
+		format(PlayerInfo[playerid][pName], 24, name);
+
+		queryStr[0] = EOS;
+		strcat(queryStr, "SELECT `Level`, `AdminLevel`, `DonateRank`, `UpgradePoints`, `ConnectedTime`, `Registered`, `Sex`, `Age`, `Continent`, `Origin`, `CK`, `Muted`, `Respect`, ");
+		strcat(queryStr, "`Money`, `Bank`, `Crimes`, `Kills`, `Deaths`, `Arrested`, `WantedDeaths`, `Phonebook`, `LottoNr`, `Fishes`, `BiggestFish`, `Job`, `Paycheck`, `HeadValue`, ");
+		strcat(queryStr, "`Jailed`, `JailTime`, `Materials`, `Drugs`, `Leader`, `Member`, `FMember`, `Rank`, `Char`, `ContractTime`, `DetSkill`, `SexSkill`, `BoxSkill`, `LawSkill`, ");
+		strcat(queryStr, "`MechSkill`, `JackSkill`, `CarSkill`, `NewsSkill`, `DrugsSkill`, `CookSkill`, `FishSkill`, `pSHealth`, `pHealth`, `Int`, `Local`, `Team`, `Model`, `PhoneNr`, ");
+		strcat(queryStr, "`House`, `Bizz`, `Pos_x`, `Pos_y`, `Pos_z`, `CarLic`, `FlyLic`, `BoatLic`, `FishLic`, `GunLic`, `Gun1`, `Gun2`, `Gun3`, `Gun4`, `Ammo1`, `Ammo2`, `Ammo3`, ");
+		strcat(queryStr, "`Ammo4`, `CarTime`, `PayDay`, `PayDayHad`, `CDPlayer`, `Wins`, `Loses`, `AlcoholPerk`, `DrugPerk`, `MiserPerk`, `PainPerk`, `TraderPerk`, `Tutorial`, ");
+		strcat(queryStr, "`Mission`, `Warnings`, `Adjustable`, `Fuel`, `Married`, `MarriedTo` ");
+		strcat(queryStr, "FROM `Characters` WHERE `Name` = '");
+
+		new endPart[128];
+		format(endPart, sizeof(endPart), "%s' LIMIT 1", name);
+		strcat(queryStr, endPart);
+
+		mysql_query(queryStr);
+		mysql_store_result();
+
+		if(mysql_result_stored()) {
+			mysql_fetch_row(queryStr, "|");
+			sscanf(queryStr, "p<|>iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiffiiiiifffiiiiiiiiiiiiiiiiiiiiiiiiiiis[128]",
+				PlayerInfo[playerid][pLevel],
+				PlayerInfo[playerid][pAdmin],
+				PlayerInfo[playerid][pDonateRank],
+				PlayerInfo[playerid][gPupgrade],
+				PlayerInfo[playerid][pConnectTime],
+				PlayerInfo[playerid][pReg],
+				PlayerInfo[playerid][pSex],
+				PlayerInfo[playerid][pAge],
+				PlayerInfo[playerid][pContinent],
+				PlayerInfo[playerid][pOrigin],
+				PlayerInfo[playerid][pCK],
+				PlayerInfo[playerid][pMuted],
+				PlayerInfo[playerid][pExp],
+				PlayerInfo[playerid][pCash],
+				PlayerInfo[playerid][pAccount],
+				PlayerInfo[playerid][pCrimes],
+				PlayerInfo[playerid][pKills],
+				PlayerInfo[playerid][pDeaths],
+				PlayerInfo[playerid][pArrested],
+				PlayerInfo[playerid][pWantedDeaths],
+				PlayerInfo[playerid][pPhoneBook],
+				PlayerInfo[playerid][pLottoNr],
+				PlayerInfo[playerid][pFishes],
+				PlayerInfo[playerid][pBiggestFish],
+				PlayerInfo[playerid][pJob],
+				PlayerInfo[playerid][pPayCheck],
+				PlayerInfo[playerid][pHeadValue],
+				PlayerInfo[playerid][pJailed],
+				PlayerInfo[playerid][pJailTime],
+				PlayerInfo[playerid][pMats],
+				PlayerInfo[playerid][pDrugs],
+				PlayerInfo[playerid][pLeader],
+				PlayerInfo[playerid][pMember],
+				PlayerInfo[playerid][pFMember],
+				PlayerInfo[playerid][pRank],
+				PlayerInfo[playerid][pChar],
+				PlayerInfo[playerid][pContractTime],
+				PlayerInfo[playerid][pDetSkill],
+				PlayerInfo[playerid][pSexSkill],
+				PlayerInfo[playerid][pBoxSkill],
+				PlayerInfo[playerid][pLawSkill],
+				PlayerInfo[playerid][pMechSkill],
+				PlayerInfo[playerid][pJackSkill],
+				PlayerInfo[playerid][pCarSkill],
+				PlayerInfo[playerid][pNewsSkill],
+				PlayerInfo[playerid][pDrugsSkill],
+				PlayerInfo[playerid][pCookSkill],
+				PlayerInfo[playerid][pFishSkill],
+				PlayerInfo[playerid][pSHealth],
+				PlayerInfo[playerid][pHealth],
+				PlayerInfo[playerid][pInt],
+				PlayerInfo[playerid][pLocal],
+				PlayerInfo[playerid][pTeam],
+				PlayerInfo[playerid][pModel],
+				PlayerInfo[playerid][pPnumber],
+				PlayerInfo[playerid][pPhousekey],
+				PlayerInfo[playerid][pPbiskey],
+				PlayerInfo[playerid][pPos_x],
+				PlayerInfo[playerid][pPos_y],
+				PlayerInfo[playerid][pPos_z],
+				PlayerInfo[playerid][pCarLic],
+				PlayerInfo[playerid][pFlyLic],
+				PlayerInfo[playerid][pBoatLic],
+				PlayerInfo[playerid][pFishLic],
+				PlayerInfo[playerid][pGunLic],
+				PlayerInfo[playerid][pGun1],
+				PlayerInfo[playerid][pGun2],
+				PlayerInfo[playerid][pGun3],
+				PlayerInfo[playerid][pGun4],
+				PlayerInfo[playerid][pAmmo1],
+				PlayerInfo[playerid][pAmmo2],
+				PlayerInfo[playerid][pAmmo3],
+				PlayerInfo[playerid][pAmmo4],
+				PlayerInfo[playerid][pCarTime],
+				PlayerInfo[playerid][pPayDay],
+				PlayerInfo[playerid][pPayDayHad],
+				PlayerInfo[playerid][pCDPlayer],
+				PlayerInfo[playerid][pWins],
+				PlayerInfo[playerid][pLoses],
+				PlayerInfo[playerid][pAlcoholPerk],
+				PlayerInfo[playerid][pDrugPerk],
+				PlayerInfo[playerid][pMiserPerk],
+				PlayerInfo[playerid][pPainPerk],
+				PlayerInfo[playerid][pTraderPerk],
+				PlayerInfo[playerid][pTut],
+				PlayerInfo[playerid][pMissionNr],
+				PlayerInfo[playerid][pWarns],
+				PlayerInfo[playerid][pAdjustable],
+				PlayerInfo[playerid][pFuel],
+				PlayerInfo[playerid][pMarried],
+				PlayerInfo[playerid][pMarriedTo]
+			);
+
+			mysql_free_result();
 		}
-		if(strcmp(PlayerInfo[playerid][pKey],password, true ) == 0 )
-		{
-			    new key[ 256 ] , val[ 256 ];
-			    new Data[ 256 ];
-			    while ( fread( UserFile , Data , sizeof( Data ) ) )
-				{
-					key = ini_GetKey( Data );
-					if( strcmp( key , "Level" , true ) == 0 ) { val = ini_GetValue( Data ); PlayerInfo[playerid][pLevel] = strval( val ); }
-			    	if( strcmp( key , "AdminLevel" , true ) == 0 ) { val = ini_GetValue( Data ); PlayerInfo[playerid][pAdmin] = strval( val ); }
-			        if( strcmp( key , "DonateRank" , true ) == 0 ) { val = ini_GetValue( Data ); PlayerInfo[playerid][pDonateRank] = strval( val ); }
-			        if( strcmp( key , "UpgradePoints" , true ) == 0 ) { val = ini_GetValue( Data ); PlayerInfo[playerid][gPupgrade] = strval( val ); }
-			        if( strcmp( key , "ConnectedTime" , true ) == 0 ) { val = ini_GetValue( Data ); PlayerInfo[playerid][pConnectTime] = strval( val ); }
-			        if( strcmp( key , "Registered" , true ) == 0 ) { val = ini_GetValue( Data ); PlayerInfo[playerid][pReg] = strval( val ); }
-			        if( strcmp( key , "Sex" , true ) == 0 ) { val = ini_GetValue( Data ); PlayerInfo[playerid][pSex] = strval( val ); }
-			        if( strcmp( key , "Age" , true ) == 0 ) { val = ini_GetValue( Data ); PlayerInfo[playerid][pAge] = strval( val ); }
-			        if( strcmp( key , "Origin" , true ) == 0 ) { val = ini_GetValue( Data ); PlayerInfo[playerid][pOrigin] = strval( val ); }
-			        if( strcmp( key , "CK" , true ) == 0 ) { val = ini_GetValue( Data ); PlayerInfo[playerid][pCK] = strval( val ); }
-			        if( strcmp( key , "Muted" , true ) == 0 ) { val = ini_GetValue( Data ); PlayerInfo[playerid][pMuted] = strval( val ); }
-			        if( strcmp( key , "Respect" , true ) == 0 ) { val = ini_GetValue( Data ); PlayerInfo[playerid][pExp] = strval( val ); }
-			        if( strcmp( key , "Money" , true ) == 0 ) { val = ini_GetValue( Data ); PlayerInfo[playerid][pCash] = strval( val ); }
-			        if( strcmp( key , "Bank" , true ) == 0 ) { val = ini_GetValue( Data ); PlayerInfo[playerid][pAccount] = strval( val ); }
-			        if( strcmp( key , "Crimes" , true ) == 0 ) { val = ini_GetValue( Data ); PlayerInfo[playerid][pCrimes] = strval( val ); }
-			        if( strcmp( key , "Kills" , true ) == 0 ) { val = ini_GetValue( Data ); PlayerInfo[playerid][pKills] = strval( val ); }
-			        if( strcmp( key , "Deaths" , true ) == 0 ) { val = ini_GetValue( Data ); PlayerInfo[playerid][pDeaths] = strval( val ); }
-			        if( strcmp( key , "Arrested" , true ) == 0 ) { val = ini_GetValue( Data ); PlayerInfo[playerid][pArrested] = strval( val ); }
-			        if( strcmp( key , "WantedDeaths" , true ) == 0 ) { val = ini_GetValue( Data ); PlayerInfo[playerid][pWantedDeaths] = strval( val ); }
-			        if( strcmp( key , "Phonebook" , true ) == 0 ) { val = ini_GetValue( Data ); PlayerInfo[playerid][pPhoneBook] = strval( val ); }
-			        if( strcmp( key , "LottoNr" , true ) == 0 ) { val = ini_GetValue( Data ); PlayerInfo[playerid][pLottoNr] = strval( val ); }
-			        if( strcmp( key , "Fishes" , true ) == 0 ) { val = ini_GetValue( Data ); PlayerInfo[playerid][pFishes] = strval( val ); }
-			        if( strcmp( key , "BiggestFish" , true ) == 0 ) { val = ini_GetValue( Data ); PlayerInfo[playerid][pBiggestFish] = strval( val ); }
-			        if( strcmp( key , "Job" , true ) == 0 ) { val = ini_GetValue( Data ); PlayerInfo[playerid][pJob] = strval( val ); }
-			        if( strcmp( key , "Paycheck" , true ) == 0 ) { val = ini_GetValue( Data ); PlayerInfo[playerid][pPayCheck] = strval( val ); }
-			        if( strcmp( key , "HeadValue" , true ) == 0 ) { val = ini_GetValue( Data ); PlayerInfo[playerid][pHeadValue] = strval( val ); }
-			        if( strcmp( key , "Jailed" , true ) == 0 ) { val = ini_GetValue( Data ); PlayerInfo[playerid][pJailed] = strval( val ); }
-			        if( strcmp( key , "JailTime" , true ) == 0 ) { val = ini_GetValue( Data ); PlayerInfo[playerid][pJailTime] = strval( val ); }
-			        if( strcmp( key , "Materials" , true ) == 0 ) { val = ini_GetValue( Data ); PlayerInfo[playerid][pMats] = strval( val ); }
-			        if( strcmp( key , "Drugs" , true ) == 0 ) { val = ini_GetValue( Data ); PlayerInfo[playerid][pDrugs] = strval( val ); }
-			        if( strcmp( key , "Leader" , true ) == 0 ) { val = ini_GetValue( Data ); PlayerInfo[playerid][pLeader] = strval( val ); }
-			        if( strcmp( key , "Member" , true ) == 0 ) { val = ini_GetValue( Data ); PlayerInfo[playerid][pMember] = strval( val ); }
-			        if( strcmp( key , "FMember" , true ) == 0 ) { val = ini_GetValue( Data ); PlayerInfo[playerid][pFMember] = strval( val ); }
-			        if( strcmp( key , "Rank" , true ) == 0 ) { val = ini_GetValue( Data ); PlayerInfo[playerid][pRank] = strval( val ); }
-			        if( strcmp( key , "Char" , true ) == 0 ) { val = ini_GetValue( Data ); PlayerInfo[playerid][pChar] = strval( val ); }
-			        if( strcmp( key , "ContractTime" , true ) == 0 ) { val = ini_GetValue( Data ); PlayerInfo[playerid][pContractTime] = strval( val ); }
-			        if( strcmp( key , "DetSkill" , true ) == 0 ) { val = ini_GetValue( Data ); PlayerInfo[playerid][pDetSkill] = strval( val ); }
-			        if( strcmp( key , "SexSkill" , true ) == 0 ) { val = ini_GetValue( Data ); PlayerInfo[playerid][pSexSkill] = strval( val ); }
-			        if( strcmp( key , "BoxSkill" , true ) == 0 ) { val = ini_GetValue( Data ); PlayerInfo[playerid][pBoxSkill] = strval( val ); }
-			        if( strcmp( key , "LawSkill" , true ) == 0 ) { val = ini_GetValue( Data ); PlayerInfo[playerid][pLawSkill] = strval( val ); }
-			        if( strcmp( key , "MechSkill" , true ) == 0 ) { val = ini_GetValue( Data ); PlayerInfo[playerid][pMechSkill] = strval( val ); }
-			        if( strcmp( key , "JackSkill" , true ) == 0 ) { val = ini_GetValue( Data ); PlayerInfo[playerid][pJackSkill] = strval( val ); }
-			        if( strcmp( key , "CarSkill" , true ) == 0 ) { val = ini_GetValue( Data ); PlayerInfo[playerid][pCarSkill] = strval( val ); }
-			        if( strcmp( key , "NewsSkill" , true ) == 0 ) { val = ini_GetValue( Data ); PlayerInfo[playerid][pNewsSkill] = strval( val ); }
-			        if( strcmp( key , "DrugsSkill" , true ) == 0 ) { val = ini_GetValue( Data ); PlayerInfo[playerid][pDrugsSkill] = strval( val ); }
-			        if( strcmp( key , "CookSkill" , true ) == 0 ) { val = ini_GetValue( Data ); PlayerInfo[playerid][pCookSkill] = strval( val ); }
-			        if( strcmp( key , "FishSkill" , true ) == 0 ) { val = ini_GetValue( Data ); PlayerInfo[playerid][pFishSkill] = strval( val ); }
-			        if( strcmp( key , "pSHealth" , true ) == 0 ) { val = ini_GetValue( Data ); PlayerInfo[playerid][pSHealth] = floatstr( val ); }
-			        if( strcmp( key , "pHealth" , true ) == 0 ) { val = ini_GetValue( Data ); PlayerInfo[playerid][pHealth] = floatstr( val ); }
-			        if( strcmp( key , "Int" , true ) == 0 ) { val = ini_GetValue( Data ); PlayerInfo[playerid][pInt] = strval( val ); }
-			        if( strcmp( key , "Local" , true ) == 0 ) { val = ini_GetValue( Data ); PlayerInfo[playerid][pLocal] = strval( val ); }
-			        if( strcmp( key , "Team" , true ) == 0 ) { val = ini_GetValue( Data ); PlayerInfo[playerid][pTeam] = strval( val ); }
-			        if( strcmp( key , "Model" , true ) == 0 ) { val = ini_GetValue( Data ); PlayerInfo[playerid][pModel] = strval( val ); }
-			        if( strcmp( key , "PhoneNr" , true ) == 0 ) { val = ini_GetValue( Data ); PlayerInfo[playerid][pPnumber] = strval( val ); }
-			        if( strcmp( key , "House" , true ) == 0 ) { val = ini_GetValue( Data ); PlayerInfo[playerid][pPhousekey] = strval( val ); }
-			        if( strcmp( key , "Bizz" , true ) == 0 ) { val = ini_GetValue( Data ); PlayerInfo[playerid][pPbiskey] = strval( val ); }
-			        if( strcmp( key , "Pos_x" , true ) == 0 ) { val = ini_GetValue( Data ); PlayerInfo[playerid][pPos_x] = floatstr( val ); }
-			        if( strcmp( key , "Pos_y" , true ) == 0 ) { val = ini_GetValue( Data ); PlayerInfo[playerid][pPos_y] = floatstr( val ); }
-			        if( strcmp( key , "Pos_z" , true ) == 0 ) { val = ini_GetValue( Data ); PlayerInfo[playerid][pPos_z] = floatstr( val ); }
-			        if( strcmp( key , "CarLic" , true ) == 0 ) { val = ini_GetValue( Data ); PlayerInfo[playerid][pCarLic] = strval( val ); }
-                    if( strcmp( key , "FlyLic" , true ) == 0 ) { val = ini_GetValue( Data ); PlayerInfo[playerid][pFlyLic] = strval( val ); }
-					if( strcmp( key , "BoatLic" , true ) == 0 ) { val = ini_GetValue( Data ); PlayerInfo[playerid][pBoatLic] = strval( val ); }
-			        if( strcmp( key , "FishLic" , true ) == 0 ) { val = ini_GetValue( Data ); PlayerInfo[playerid][pFishLic] = strval( val ); }
-			        if( strcmp( key , "GunLic" , true ) == 0 ) { val = ini_GetValue( Data ); PlayerInfo[playerid][pGunLic] = strval( val ); }
-			        if( strcmp( key , "Gun1" , true ) == 0 ) { val = ini_GetValue( Data ); PlayerInfo[playerid][pGun1] = strval( val ); }
-			        if( strcmp( key , "Gun2" , true ) == 0 ) { val = ini_GetValue( Data ); PlayerInfo[playerid][pGun2] = strval( val ); }
-			        if( strcmp( key , "Gun3" , true ) == 0 ) { val = ini_GetValue( Data ); PlayerInfo[playerid][pGun3] = strval( val ); }
-			        if( strcmp( key , "Gun4" , true ) == 0 ) { val = ini_GetValue( Data ); PlayerInfo[playerid][pGun4] = strval( val ); }
-			        if( strcmp( key , "Ammo1" , true ) == 0 ) { val = ini_GetValue( Data ); PlayerInfo[playerid][pAmmo1] = strval( val ); }
-			        if( strcmp( key , "Ammo2" , true ) == 0 ) { val = ini_GetValue( Data ); PlayerInfo[playerid][pAmmo2] = strval( val ); }
-			        if( strcmp( key , "Ammo3" , true ) == 0 ) { val = ini_GetValue( Data ); PlayerInfo[playerid][pAmmo3] = strval( val ); }
-			        if( strcmp( key , "Ammo4" , true ) == 0 ) { val = ini_GetValue( Data ); PlayerInfo[playerid][pAmmo4] = strval( val ); }
-			        if( strcmp( key , "CarTime" , true ) == 0 ) { val = ini_GetValue( Data ); PlayerInfo[playerid][pCarTime] = strval( val ); }
-			        if( strcmp( key , "PayDay" , true ) == 0 ) { val = ini_GetValue( Data ); PlayerInfo[playerid][pPayDay] = strval( val ); }
-			        if( strcmp( key , "PayDayHad" , true ) == 0 ) { val = ini_GetValue( Data ); PlayerInfo[playerid][pPayDayHad] = strval( val ); }
-			        if( strcmp( key , "CDPlayer" , true ) == 0 ) { val = ini_GetValue( Data ); PlayerInfo[playerid][pCDPlayer] = strval( val ); }
-			        if( strcmp( key , "Wins" , true ) == 0 ) { val = ini_GetValue( Data ); PlayerInfo[playerid][pWins] = strval( val ); }
-			        if( strcmp( key , "Loses" , true ) == 0 ) { val = ini_GetValue( Data ); PlayerInfo[playerid][pLoses] = strval( val ); }
-			        if( strcmp( key , "AlcoholPerk" , true ) == 0 ) { val = ini_GetValue( Data ); PlayerInfo[playerid][pAlcoholPerk] = strval( val ); }
-			        if( strcmp( key , "DrugPerk" , true ) == 0 ) { val = ini_GetValue( Data ); PlayerInfo[playerid][pDrugPerk] = strval( val ); }
-			        if( strcmp( key , "MiserPerk" , true ) == 0 ) { val = ini_GetValue( Data ); PlayerInfo[playerid][pMiserPerk] = strval( val ); }
-			        if( strcmp( key , "PainPerk" , true ) == 0 ) { val = ini_GetValue( Data ); PlayerInfo[playerid][pPainPerk] = strval( val ); }
-			        if( strcmp( key , "TraderPerk" , true ) == 0 ) { val = ini_GetValue( Data ); PlayerInfo[playerid][pTraderPerk] = strval( val ); }
-			        if( strcmp( key , "Tutorial" , true ) == 0 ) { val = ini_GetValue( Data ); PlayerInfo[playerid][pTut] = strval( val ); }
-			        if( strcmp( key , "Mission" , true ) == 0 ) { val = ini_GetValue( Data ); PlayerInfo[playerid][pMissionNr] = strval( val ); }
-			        if( strcmp( key , "Warnings" , true ) == 0 ) { val = ini_GetValue( Data ); PlayerInfo[playerid][pWarns] = strval( val ); }
-			        if( strcmp( key , "Adjustable" , true ) == 0 ) { val = ini_GetValue( Data ); PlayerInfo[playerid][pAdjustable] = strval( val ); }
-			        if( strcmp( key , "Fuel" , true ) == 0 ) { val = ini_GetValue( Data ); PlayerInfo[playerid][pFuel] = strval( val ); }
-			        if( strcmp( key , "Married" , true ) == 0 ) { val = ini_GetValue( Data ); PlayerInfo[playerid][pMarried] = strval( val ); }
-			        if( strcmp( key , "MarriedTo" , true ) == 0 ) { val = ini_GetValue( Data ); strmid(PlayerInfo[playerid][pMarriedTo], val, 0, strlen(val)-1, 255); }
-                }//end while
-                fclose(UserFile);//close the file after everything has been read in the while
-		}
-		else
-		{
-			SendClientMessage(playerid, COLOR_WHITE, "SERVER: Password does not match your name.");
-	        fclose(UserFile);
-	        gPlayerLogTries[playerid] += 1;
-	        if(gPlayerLogTries[playerid] == 4) { Ban(playerid); }
-	        return 1;
-		}
-		PlayerInfo[playerid][pAdjustable] = 0;
-		ResetPlayerMoney(playerid);
-		ConsumingMoney[playerid] = 1;
-		GivePlayerMoney(playerid,PlayerInfo[playerid][pCash]);
-		CurrentMoney[playerid] = PlayerInfo[playerid][pCash];
-		if(PlayerInfo[playerid][pReg] == 0)
-		{
-			PlayerInfo[playerid][pLevel] = 1;
-			PlayerInfo[playerid][pSHealth] = 0.0;
-			PlayerInfo[playerid][pHealth] = 50.0;
-			PlayerInfo[playerid][pPos_x] = 2246.6;
-			PlayerInfo[playerid][pPos_y] = -1161.9;
-			PlayerInfo[playerid][pPos_z] = 1029.7;
-			PlayerInfo[playerid][pInt] = 15;
-			PlayerInfo[playerid][pLocal] = 255;
-			PlayerInfo[playerid][pTeam] = 3;
-			PlayerInfo[playerid][pModel] = 264;
-			new randphone = 1000 + random(8999);//minimum 1000  max 9999 //giving one at the start
-			PlayerInfo[playerid][pPnumber] = randphone;
-			PlayerInfo[playerid][pPhousekey] = 255;
-			PlayerInfo[playerid][pPbiskey] = 255;
-			PlayerInfo[playerid][pAccount] = 50000;
-			PlayerInfo[playerid][pReg] = 1;
-			GivePlayerMoney(playerid, 5000);
-		}
-		if(PlayerInfo[playerid][pLevel] == -999) //autoban
-		{
-			Ban(playerid);
-		}
-		else if(PlayerInfo[playerid][pCK] > 0)
-		{
-		    Kick(playerid);
-		}
-		format(string2, sizeof(string2), "SERVER: Welcome %s",playername2);
-		SendClientMessage(playerid, COLOR_WHITE,string2);
-		printf("%s has logged in.",playername2);
-		if (PlayerInfo[playerid][pDonateRank] > 0)
-		{
-			SendClientMessage(playerid, COLOR_WHITE,"SERVER: You are a Premium Account user.");
-		}
-		if (PlayerInfo[playerid][pAdmin] > 0)
-		{
-			format(string2, sizeof(string2), "SERVER: You are logged in as a Level %d Admin.",PlayerInfo[playerid][pAdmin]);
-			SendClientMessage(playerid, COLOR_WHITE,string2);
-		}
-		SetSpawnInfo(playerid, PlayerInfo[playerid][pTeam], PlayerInfo[playerid][pModel], PlayerInfo[playerid][pPos_x], PlayerInfo[playerid][pPos_y], PlayerInfo[playerid][pPos_z], 1.0, -1, -1, -1, -1, -1, -1);
-		if(gTeam[playerid] == 0)
-		{
-			gTeam[playerid] = 3;
-		}
-		else
-		{
-			gTeam[playerid] = PlayerInfo[playerid][pTeam];
-		}
-		gPlayerLogged[playerid] = 1;
-		SpawnPlayer(playerid);
-		format(tmp2, sizeof(tmp2), "~w~Welcome ~n~~y~   %s", playername2);
-		DateProp(playerid);
-		GameTextForPlayer(playerid, tmp2, 5000, 1);
-		SendClientMessage(playerid, COLOR_YELLOW, motd);
-		if(PlayerInfo[playerid][pFMember] < 255)
-		{
-		    format(tmp2, sizeof(tmp2), "Family MOTD: %s.", FamilyInfo[PlayerInfo[playerid][pFMember]][FamilyMOTD]);
-		    SendClientMessage(playerid, COLOR_YELLOW, tmp2);
-		}
+	}
+
+	PlayerInfo[playerid][pAdjustable] = 0;
+	ResetPlayerMoney(playerid);
+	ConsumingMoney[playerid] = 1;
+	GivePlayerMoney(playerid,PlayerInfo[playerid][pCash]);
+	CurrentMoney[playerid] = PlayerInfo[playerid][pCash];
+	osrp_TogglePlayerSpectating(playerid, 0);
+
+	if(PlayerInfo[playerid][pReg] == 0) {
+		PlayerInfo[playerid][pLevel] = 1;
+		PlayerInfo[playerid][pSHealth] = 0.0;
+		PlayerInfo[playerid][pHealth] = 50.0;
+		PlayerInfo[playerid][pPos_x] = 2246.6;
+		PlayerInfo[playerid][pPos_y] = -1161.9;
+		PlayerInfo[playerid][pPos_z] = 1029.7;
+		PlayerInfo[playerid][pInt] = 15;
+		PlayerInfo[playerid][pLocal] = 255;
+		PlayerInfo[playerid][pTeam] = 3;
+		PlayerInfo[playerid][pModel] = 264;
+		new randphone = 1000 + random(8999);//minimum 1000  max 9999 //giving one at the start
+		PlayerInfo[playerid][pPnumber] = randphone;
+		PlayerInfo[playerid][pPhousekey] = 255;
+		PlayerInfo[playerid][pPbiskey] = 255;
+		PlayerInfo[playerid][pAccount] = 50000;
+		PlayerInfo[playerid][pReg] = 1;
+		GivePlayerMoney(playerid, 5000);
+	}
+
+	if(PlayerInfo[playerid][pLevel] == -999) { //autoban
+		Ban(playerid);
+	} else if(PlayerInfo[playerid][pCK] > 0) {
+		Kick(playerid);
+	}
+
+	mainStr[0] = EOS;
+	format(mainStr, sizeof(mainStr), "Serwer: Witaj %s.", PlayerInfo[playerid][pName]);
+	SendClientMessage(playerid, COLOR_WHITE, mainStr);
+
+	printf("%s has logged in.", PlayerInfo[playerid][pName]);
+	SetPlayerName(playerid, PlayerInfo[playerid][pName]);
+
+	if(PlayerInfo[playerid][pDonateRank] > 0) {
+		SendClientMessage(playerid, COLOR_WHITE,"SERVER: You are a Premium Account user.");
+	}
+
+	if(PlayerInfo[playerid][pAdmin] > 0) {
+		format(mainStr, sizeof(mainStr), "SERVER: You are logged in as a Level %d Admin.", PlayerInfo[playerid][pAdmin]);
+		SendClientMessage(playerid, COLOR_WHITE,mainStr);
+	}
+
+	for(new i = 0; i < 4; i++) {
+		TextDrawHideForPlayer(playerid, Intro[i]);
+	}
+
+	SetSpawnInfo(playerid, PlayerInfo[playerid][pTeam], PlayerInfo[playerid][pModel], PlayerInfo[playerid][pPos_x], PlayerInfo[playerid][pPos_y], PlayerInfo[playerid][pPos_z], 1.0, -1, -1, -1, -1, -1, -1);
+
+	if(gTeam[playerid] == 0) {
+		gTeam[playerid] = 3;
+	} else {
+		gTeam[playerid] = PlayerInfo[playerid][pTeam];
+	}
+
+	gPlayerLogged[playerid] = 1;
+	SpawnPlayer(playerid);
+	DateProp(playerid);
+
+	if(PlayerInfo[playerid][pFMember] < 255) {
+		format(mainStr, sizeof(mainStr), "Family MOTD: %s.", FamilyInfo[PlayerInfo[playerid][pFMember]][FamilyMOTD]);
+		SendClientMessage(playerid, COLOR_YELLOW, mainStr);
 	}
 	return 1;
 }
@@ -3039,8 +2927,7 @@ stock OnPropUpdate()
 	return 1;
 }
 
-stock BroadCast(color,const string[])
-{
+stock BroadCast(color, const string[]) {
 	SendClientMessageToAll(color, string);
 	return 1;
 }
@@ -3746,13 +3633,59 @@ stock AddsOn()
 	return 1;
 }
 
-stock osrp_Usage(playerid, const message[]) {
-	new str[128];
+stock GetPlayerSex(playerid) {
+	new sex[16];
 
-	format(str, sizeof(str), "U¿yj: %s", message);
-	SendClientMessage(playerid, COLOR_GRAD1, str);
+	switch(PlayerInfo[playerid][pSex]) {
+		case 0: {
+			sex = "Mê¿czyzna";
+		}
+		case 1: {
+			sex = "Kobieta";
+		}
+	}
+	return sex;
 }
 
+stock GetPlayerContinent(playerid) {
+	new continent[16];
+
+	switch(PlayerInfo[playerid][pSex]) {
+		case 0: {
+			continent = "Ameryka";
+		}
+		case 1: {
+			continent = "Europa";
+		}
+		case 2: {
+			continent = "Australia";
+		}
+		case 3: {
+			continent = "Azja";
+		}
+		case 4: {
+			continent = "Afryka";
+		}
+	}
+	return continent;
+}
+
+stock GetPlayerOrigin(playerid) {
+	new origin[16];
+
+	switch(PlayerInfo[playerid][pSex]) {
+		case 0: {
+			origin = "Bia³a";
+		}
+		case 1: {
+			origin = "Czarna";
+		}
+		case 2: {
+			origin = "¯ó³ta";
+		}
+	}
+	return origin;
+}
 // Stuff from old incs
 stock IsNumeric(const string[])
 {
