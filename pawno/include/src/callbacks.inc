@@ -228,20 +228,23 @@ sampCallback OnPlayerRequestClass(playerid, classid) {
 	return 1;
 }
 
-sampCallback OnPlayerConnect(playerid)
-{
+sampCallback OnPlayerConnect(playerid) {
 	GetPlayerName(playerid, oocName[playerid], sizeof(oocName));
 	mysql_real_escape_string(oocName[playerid], escapedName[playerid]);
 
 	TextDrawShowForPlayer(playerid, SplashScreen);
 	PlayerPlaySound(playerid, 1187, 0.0, 0.0, 0.0);
 
-	if(Security != 0)
-	{
+	if(Security != 0) {
 	    SendClientMessage(playerid, COLOR_YELLOW, "Host has broken one of the Agreement rules, action has been taken.");
 	    Kick(playerid);
 	    return 1;
 	}
+
+	mainStr[0] = EOS;
+	format(queryStr, sizeof(queryStr), "*** %s (id: %d) do³¹czy³ do serwera.", oocName[playerid], playerid);
+	ABroadCast(COLOR_GREY, mainStr, 1);
+
 	gActivePlayers[playerid]++;
 	numplayers++;
 	loadedIntro[playerid] = false;
@@ -275,7 +278,7 @@ sampCallback OnPlayerConnect(playerid)
     gLastCar[playerid] = 0; FirstSpawn[playerid] = 0;
 	gOoc[playerid] = 0; gNews[playerid] = 0; BigEar[playerid] = 0; gDice[playerid] = 0; gFam[playerid] = 0;
 	gSpeedo[playerid] = 0; gGas[playerid] = 0;
-	gPlayerLogged[playerid] = 0; gPlayerLogTries[playerid] = 0; gPlayerAccount[playerid] = 0;
+	gPlayerLogged[playerid] = 0; gPlayerLogTries[playerid] = 4; gPlayerAccount[playerid] = 0;
 	gPlayerSpawned[playerid] = 0; PlayerKarting[playerid] = 0; PlayerInKart[playerid] = 0;
 	PlayerTazeTime[playerid] = 0; PlayerStoned[playerid] = 0;
 	StartTime[playerid] = 0; TicketOffer[playerid] = 999; TicketMoney[playerid] = 0;
@@ -333,11 +336,11 @@ sampCallback OnPlayerConnect(playerid)
 	PlayerInfo[playerid][pCookSkill] = 0;
 	PlayerInfo[playerid][pFishSkill] = 0;
 	PlayerInfo[playerid][pSHealth] = 0.0;
-	PlayerInfo[playerid][pHealth] = 50.0;
-	PlayerInfo[playerid][pPos_x] = 2246.6;
-	PlayerInfo[playerid][pPos_y] = -1161.9;
-	PlayerInfo[playerid][pPos_z] = 1029.7;
-	PlayerInfo[playerid][pInt] = 15;
+	PlayerInfo[playerid][pHealth] = 100.0;
+	PlayerInfo[playerid][pPos_x] = DEFAULT_POS_X;
+	PlayerInfo[playerid][pPos_y] = DEFAULT_POS_Y;
+	PlayerInfo[playerid][pPos_z] = DEFAULT_POS_Z;
+	PlayerInfo[playerid][pInt] = 0;
 	PlayerInfo[playerid][pLocal] = 255;
 	PlayerInfo[playerid][pTeam] = 3;
 	PlayerInfo[playerid][pModel] = 264;
@@ -379,16 +382,26 @@ sampCallback OnPlayerConnect(playerid)
 	ClearCooking(playerid);
 	ClearGroceries(playerid);
 	ClearMarriage(playerid);
-	SetPlayerColor(playerid,COLOR_GRAD2);
+	SetPlayerColor(playerid, COLOR_GRAD2);
 	return 1;
 }
 
-sampCallback OnPlayerDisconnect(playerid)
-{
+sampCallback OnPlayerDisconnect(playerid, reason) {
 	gActivePlayers[playerid]--;
 	numplayers--;
 	PlayerInfo[playerid][pAdjustable] = 1;
 	OnPlayerUpdate(playerid);
+
+	new DisconnectReasons[][] = {
+		"Crash",
+		"Wyszed³",
+		"Kick/Ban"
+	};
+
+	mainStr[0] = EOS;
+	format(queryStr, sizeof(queryStr), "*** %s (( %s )) (id: %d) wyszed³ z serwera. (%s)", PlayerInfo[playerid][pName], oocName[playerid], playerid, DisconnectReasons[reason]);
+	ABroadCast(COLOR_GREY, mainStr, 1);
+
 	for(new i = 0; i < MAX_PLAYERS; i++)
 	{
 	    if(IsPlayerConnected(i))
@@ -4165,10 +4178,10 @@ Callback LoadIntro(playerid) {
 				SendClientMessage(playerid, COLOR_YELLOW2, "Serwer: To konto nie jest jeszcze zarejestrowane, aby zagraæ musisz siê zarejestrowaæ.");
 
 				mainStr[0] = EOS;
-				strcat(mainStr, "{FFFFFF}Kompletny regulamin serwera Old School Role Play znajduje siê na naszej stronie internetowej www.osrp.pl.\n");
+				strcat(mainStr, "{FFFFFF}Kompletny regulamin serwera {FFC801}Old School Role Play {FFFFFF}znajduje siê na naszej stronie internetowej www.osrp.pl.\n");
 				strcat(mainStr, "Prosimy o zapoznanie siê z nim, poniewa¿ jego nieznajomoœæ nie jest usprawiedliwieniem do ³amania go.\n");
 				strcat(mainStr, "Za nieprzestrzeganie regulaminu gro¿¹ kary.\n\n");
-				strcat(mainStr, "Klikaj¹c przycisk Akceptuj zobowi¹zujesz siê do przestrzegania regulaminu, Odrzuæ wi¹¿e siê z opuszczeniem serwera.");
+				strcat(mainStr, "Klikaj¹c przycisk {BDCB92}Akceptuj {FFFFFF}zobowi¹zujesz siê do przestrzegania regulaminu, {FFC801}Odrzuæ {FFFFFF}wi¹¿e siê z opuszczeniem serwera.");
 				osrp_ShowPlayerDialog(playerid, DIALOG_REGISTER_RULES, DIALOG_STYLE_MSGBOX, "Regulamin:", mainStr, "Akceptuj", "Odrzuæ");
 			} else {
 				gPlayerAccount[playerid] = 1;

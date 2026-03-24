@@ -24,8 +24,12 @@ stock ConnectingMySQL() {
 }
 
 stock osrp_ShowPlayerDialog(playerid, dialogid, style, caption[], info[], button1[], button2[]) {
+	new title[64];
+
+	format(title, sizeof(title), "{FFC801}%s", caption);
+
 	PlayerInfo[playerid][pDialog] = dialogid;
-	return ShowPlayerDialog(playerid, dialogid, style, caption, info, button1, button2);
+	return ShowPlayerDialog(playerid, dialogid, style, title, info, button1, button2);
 }
 
 stock osrp_TogglePlayerSpectating(playerid, toggle) {
@@ -694,52 +698,49 @@ stock ClearGroceries(playerid)
 	return 1;
 }
 
-stock Lotto(number)
-{
+stock Lotto(number) {
 	new JackpotFallen = 0;
 	new string[256];
-	new winner[MAX_PLAYER_NAME];
-	format(string, sizeof(string), "Lottery News: Today the Winning Number has fallen on: %d.", number);
+
+	format(string, sizeof(string), "Loteria: {F5DEB3}Dzisiaj wygrywa numer: %d.", number);
     OOCOff(COLOR_WHITE, string);
-    for(new i = 0; i < MAX_PLAYERS; i++)
-	{
-		if(IsPlayerConnected(i))
-		{
-		    if(PlayerInfo[i][pLottoNr] > 0)
-		    {
-			    if(PlayerInfo[i][pLottoNr] == number)
-			    {
-			        JackpotFallen = 1;
-			        GetPlayerName(i, winner, sizeof(winner));
-					format(string, sizeof(string), "Lottery News: %s has won the Jackpot of $%d with his Lottery Ticket.", winner, Jackpot);
-					OOCOff(COLOR_WHITE, string);
-					format(string, sizeof(string), "* You have Won $%d with your Lottery Ticket.", Jackpot);
-					SendClientMessage(i, COLOR_YELLOW, string);
-					ConsumingMoney[i] = 1;
-					GivePlayerMoney(i, Jackpot);
-			    }
-			    else
-			    {
-			        SendClientMessage(i, COLOR_LIGHTBLUE, "* You haven't won with your Lottery Ticket this time.");
-			    }
+
+    foreach(new i : Player) {
+		if(PlayerInfo[i][pLottoNr] > 0) {
+			if(PlayerInfo[i][pLottoNr] == number) {
+			    JackpotFallen = 1;
+
+				format(string, sizeof(string), "Loteria: {F5DEB3}Dziœ zwyciêzc¹ zosta³ %s. Wygra³ $%d zgarniaj¹c ca³¹ stawkê. Gratulacje!", PlayerInfo[i][pName], Jackpot);
+				OOCOff(COLOR_WHITE, string);
+
+				format(string, sizeof(string), "* Wygra³eœ $%d dziêki swojemu losowi na loteriê.", Jackpot);
+				SendClientMessage(i, COLOR_YELLOW, string);
+
+				ConsumingMoney[i] = 1;
+				GivePlayerMoney(i, Jackpot);
+			} else {
+			    SendClientMessage(i, COLOR_LIGHTBLUE, "* Tym razem nie uda³o ci siê wygraæ na loterii.");
 			}
-			PlayerInfo[i][pLottoNr] = 0;
 		}
+
+		PlayerInfo[i][pLottoNr] = 0;
 	}
-	if(JackpotFallen)
-	{
+
+	if(JackpotFallen) {
 	    new rand = random(125000); rand += 15789;
+
 	    Jackpot = rand;
 	    SaveStuff();
-	    format(string, sizeof(string), "Lottery News: The new Jackpot has been started with $%d.", Jackpot);
+
+	    format(string, sizeof(string), "Loteria: {F5DEB3}Obecna kumulacja wynosi $%d.", Jackpot);
 		OOCOff(COLOR_WHITE, string);
-	}
-	else
-	{
+	} else {
 	    new rand = random(15000); rand += 2158;
+
 	    Jackpot += rand;
 	    SaveStuff();
-	    format(string, sizeof(string), "Lottery News: The Jackpot has been raised to $%d.", Jackpot);
+
+	    format(string, sizeof(string), "Loteria: The Jackpot has been raised to $%d.", Jackpot);
 		OOCOff(COLOR_WHITE, string);
 	}
 	return 1;
@@ -1325,10 +1326,6 @@ stock SetPlayerWeapons(playerid)
 				    GivePlayerWeapon(playerid, 29, 600);
 				}
 			}
-			if(gTeam[playerid] >= 3)
-			{
-				GivePlayerWeapon(playerid, 5, 0);
-			}
 			if(PlayerInfo[playerid][pDonateRank] > 0)
 			{
 				if (PlayerInfo[playerid][pGun1] > 0)
@@ -1391,7 +1388,7 @@ stock PrintBizInfo(playerid,targetid)
 	{
 		new coordsstring[256];
 		SendClientMessage(playerid, COLOR_GREEN,"_______________________________________");
-		format(coordsstring, sizeof(coordsstring),"*** %s ***",BizzInfo[targetid][bMessage]);
+		format(coordsstring, sizeof(coordsstring),"*** %s ***", BizzInfo[targetid][bMessage]);
 		SendClientMessage(playerid, COLOR_WHITE,coordsstring);
 		format(coordsstring, sizeof(coordsstring), "Locked: %d EntryFee: $%d Till: $%d", BizzInfo[targetid][bLocked], BizzInfo[targetid][bEntranceCost], BizzInfo[targetid][bTill]);
 		SendClientMessage(playerid, COLOR_GRAD1,coordsstring);
@@ -1607,12 +1604,8 @@ stock ShowStats(playerid,targetid)
 }
 //---------------------------------------------------------
 
-stock SetPlayerToTeamColor(playerid)
-{
-	if(IsPlayerConnected(playerid))
-	{
-	    SetPlayerColor(playerid,TEAM_HIT_COLOR); // white
-	}
+stock SetPlayerToTeamColor(playerid) {
+	SetPlayerColor(playerid,TEAM_HIT_COLOR); // white
 }
 
 stock SaveMission(playerid,name[])
@@ -2523,10 +2516,10 @@ stock OnPlayerRegister(playerid) {
 	GetPlayerHealth(playerid,PlayerInfo[playerid][pHealth]);
 	PlayerInfo[playerid][pCash] = GetPlayerMoney(playerid);
 
-	if((PlayerInfo[playerid][pPos_x]==0.0 && PlayerInfo[playerid][pPos_y]==0.0 && PlayerInfo[playerid][pPos_z]==0.0)) {
-		PlayerInfo[playerid][pPos_x] = 1684.9;
-		PlayerInfo[playerid][pPos_y] = -2244.5;
-		PlayerInfo[playerid][pPos_z] = 13.5;
+	if(PlayerInfo[playerid][pPos_x] == 0.0 && PlayerInfo[playerid][pPos_y] == 0.0 && PlayerInfo[playerid][pPos_z] == 0.0) {
+		PlayerInfo[playerid][pPos_x] = DEFAULT_POS_X;
+		PlayerInfo[playerid][pPos_y] = DEFAULT_POS_Y;
+		PlayerInfo[playerid][pPos_z] = DEFAULT_POS_Z;
 	}
 
 	if(Spectate[playerid] != 255) {
@@ -2596,7 +2589,7 @@ stock OnPlayerRegister(playerid) {
 }
 
 stock OnPlayerLogin(playerid, name[]) {
-	if(!createdChar[playerid] && strlen(name)) {
+	if(!createdChar[playerid] && !isnull(name)) {
 		format(PlayerInfo[playerid][pName], 24, name);
 
 		queryStr[0] = EOS;
@@ -2609,7 +2602,7 @@ stock OnPlayerLogin(playerid, name[]) {
 		strcat(queryStr, "`Mission`, `Warnings`, `Adjustable`, `Fuel`, `Married`, `MarriedTo` ");
 		strcat(queryStr, "FROM `Characters` WHERE `Name` = '");
 
-		new endPart[128];
+		new endPart[64];
 		format(endPart, sizeof(endPart), "%s' LIMIT 1", name);
 		strcat(queryStr, endPart);
 
@@ -2726,21 +2719,51 @@ stock OnPlayerLogin(playerid, name[]) {
 	if(PlayerInfo[playerid][pReg] == 0) {
 		PlayerInfo[playerid][pLevel] = 1;
 		PlayerInfo[playerid][pSHealth] = 0.0;
-		PlayerInfo[playerid][pHealth] = 50.0;
-		PlayerInfo[playerid][pPos_x] = 2246.6;
-		PlayerInfo[playerid][pPos_y] = -1161.9;
-		PlayerInfo[playerid][pPos_z] = 1029.7;
-		PlayerInfo[playerid][pInt] = 15;
+		PlayerInfo[playerid][pHealth] = 100.0;
+		PlayerInfo[playerid][pPos_x] = DEFAULT_POS_X;
+		PlayerInfo[playerid][pPos_y] = DEFAULT_POS_Y;
+		PlayerInfo[playerid][pPos_z] = DEFAULT_POS_Z;
+		PlayerInfo[playerid][pInt] = 0;
 		PlayerInfo[playerid][pLocal] = 255;
 		PlayerInfo[playerid][pTeam] = 3;
-		PlayerInfo[playerid][pModel] = 264;
-		new randphone = 1000 + random(8999);//minimum 1000  max 9999 //giving one at the start
-		PlayerInfo[playerid][pPnumber] = randphone;
+
+		if(PlayerInfo[playerid][pSex] == 0) {
+			switch(PlayerInfo[playerid][pContinent]) {
+				case 0: {
+					PlayerInfo[playerid][pModel] = DEFAULT_EUROPE_MALE_SKIN;
+				}
+				case 1: {
+					PlayerInfo[playerid][pModel] = DEFAULT_USA_MALE_SKIN;
+				}
+				case 2: {
+					PlayerInfo[playerid][pModel] = DEFAULT_ASIA_MALE_SKIN;
+				}
+			}
+		} else {
+			switch(PlayerInfo[playerid][pContinent]) {
+				case 0: {
+					PlayerInfo[playerid][pModel] = DEFAULT_EUROPE_FEMALE_SKIN;
+				}
+				case 1: {
+					PlayerInfo[playerid][pModel] = DEFAULT_USA_FEMALE_SKIN;
+				}
+				case 2: {
+					PlayerInfo[playerid][pModel] = DEFAULT_ASIA_FEMALE_SKIN;
+				}
+			}
+		}
+
+		//new randphone = 1000 + random(8999);//minimum 1000  max 9999 //giving one at the start
+
+		PlayerInfo[playerid][pPnumber] = 0;
 		PlayerInfo[playerid][pPhousekey] = 255;
 		PlayerInfo[playerid][pPbiskey] = 255;
-		PlayerInfo[playerid][pAccount] = 50000;
+		PlayerInfo[playerid][pAccount] = 0;
 		PlayerInfo[playerid][pReg] = 1;
+
 		GivePlayerMoney(playerid, 5000);
+
+		osrp_ShowPlayerDialog(playerid, DIALOG_TUTORIAL, DIALOG_STYLE_MSGBOX, "Tutorial:", "{FFFFFF}To Twoje pierwsze logowanie na t¹ postaæ.\nCzy chcesz zobaczyæ tutorial?", "Tak", "Nie");
 	}
 
 	if(PlayerInfo[playerid][pLevel] == -999) { //autoban
@@ -3686,6 +3709,7 @@ stock GetPlayerOrigin(playerid) {
 	}
 	return origin;
 }
+
 // Stuff from old incs
 stock IsNumeric(const string[])
 {

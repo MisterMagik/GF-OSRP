@@ -5469,7 +5469,7 @@ CMD:kick(playerid, params[]) {
 			format(gString, sizeof(gString), "AdmCmd: %s was kicked by %s, reason: %s (%d-%d-%d)", PlayerInfo[giveplayerid][pName], PlayerInfo[playerid][pName], (result),month,day,year);
 			KickLog(gString);
 			Kick(giveplayerid);
-			format(gString, sizeof(gString), "AdmCmd: %s was kicked by %s, reason: %s", PlayerInfo[giveplayerid][pName], PlayerInfo[playerid][pName], (result));
+			format(gString, sizeof(gString), "Serwer: %s został wyrzucony z serwera przez %s. Powód: %s", PlayerInfo[giveplayerid][pName], PlayerInfo[playerid][pName], (result));
 			SendClientMessageToAll(COLOR_LIGHTRED, gString);
 			return 1;
 		}
@@ -5548,7 +5548,7 @@ CMD:warn(playerid, params[]) {
 				getdate(year, month, day);
 				format(gString, sizeof(gString), "AdmCmd: %s was banned by %s, reason: %s (%d-%d-%d)", PlayerInfo[giveplayerid][pName], PlayerInfo[playerid][pName], (result),month,day,year);
 				BanLog(gString);
-				format(gString, sizeof(gString), "AdmCmd: %s was banned by %s (had 3 Warnings), reason: %s", PlayerInfo[giveplayerid][pName], PlayerInfo[playerid][pName], (result));
+				format(gString, sizeof(gString), "Serwer: %s dostał warna (3/3) i został zbanowany przez %s. Powód: %s", PlayerInfo[giveplayerid][pName], PlayerInfo[playerid][pName], (result));
 				SendClientMessageToAll(COLOR_LIGHTRED, gString);
 				PlayerInfo[giveplayerid][pAdmin] = PlayerInfo[giveplayerid][pLevel];
 				PlayerInfo[giveplayerid][pLevel] = -999;
@@ -5616,7 +5616,7 @@ CMD:ban(playerid, params[]) {
 			getdate(year, month, day);
 			format(gString, sizeof(gString), "AdmCmd: %s was banned by %s, reason: %s (%d-%d-%d)", PlayerInfo[giveplayerid][pName], PlayerInfo[playerid][pName], (result),month,day,year);
 			BanLog(gString);
-			format(gString, sizeof(gString), "AdmCmd: %s was banned by %s, reason: %s", PlayerInfo[giveplayerid][pName], PlayerInfo[playerid][pName], (result));
+			format(gString, sizeof(gString), "Serwer: %s został zbanowany przez %s. Powód: %s", PlayerInfo[giveplayerid][pName], PlayerInfo[playerid][pName], (result));
 			SendClientMessageToAll(COLOR_LIGHTRED, gString);
 			PlayerInfo[giveplayerid][pAdmin] = PlayerInfo[giveplayerid][pLevel];
 			PlayerInfo[giveplayerid][pLevel] = -999;
