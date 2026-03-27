@@ -898,27 +898,6 @@ Timer:GlobalTimer[1000]() {
 							CountVehicleMileage(j);
 						}
 
-						if(IsPlayerInAnyVehicle(i) && GetPlayerVehicleID(i) == j) {
-							new str[256];
-
-							if(VehicleInfo[j][vLock]) {
-								format(str, sizeof(str), "~g~OTWARTY");
-							} else {
-								format(str, sizeof(str), "~r~ZAMKNIETY");
-							}
-
-							if(VehicleInfo[j][vEngine]) {
-								format(str, sizeof(str), "%s~n~~n~~w~SILNIK: ~g~ON", str);
-							} else {
-								format(str, sizeof(str), "%s~n~~n~~w~SILNIK: ~r~OFF", str);
-							}
-
-							format(str, sizeof(str), "%s~n~~w~DIESEL: %0.1f L~n~~n~PREDKOSC: %d KM/H~n~ PRZEBIEG: %d", str, VehicleInfo[j][vFuel], GetVehicleSpeed(j), FloatToInt(VehicleInfo[j][vMileage]));
-							TextDrawSetString(VehicleStats[i], str);
-
-							TextDrawShowForPlayer(i, VehicleStats[i]);
-						}
-
 						if(VehicleInfo[j][vFuel] < 0.0) {
 							new engine, lights, alarm, doors, bonnet, boot, objective;
 
@@ -932,6 +911,27 @@ Timer:GlobalTimer[1000]() {
 								SendClientMessage(i, COLOR_YELLOW, "Skoñczy³o Ci siê paliwo w pojeŸdzie. Silnik zosta³ wy³¹czony.");
 							}
 						}
+					}
+
+					if(IsPlayerInAnyVehicle(i) && GetPlayerVehicleID(i) == j) {
+						new str[256];
+
+						if(VehicleInfo[j][vLock]) {
+							format(str, sizeof(str), "~g~OTWARTY");
+						} else {
+							format(str, sizeof(str), "~r~ZAMKNIETY");
+						}
+
+						if(VehicleInfo[j][vEngine]) {
+							format(str, sizeof(str), "%s~n~~n~~w~SILNIK: ~g~ON", str);
+						} else {
+							format(str, sizeof(str), "%s~n~~n~~w~SILNIK: ~r~OFF", str);
+						}
+
+						format(str, sizeof(str), "%s~n~~w~DIESEL: %0.1f L~n~~n~PREDKOSC: %d KM/H~n~ PRZEBIEG: %d", str, VehicleInfo[j][vFuel], GetVehicleSpeed(j), FloatToInt(VehicleInfo[j][vMileage]));
+						TextDrawSetString(VehicleStats[i], str);
+
+						TextDrawShowForPlayer(i, VehicleStats[i]);
 					}
 				}
 			}
