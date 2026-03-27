@@ -170,8 +170,10 @@ enum hNews
 
 enum pInfo
 {
+	pID,
 	pAID,
 	pName[24],
+	pDate[32],
 	pLevel,
 	pAdmin,
 	pDonateRank,
@@ -441,4 +443,41 @@ enum iInfo
 	iNeedPass,
 	iLock,
 	iPlayers,
+};
+
+enum vInfo {
+	vID, //id from database
+	vOwnerID, // -1 - server
+	vOwnerType, // -1 - serverowe (prace dorywcze), 0 - annonymous, 1 - player, 2 - bussiness
+	vBizID,
+	vAccessID[32], // -1 - all, 0 - only owner
+	vRentID,
+	vModelID, // vehicle modelid
+	vEngineType, // 0 - petrol, 1 - diesel, 2 - elektryk, -1 - rower
+	vColor[2],
+	Float:vPos[4],
+	Float:vFuel,
+	bool:vLock,
+	bool:vEngine,
+	Float:vEngineHp, // Stan silnika
+	bool:vSpawned,
+	bool:vLightsOn,
+	vWindow[4], // -1 - Not state, 0 - open, 1 - closed
+	vAccessories, // 0 - brak, 1 - zamki, 2 - alarm
+	vPanels,
+	vDoors, // -1 - Not state, 0 - open, 1 - closed
+	vLights,
+	vTires,
+	vVw,
+	vInt,
+	vPaintjob,
+	vNitro,
+	vComponents[14],
+	vDriverID,
+	Float:vRepair,
+	Float:vMileage, // Przebieg
+	vBlock,
+	Text3D:v3DDesc,
+	vDesc[128],
+	vPlate[32]
 };

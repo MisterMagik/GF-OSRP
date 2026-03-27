@@ -24,8 +24,12 @@ stock ConnectingMySQL() {
 }
 
 stock osrp_ShowPlayerDialog(playerid, dialogid, style, caption[], info[], button1[], button2[]) {
+	new title[64];
+
+	format(title, sizeof(title), "{FFC801}%s", caption);
+
 	PlayerInfo[playerid][pDialog] = dialogid;
-	return ShowPlayerDialog(playerid, dialogid, style, caption, info, button1, button2);
+	return ShowPlayerDialog(playerid, dialogid, style, title, info, button1, button2);
 }
 
 stock osrp_TogglePlayerSpectating(playerid, toggle) {
@@ -42,6 +46,167 @@ stock GeneratePasswordSalt() {
 
 	salt[16] = 0;
 	return salt;
+}
+
+stock SavePlayerData(playerid) {
+	if(!gPlayerLogged[playerid]) {
+		return 1;
+	}
+
+	PlayerInfo[playerid][pCash] = GetPlayerMoney(playerid);
+	GetPlayerHealth(playerid,PlayerInfo[playerid][pHealth]);
+	GetPlayerPos(playerid, PlayerInfo[playerid][pPos_x], PlayerInfo[playerid][pPos_y], PlayerInfo[playerid][pPos_z]);
+
+	if(PlayerInfo[playerid][pPos_x]==0.0 && PlayerInfo[playerid][pPos_y]==0.0 && PlayerInfo[playerid][pPos_z]==0.0) {
+		PlayerInfo[playerid][pPos_x] = 1684.9;
+		PlayerInfo[playerid][pPos_y] = -2244.5;
+		PlayerInfo[playerid][pPos_z] = 13.5;
+	}
+
+	if(Spectate[playerid] != 255) {
+		PlayerInfo[playerid][pPos_x] = Unspec[playerid][sPx];
+		PlayerInfo[playerid][pPos_y] = Unspec[playerid][sPy];
+		PlayerInfo[playerid][pPos_z] = Unspec[playerid][sPz];
+		PlayerInfo[playerid][pInt] = Unspec[playerid][sPint];
+		PlayerInfo[playerid][pLocal] = Unspec[playerid][sLocal];
+	}
+
+	if(PlayerInfo[playerid][pDonateRank] < 1) { PlayerInfo[playerid][pFuel] = 0; }
+
+	queryStr[0] = EOS;
+	strcat(queryStr, "UPDATE `Characters` SET ");
+
+	new temp[512];
+
+	format(temp, sizeof(temp), "`Level`='%d', `AdminLevel`='%d', `DonateRank`='%d', `UpgradePoints`='%d', `ConnectedTime`='%d', `Registered`='%d', `Sex`='%d', `Age`='%d', ",
+		PlayerInfo[playerid][pLevel],
+		PlayerInfo[playerid][pAdmin],
+		PlayerInfo[playerid][pDonateRank],
+		PlayerInfo[playerid][gPupgrade],
+		PlayerInfo[playerid][pConnectTime],
+		PlayerInfo[playerid][pReg],
+		PlayerInfo[playerid][pSex],
+		PlayerInfo[playerid][pAge]
+	);
+	strcat(queryStr, temp);
+
+	format(temp, sizeof(temp), "`Continent`='%d', `Origin`='%d', `CK`='%d', `Muted`='%d', `Respect`='%d', `Money`='%d', `Bank`='%d', `Crimes`='%d', `Kills`='%d', `Deaths`='%d', ",
+		PlayerInfo[playerid][pContinent],
+		PlayerInfo[playerid][pOrigin],
+		PlayerInfo[playerid][pCK],
+		PlayerInfo[playerid][pMuted],
+		PlayerInfo[playerid][pExp],
+		PlayerInfo[playerid][pCash],
+		PlayerInfo[playerid][pAccount],
+		PlayerInfo[playerid][pCrimes],
+		PlayerInfo[playerid][pKills],
+		PlayerInfo[playerid][pDeaths]
+	);
+	strcat(queryStr, temp);
+
+	format(temp, sizeof(temp), "`Arrested`='%d', `WantedDeaths`='%d', `Phonebook`='%d', `LottoNr`='%d', `Fishes`='%d', `BiggestFish`='%d', `Job`='%d', `Paycheck`='%d', `HeadValue`='%d', `Jailed`='%d', `JailTime`='%d', ",
+		PlayerInfo[playerid][pArrested],
+		PlayerInfo[playerid][pWantedDeaths],
+		PlayerInfo[playerid][pPhoneBook],
+		PlayerInfo[playerid][pLottoNr],
+		PlayerInfo[playerid][pFishes],
+		PlayerInfo[playerid][pBiggestFish],
+		PlayerInfo[playerid][pJob],
+		PlayerInfo[playerid][pPayCheck],
+		PlayerInfo[playerid][pHeadValue],
+		PlayerInfo[playerid][pJailed],
+		PlayerInfo[playerid][pJailTime]
+	);
+	strcat(queryStr, temp);
+
+	format(temp, sizeof(temp), "`Materials`='%d', `Drugs`='%d', `Leader`='%d', `Member`='%d', `FMember`='%d', `Rank`='%d', `Char`='%d', `ContractTime`='%d', ",
+		PlayerInfo[playerid][pMats],
+		PlayerInfo[playerid][pDrugs],
+		PlayerInfo[playerid][pLeader],
+		PlayerInfo[playerid][pMember],
+		PlayerInfo[playerid][pFMember],
+		PlayerInfo[playerid][pRank],
+		PlayerInfo[playerid][pChar],
+		PlayerInfo[playerid][pContractTime]
+	);
+	strcat(queryStr, temp);
+
+	format(temp, sizeof(temp), "`DetSkill`='%d', `SexSkill`='%d', `BoxSkill`='%d', `LawSkill`='%d', `MechSkill`='%d', `JackSkill`='%d', `CarSkill`='%d', `NewsSkill`='%d', `DrugsSkill`='%d', `CookSkill`='%d', `FishSkill`='%d', ",
+		PlayerInfo[playerid][pDetSkill],
+		PlayerInfo[playerid][pSexSkill],
+		PlayerInfo[playerid][pBoxSkill],
+		PlayerInfo[playerid][pLawSkill],
+		PlayerInfo[playerid][pMechSkill],
+		PlayerInfo[playerid][pJackSkill],
+		PlayerInfo[playerid][pCarSkill],
+		PlayerInfo[playerid][pNewsSkill],
+		PlayerInfo[playerid][pDrugsSkill],
+		PlayerInfo[playerid][pCookSkill],
+		PlayerInfo[playerid][pFishSkill]
+	);
+	strcat(queryStr, temp);
+
+	format(temp, sizeof(temp), "`pSHealth`='%f', `pHealth`='%f', `Int`='%d', `Local`='%d', `Team`='%d', `Model`='%d', `PhoneNr`='%d', `House`='%d', `Bizz`='%d', `Pos_x`='%f', `Pos_y`='%f', `Pos_z`='%f', ",
+		PlayerInfo[playerid][pSHealth],
+		PlayerInfo[playerid][pHealth],
+		PlayerInfo[playerid][pInt],
+		PlayerInfo[playerid][pLocal],
+		PlayerInfo[playerid][pTeam],
+		PlayerInfo[playerid][pModel],
+		PlayerInfo[playerid][pPnumber],
+		PlayerInfo[playerid][pPhousekey],
+		PlayerInfo[playerid][pPbiskey],
+		PlayerInfo[playerid][pPos_x],
+		PlayerInfo[playerid][pPos_y],
+		PlayerInfo[playerid][pPos_z]
+	);
+	strcat(queryStr, temp);
+
+	format(temp, sizeof(temp), "`CarLic`='%d', `FlyLic`='%d', `BoatLic`='%d', `FishLic`='%d', `GunLic`='%d', `Gun1`='%d', `Gun2`='%d', `Gun3`='%d', `Gun4`='%d', `Ammo1`='%d', `Ammo2`='%d', `Ammo3`='%d', `Ammo4`='%d', ",
+		PlayerInfo[playerid][pCarLic],
+		PlayerInfo[playerid][pFlyLic],
+		PlayerInfo[playerid][pBoatLic],
+		PlayerInfo[playerid][pFishLic],
+		PlayerInfo[playerid][pGunLic],
+		PlayerInfo[playerid][pGun1],
+		PlayerInfo[playerid][pGun2],
+		PlayerInfo[playerid][pGun3],
+		PlayerInfo[playerid][pGun4],
+		PlayerInfo[playerid][pAmmo1],
+		PlayerInfo[playerid][pAmmo2],
+		PlayerInfo[playerid][pAmmo3],
+		PlayerInfo[playerid][pAmmo4]
+	);
+	strcat(queryStr, temp);
+
+	format(temp, sizeof(temp), "`CarTime`='%d', `PayDay`='%d', `PayDayHad`='%d', `CDPlayer`='%d', `Wins`='%d', `Loses`='%d', `AlcoholPerk`='%d', `DrugPerk`='%d', `MiserPerk`='%d', `PainPerk`='%d', `TraderPerk`='%d', ",
+		PlayerInfo[playerid][pCarTime],
+		PlayerInfo[playerid][pPayDay],
+		PlayerInfo[playerid][pPayDayHad],
+		PlayerInfo[playerid][pCDPlayer],
+		PlayerInfo[playerid][pWins],
+		PlayerInfo[playerid][pLoses],
+		PlayerInfo[playerid][pAlcoholPerk],
+		PlayerInfo[playerid][pDrugPerk],
+		PlayerInfo[playerid][pMiserPerk],
+		PlayerInfo[playerid][pPainPerk],
+		PlayerInfo[playerid][pTraderPerk]
+	);
+	strcat(queryStr, temp);
+
+	format(temp, sizeof(temp), "`Tutorial`='%d', `Mission`='%d', `Warnings`='%d', `Adjustable`='%d', `Fuel`='%d', `Married`='%d', `MarriedTo`='%s' WHERE `Name`='%s'",
+		PlayerInfo[playerid][pTut],
+		PlayerInfo[playerid][pMissionNr],
+		PlayerInfo[playerid][pWarns],
+		PlayerInfo[playerid][pAdjustable],
+		PlayerInfo[playerid][pFuel],
+		PlayerInfo[playerid][pMarried],
+		PlayerInfo[playerid][pMarriedTo],
+		PlayerInfo[playerid][pName]
+	);
+	strcat(queryStr, temp);
+	mysql_query(queryStr);
+	return 1;
 }
 
 stock Float:GetDistanceBetweenPlayers(p1,p2)
@@ -158,16 +323,12 @@ stock ExtortionSBiz(bizid, money)
 	return 1;
 }
 
-stock DollahScoreUpdate()
-{
+stock DollahScoreUpdate() {
 	new LevScore;
-	for(new i=0; i<MAX_PLAYERS; i++)
-	{
-		if(IsPlayerConnected(i))
-		{
-   			LevScore = PlayerInfo[i][pLevel];
-			SetPlayerScore(i, LevScore);
-		}
+
+	foreach(new i : Player) {
+   		LevScore = PlayerInfo[i][pLevel];
+		SetPlayerScore(i, LevScore);
 	}
 	return 1;
 }
@@ -694,52 +855,49 @@ stock ClearGroceries(playerid)
 	return 1;
 }
 
-stock Lotto(number)
-{
+stock Lotto(number) {
 	new JackpotFallen = 0;
 	new string[256];
-	new winner[MAX_PLAYER_NAME];
-	format(string, sizeof(string), "Lottery News: Today the Winning Number has fallen on: %d.", number);
+
+	format(string, sizeof(string), "Loteria: {F5DEB3}Dzisiaj wygrywa numer: %d.", number);
     OOCOff(COLOR_WHITE, string);
-    for(new i = 0; i < MAX_PLAYERS; i++)
-	{
-		if(IsPlayerConnected(i))
-		{
-		    if(PlayerInfo[i][pLottoNr] > 0)
-		    {
-			    if(PlayerInfo[i][pLottoNr] == number)
-			    {
-			        JackpotFallen = 1;
-			        GetPlayerName(i, winner, sizeof(winner));
-					format(string, sizeof(string), "Lottery News: %s has won the Jackpot of $%d with his Lottery Ticket.", winner, Jackpot);
-					OOCOff(COLOR_WHITE, string);
-					format(string, sizeof(string), "* You have Won $%d with your Lottery Ticket.", Jackpot);
-					SendClientMessage(i, COLOR_YELLOW, string);
-					ConsumingMoney[i] = 1;
-					GivePlayerMoney(i, Jackpot);
-			    }
-			    else
-			    {
-			        SendClientMessage(i, COLOR_LIGHTBLUE, "* You haven't won with your Lottery Ticket this time.");
-			    }
+
+    foreach(new i : Player) {
+		if(PlayerInfo[i][pLottoNr] > 0) {
+			if(PlayerInfo[i][pLottoNr] == number) {
+			    JackpotFallen = 1;
+
+				format(string, sizeof(string), "Loteria: {F5DEB3}Dziœ zwyciêzc¹ zosta³ %s. Wygra³ $%d zgarniaj¹c ca³¹ stawkê. Gratulacje!", PlayerInfo[i][pName], Jackpot);
+				OOCOff(COLOR_WHITE, string);
+
+				format(string, sizeof(string), "* Wygra³eœ $%d dziêki swojemu losowi na loteriê.", Jackpot);
+				SendClientMessage(i, COLOR_YELLOW, string);
+
+				ConsumingMoney[i] = 1;
+				GivePlayerMoney(i, Jackpot);
+			} else {
+			    SendClientMessage(i, COLOR_LIGHTBLUE, "* Tym razem nie uda³o ci siê wygraæ na loterii.");
 			}
-			PlayerInfo[i][pLottoNr] = 0;
 		}
+
+		PlayerInfo[i][pLottoNr] = 0;
 	}
-	if(JackpotFallen)
-	{
+
+	if(JackpotFallen) {
 	    new rand = random(125000); rand += 15789;
+
 	    Jackpot = rand;
 	    SaveStuff();
-	    format(string, sizeof(string), "Lottery News: The new Jackpot has been started with $%d.", Jackpot);
+
+	    format(string, sizeof(string), "Loteria: {F5DEB3}Obecna kumulacja wynosi $%d.", Jackpot);
 		OOCOff(COLOR_WHITE, string);
-	}
-	else
-	{
+	} else {
 	    new rand = random(15000); rand += 2158;
+
 	    Jackpot += rand;
 	    SaveStuff();
-	    format(string, sizeof(string), "Lottery News: The Jackpot has been raised to $%d.", Jackpot);
+
+	    format(string, sizeof(string), "Loteria: The Jackpot has been raised to $%d.", Jackpot);
 		OOCOff(COLOR_WHITE, string);
 	}
 	return 1;
@@ -907,10 +1065,10 @@ stock SetPlayerSpawn(playerid)
 	    {
 			SetPlayerToTeamColor(playerid);
 			SetCameraBehindPlayer(playerid);
-			SetPlayerPos(playerid,1742.7944,-1864.1165,13.5742);
-			SetPlayerFacingAngle(playerid, 358.5073);
-			SetPlayerInterior(playerid,0);
-			PlayerInfo[playerid][pInt] = 0;
+			SetPlayerPos(playerid, PlayerInfo[playerid][pPos_x], PlayerInfo[playerid][pPos_y], PlayerInfo[playerid][pPos_z]);
+			SetPlayerFacingAngle(playerid, 0.0);
+			SetPlayerVirtualWorld(playerid, 0);
+			SetPlayerInterior(playerid, PlayerInfo[playerid][pInt]);
 		}
 	}
 	return 1;
@@ -1016,86 +1174,6 @@ stock HireCost(carid)
 		}
 	}
 	return 0;
-}
-
-stock CarCheck()
-{
-	new string[256];
-	for(new j = 0; j<MAX_PLAYERS; j++)
-	{
-	    if(IsPlayerConnected(j))
-	    {
-	        SetVehicleParamsForPlayer(99, j, 0, 0);
-	        SetVehicleParamsForPlayer(100, j, 0, 0);
-	        SetVehicleParamsForPlayer(101, j, 0, 0);
-	        SetVehicleParamsForPlayer(102, j, 0, 0);
-	        SetVehicleParamsForPlayer(103, j, 0, 0);
-	        SetVehicleParamsForPlayer(104, j, 0, 0);
-	        SetVehicleParamsForPlayer(105, j, 0, 0);
-	        SetVehicleParamsForPlayer(106, j, 0, 0);
-	        SetVehicleParamsForPlayer(107, j, 0, 0);
-	        SetVehicleParamsForPlayer(108, j, 0, 0);
-	        SetVehicleParamsForPlayer(109, j, 0, 0);
-		    new Float:health;
-		    GetPlayerHealth(j, health);
-			SetPlayerHealth(j, health - 1.0);
-			if(STDPlayer[j]==1)
-			{
-			    GetPlayerHealth(j, health);
-			    SetPlayerHealth(j, health - 5.0);
-			    SendClientMessage(j, COLOR_LIGHTBLUE, "* Lost 4 health due to STD.");
-			}
-			else if(STDPlayer[j]==2)
-			{
-			    GetPlayerHealth(j, health);
-			    SetPlayerHealth(j, health - 12.0);
-			    SendClientMessage(j, COLOR_LIGHTBLUE, "* Lost 8 health due to STD.");
-			}
-			else if(STDPlayer[j]==3)
-			{
-			    GetPlayerHealth(j, health);
-			    SetPlayerHealth(j, health - 20.0);
-			    SendClientMessage(j, COLOR_LIGHTBLUE, "* Lost 12 health due to STD.");
-			}
-
-			if(GetPlayerMoney(j) < 0)
-			{
-			    if(MoneyMessage[j]==0)
-			    {
-				    format(string, sizeof(string), "You are in debt, you have till next Time Check to get: $%d or you go to jail.", GetPlayerMoney(j));
-					SendClientMessage(j, COLOR_LIGHTRED, string);
-					MoneyMessage[j] = 1;
-				}
-			}
-			else
-			{
-			    MoneyMessage[j] = 0;
-			}
-		}
-	}
-	for(new c = 1; c < 254; c++)
-	{
-		for(new i = 0; i < MAX_PLAYERS; i++)
-		{
-			if(IsPlayerConnected(i))
-			{
-				if (PlayerInfo[i][pJob] == 5)
-				{
-					SetVehicleParamsForPlayer(c, i, 0, 0);
-				}
-			}
-		}
-		if (gLastDriver[c] == 301)
-		{
-			CarRespawn(c);
-		}
-		if (gLastDriver[c] >= 300)
-		{
-			gLastDriver[c]++;
-		}
-		//foundowner = -1;
-	}
-	return 1;
 }
 
 stock CarInit()
@@ -1325,10 +1403,6 @@ stock SetPlayerWeapons(playerid)
 				    GivePlayerWeapon(playerid, 29, 600);
 				}
 			}
-			if(gTeam[playerid] >= 3)
-			{
-				GivePlayerWeapon(playerid, 5, 0);
-			}
 			if(PlayerInfo[playerid][pDonateRank] > 0)
 			{
 				if (PlayerInfo[playerid][pGun1] > 0)
@@ -1391,7 +1465,7 @@ stock PrintBizInfo(playerid,targetid)
 	{
 		new coordsstring[256];
 		SendClientMessage(playerid, COLOR_GREEN,"_______________________________________");
-		format(coordsstring, sizeof(coordsstring),"*** %s ***",BizzInfo[targetid][bMessage]);
+		format(coordsstring, sizeof(coordsstring),"*** %s ***", BizzInfo[targetid][bMessage]);
 		SendClientMessage(playerid, COLOR_WHITE,coordsstring);
 		format(coordsstring, sizeof(coordsstring), "Locked: %d EntryFee: $%d Till: $%d", BizzInfo[targetid][bLocked], BizzInfo[targetid][bEntranceCost], BizzInfo[targetid][bTill]);
 		SendClientMessage(playerid, COLOR_GRAD1,coordsstring);
@@ -1401,218 +1475,217 @@ stock PrintBizInfo(playerid,targetid)
 	}
 }
 
-stock ShowStats(playerid,targetid)
-{
-    if(IsPlayerConnected(playerid)&&IsPlayerConnected(targetid))
+stock ShowStats(playerid, targetid) {
+	new cash =  GetPlayerMoney(targetid);
+	new atext[20];
+
+	if(PlayerInfo[targetid][pSex] == 1) { atext = "Male"; }
+	else if(PlayerInfo[targetid][pSex] == 2) { atext = "Female"; }
+
+  	new otext[20];
+	if(PlayerInfo[targetid][pOrigin] == 1) { otext = "USA"; }
+	else if(PlayerInfo[targetid][pOrigin] == 2) { otext = "Europe"; }
+	else if(PlayerInfo[targetid][pOrigin] == 3) { otext = "Asia"; }
+
+	new ttext[20];
+	if(PlayerInfo[targetid][pMember] == 4 || PlayerInfo[targetid][pLeader] == 4) { ttext = "Medic"; }
+	else if(gTeam[targetid] == 3 || gTeam[targetid] == 4) { ttext = "Civilian"; }
+	else if(PlayerInfo[targetid][pMember] == 1 || PlayerInfo[targetid][pLeader] == 1) { ttext = "Officer"; }
+	else if(PlayerInfo[targetid][pMember] == 2 || PlayerInfo[targetid][pLeader] == 2) { ttext = "FBI Agent"; }
+	else if(PlayerInfo[targetid][pMember] == 3 || PlayerInfo[targetid][pLeader] == 3) { ttext = "National Guard"; }
+	else if(PlayerInfo[targetid][pMember] == 4 || PlayerInfo[targetid][pLeader] == 4) { ttext = "Firemen/Paramedic"; }
+	else if(PlayerInfo[targetid][pMember] == 5 || PlayerInfo[targetid][pLeader] == 5) { ttext = "LCN"; }
+	else if(PlayerInfo[targetid][pMember] == 6 || PlayerInfo[targetid][pLeader] == 6) { ttext = "Yakuza"; }
+	else if(PlayerInfo[targetid][pMember] == 8 || PlayerInfo[targetid][pLeader] == 8) { ttext = "Hitmen"; }
+	else if(PlayerInfo[targetid][pMember] == 9 || PlayerInfo[targetid][pLeader] == 9) { ttext = "News Reporter"; }
+	else if(PlayerInfo[targetid][pMember] == 10 || PlayerInfo[targetid][pLeader] == 10) { ttext = "Taxi"; }
+	else if(PlayerInfo[targetid][pMember] == 11 || PlayerInfo[targetid][pLeader] == 11) { ttext = "School Instructor"; }
+
+	new dtext[20];
+	if(STDPlayer[targetid] == 1) { dtext = "Chlamydia"; }
+	else if(STDPlayer[targetid] == 2) { dtext = "Gonorrhea"; }
+	else if(STDPlayer[targetid] == 3) { dtext = "Syphilis"; }
+	else { dtext = "None"; }
+
+	new ftext[20];
+	if(PlayerInfo[targetid][pMember] == 4 || PlayerInfo[targetid][pLeader] == 4)
+	{ ftext = "Firemen/Paramedics"; }
+  	else if(PlayerInfo[targetid][pMember] == 5 || PlayerInfo[targetid][pLeader] == 5)
+	{ ftext = "La Cosa Nostra"; }
+	else if(PlayerInfo[targetid][pMember] == 6 || PlayerInfo[targetid][pLeader] == 6)
+	{ ftext = "Yakuza"; }
+	else if(PlayerInfo[targetid][pMember] == 11 || PlayerInfo[targetid][pLeader] == 11)
+	{ ftext = "License Faction"; }
+	else
+	{ ftext = "None"; }
+
+	new f2text[20];
+	if(PlayerInfo[targetid][pFMember] < 255) { f2text = FamilyInfo[PlayerInfo[targetid][pFMember]][FamilyName]; }
+	else { f2text = "None"; }
+
+	new rtext[64];
+	if(gTeam[targetid] == 5 || PlayerInfo[targetid][pFMember] < 255)//The 2 Organisations
 	{
-		new cash =  GetPlayerMoney(targetid);
-		new atext[20];
-		if(PlayerInfo[targetid][pSex] == 1) { atext = "Male"; }
-		else if(PlayerInfo[targetid][pSex] == 2) { atext = "Female"; }
-  		new otext[20];
-		if(PlayerInfo[targetid][pOrigin] == 1) { otext = "USA"; }
-		else if(PlayerInfo[targetid][pOrigin] == 2) { otext = "Europe"; }
-		else if(PlayerInfo[targetid][pOrigin] == 3) { otext = "Asia"; }
-		new ttext[20];
-		if(PlayerInfo[targetid][pMember] == 4 || PlayerInfo[targetid][pLeader] == 4) { ttext = "Medic"; }
-		else if(gTeam[targetid] == 3 || gTeam[targetid] == 4) { ttext = "Civilian"; }
-		else if(PlayerInfo[targetid][pMember] == 1 || PlayerInfo[targetid][pLeader] == 1) { ttext = "Officer"; }
-		else if(PlayerInfo[targetid][pMember] == 2 || PlayerInfo[targetid][pLeader] == 2) { ttext = "FBI Agent"; }
-		else if(PlayerInfo[targetid][pMember] == 3 || PlayerInfo[targetid][pLeader] == 3) { ttext = "National Guard"; }
-		else if(PlayerInfo[targetid][pMember] == 4 || PlayerInfo[targetid][pLeader] == 4) { ttext = "Firemen/Paramedic"; }
-		else if(PlayerInfo[targetid][pMember] == 5 || PlayerInfo[targetid][pLeader] == 5) { ttext = "LCN"; }
-		else if(PlayerInfo[targetid][pMember] == 6 || PlayerInfo[targetid][pLeader] == 6) { ttext = "Yakuza"; }
-		else if(PlayerInfo[targetid][pMember] == 8 || PlayerInfo[targetid][pLeader] == 8) { ttext = "Hitmen"; }
-		else if(PlayerInfo[targetid][pMember] == 9 || PlayerInfo[targetid][pLeader] == 9) { ttext = "News Reporter"; }
-		else if(PlayerInfo[targetid][pMember] == 10 || PlayerInfo[targetid][pLeader] == 10) { ttext = "Taxi"; }
-		else if(PlayerInfo[targetid][pMember] == 11 || PlayerInfo[targetid][pLeader] == 11) { ttext = "School Instructor"; }
-		new dtext[20];
-		if(STDPlayer[targetid] == 1) { dtext = "Chlamydia"; }
-		else if(STDPlayer[targetid] == 2) { dtext = "Gonorrhea"; }
-		else if(STDPlayer[targetid] == 3) { dtext = "Syphilis"; }
-		else { dtext = "None"; }
-	    new ftext[20];
-	    if(PlayerInfo[targetid][pMember] == 4 || PlayerInfo[targetid][pLeader] == 4)
-		{ ftext = "Firemen/Paramedics"; }
-  		else if(PlayerInfo[targetid][pMember] == 5 || PlayerInfo[targetid][pLeader] == 5)
-		{ ftext = "La Cosa Nostra"; }
-		else if(PlayerInfo[targetid][pMember] == 6 || PlayerInfo[targetid][pLeader] == 6)
-		{ ftext = "Yakuza"; }
-		else if(PlayerInfo[targetid][pMember] == 11 || PlayerInfo[targetid][pLeader] == 11)
-		{ ftext = "License Faction"; }
-		else
-		{ ftext = "None"; }
-		new f2text[20];
-	    if(PlayerInfo[targetid][pFMember] < 255) { f2text = FamilyInfo[PlayerInfo[targetid][pFMember]][FamilyName]; }
-		else { f2text = "None"; }
-	    new rtext[64];
-	    if(gTeam[targetid] == 5 || PlayerInfo[targetid][pFMember] < 255)//The 2 Organisations
-	    {
-        	if(PlayerInfo[targetid][pRank] == 1) { rtext = "Outsider"; }
-			else if(PlayerInfo[targetid][pRank] == 2) { rtext = "Associate"; }
-			else if(PlayerInfo[targetid][pRank] == 3) { rtext = "Soldier"; }
-			else if(PlayerInfo[targetid][pRank] == 4) { rtext = "Capo"; }
-			else if(PlayerInfo[targetid][pRank] == 5) { rtext = "Underboss"; }
-  			else if(PlayerInfo[targetid][pRank] == 6) { rtext = "Godfather"; }
-			else { rtext = "Outsider"; }
-		}
-		else if(PlayerInfo[targetid][pMember] == 1 || PlayerInfo[targetid][pLeader] == 1)//PD Ranks
-		{
-		    if(PlayerInfo[targetid][pRank] == 1) { rtext = "Cadet"; }
-			else if(PlayerInfo[targetid][pRank] == 2) { rtext = "Officer"; }
-			else if(PlayerInfo[targetid][pRank] == 3) { rtext = "Sergeant"; }
-			else if(PlayerInfo[targetid][pRank] == 4) { rtext = "Lieutenant"; }
-			else if(PlayerInfo[targetid][pRank] == 5) { rtext = "Captain"; }
-	        else if(PlayerInfo[targetid][pRank] == 6) { rtext = "Chief"; }
-			else { rtext = "Cadet"; }
-		}
-		else if(PlayerInfo[targetid][pMember] == 2 || PlayerInfo[targetid][pLeader] == 2)//FBI Ranks
-		{
-		    if(PlayerInfo[targetid][pRank] == 1) { rtext = "Professional Staff"; }
-			else if(PlayerInfo[targetid][pRank] == 2) { rtext = "Special Agent Trainee"; }
-			else if(PlayerInfo[targetid][pRank] == 3) { rtext = "Special Agent"; }
-			else if(PlayerInfo[targetid][pRank] == 4) { rtext = "Special Agent in Charge"; }
-			else if(PlayerInfo[targetid][pRank] == 5) { rtext = "Assistant Director in Charge"; }
-		    else if(PlayerInfo[targetid][pRank] == 6) { rtext = "Director"; }
-			else { rtext = "Intern"; }
-		}
-		else if(PlayerInfo[targetid][pMember] == 3 || PlayerInfo[targetid][pLeader] == 3)//NG Ranks
-		{
-		    if(PlayerInfo[targetid][pRank] == 1) { rtext = "Private"; }
-			else if(PlayerInfo[targetid][pRank] == 2) { rtext = "Sergeant"; }
-			else if(PlayerInfo[targetid][pRank] == 3) { rtext = "Major"; }
-			else if(PlayerInfo[targetid][pRank] == 4) { rtext = "Captain"; }
-			else if(PlayerInfo[targetid][pRank] == 5) { rtext = "Lieutenant"; }
-		    else if(PlayerInfo[targetid][pRank] == 6) { rtext = "General"; }
-			else { rtext = "Private"; }
-		}
-		else if(PlayerInfo[targetid][pMember] == 8 || PlayerInfo[targetid][pLeader] == 8)//Hitman Ranks
-		{
-		    if(PlayerInfo[targetid][pRank] == 1) { rtext = "Freelancer"; }
-			else if(PlayerInfo[targetid][pRank] == 2) { rtext = "Marksman"; }
-			else if(PlayerInfo[targetid][pRank] == 3) { rtext = "Agent"; }
-			else if(PlayerInfo[targetid][pRank] == 4) { rtext = "Special Agent"; }
-			else if(PlayerInfo[targetid][pRank] == 5) { rtext = "Vice-Director"; }
-		    else if(PlayerInfo[targetid][pRank] == 6) { rtext = "Director"; }
-			else { rtext = "Freelancer"; }
-		}
-		else if(PlayerInfo[targetid][pMember] == 9 || PlayerInfo[targetid][pLeader] == 9)//NR Ranks
-		{
-		    if(PlayerInfo[targetid][pRank] == 1) { rtext = "Intern"; }
-			else if(PlayerInfo[targetid][pRank] == 2) { rtext = "Local Reporter"; }
-			else if(PlayerInfo[targetid][pRank] == 3) { rtext = "Local Editor"; }
-			else if(PlayerInfo[targetid][pRank] == 4) { rtext = "Network Anchor"; }
-			else if(PlayerInfo[targetid][pRank] == 5) { rtext = "Network Editor"; }
-		    else if(PlayerInfo[targetid][pRank] == 6) { rtext = "Network Producer"; }
-			else { rtext = "Intern"; }
-		}
-		else if(PlayerInfo[targetid][pMember] == 10 || PlayerInfo[targetid][pLeader] == 10)//Taxi Company Ranks
-		{
-		    if(PlayerInfo[targetid][pRank] == 1) { rtext = "Trainee"; }
-			else if(PlayerInfo[targetid][pRank] == 2) { rtext = "Taxi Rookie"; }
-			else if(PlayerInfo[targetid][pRank] == 3) { rtext = "Cabbie"; }
-			else if(PlayerInfo[targetid][pRank] == 4) { rtext = "Dispatcher"; }
-			else if(PlayerInfo[targetid][pRank] == 5) { rtext = "Shift Supervisor"; }
-		    else if(PlayerInfo[targetid][pRank] == 6) { rtext = "Taxi Company Owner"; }
-			else { rtext = "Trainee"; }
-		}
-		else if(IsAnInstructor(targetid))//Driving/Flying School Ranks
-		{
-		    if(PlayerInfo[targetid][pRank] == 1) { rtext = "Trainee"; }
-			else if(PlayerInfo[targetid][pRank] == 2) { rtext = "Instructor"; }
-			else if(PlayerInfo[targetid][pRank] == 3) { rtext = "Senior Instructor"; }
-			else if(PlayerInfo[targetid][pRank] == 4) { rtext = "Manager"; }
-			else if(PlayerInfo[targetid][pRank] == 5) { rtext = "Under Boss"; }
-		    else if(PlayerInfo[targetid][pRank] == 6) { rtext = "Boss"; }
-			else { rtext = "Trainee"; }
-		}
-		else
-		{
-		    rtext = "None";
-		}
-        new jtext[20];
-        if(PlayerInfo[targetid][pJob] == 1) { jtext = "Detective"; }
-        else if(PlayerInfo[targetid][pJob] == 2) { jtext = "Lawyer"; }
-        else if(PlayerInfo[targetid][pJob] == 3) { jtext = "Whore"; }
-        else if(PlayerInfo[targetid][pJob] == 4) { jtext = "Drugs Dealer"; }
-        else if(PlayerInfo[targetid][pJob] == 5) { jtext = "Car Jacker"; }
-        else if(PlayerInfo[targetid][pJob] == 6) { jtext = "News Reporter"; }
-        else if(PlayerInfo[targetid][pJob] == 7) { jtext = "Car Mechanic"; }
-        else if(PlayerInfo[targetid][pJob] == 8) { jtext = "Bodyguard"; }
-        else if(PlayerInfo[targetid][pJob] == 9) { jtext = "Arms Dealer"; }
-        else if(PlayerInfo[targetid][pJob] == 10) { jtext = "Car Dealer"; }
-		else if(PlayerInfo[targetid][pJob] == 12) { jtext = "Boxer"; }
-        else if(PlayerInfo[targetid][pJob] == 14) { jtext = "Bus Driver"; }
-        else if(PlayerInfo[targetid][pJob] == 15) { jtext = "Paper Boy"; }
-        else if(PlayerInfo[targetid][pJob] == 16) { jtext = "Trucker"; }
-        else { jtext = "None"; }
-		new drank[20];
-		if(PlayerInfo[targetid][pDonateRank] == 1) { drank = "Power User"; }
-		else if(PlayerInfo[targetid][pDonateRank] >= 2) { drank = "Donater"; }
-		else { drank = "None"; }
-		new married[20];
-		strmid(married, PlayerInfo[targetid][pMarriedTo], 0, strlen(PlayerInfo[targetid][pMarriedTo]), 255);
-		new age = PlayerInfo[targetid][pAge];
-		new ptime = PlayerInfo[targetid][pConnectTime];
-		new lotto = PlayerInfo[targetid][pLottoNr];
-		new deaths = PlayerInfo[targetid][pDeaths];
-		new fishes = PlayerInfo[targetid][pFishes];
-		new bigfish = PlayerInfo[targetid][pBiggestFish];
-		new crimes = PlayerInfo[targetid][pCrimes];
-		new arrests = PlayerInfo[targetid][pArrested];
-		new warrests = PlayerInfo[targetid][pWantedDeaths];
-		new drugs = PlayerInfo[targetid][pDrugs];
-		new mats = PlayerInfo[targetid][pMats];
-		new wanted = WantedLevel[targetid];
-		new level = PlayerInfo[targetid][pLevel];
-		new exp = PlayerInfo[targetid][pExp];
-		new kills = PlayerInfo[targetid][pKills];
-		new pnumber = PlayerInfo[targetid][pPnumber];
-		new account = PlayerInfo[targetid][pAccount];
-		new nxtlevel = PlayerInfo[targetid][pLevel]+1;
-		new expamount = nxtlevel*levelexp;
-		new costlevel = nxtlevel*levelcost;//10k for testing purposes
-		new housekey = PlayerInfo[targetid][pPhousekey];
-		new bizkey = PlayerInfo[targetid][pPbiskey];
-		new intir = PlayerInfo[targetid][pInt];
-		new local = PlayerInfo[targetid][pLocal];
-		new Float:shealth = PlayerInfo[targetid][pSHealth];
-		new Float:health;
-		new name[MAX_PLAYER_NAME];
-		GetPlayerName(targetid, name, sizeof(name));
-		GetPlayerHealth(targetid,health);
-		new Float:px,Float:py,Float:pz;
-		GetPlayerPos(targetid, px, py, pz);
-		new coordsstring[256];
-		SendClientMessage(playerid, COLOR_GREEN,"_______________________________________");
-		format(coordsstring, sizeof(coordsstring),"*** %s ***",name);
-		SendClientMessage(playerid, COLOR_WHITE,coordsstring);
-		format(coordsstring, sizeof(coordsstring), "Level:[%d] Sex:[%s] Age:[%d] Origin:[%s] SpawnHealth:[%.1f] Cash:[$%d] Bank:[$%d] Ph:[%d]", level,atext,age,otext,shealth+50, cash, account, pnumber);
-		SendClientMessage(playerid, COLOR_GRAD1,coordsstring);
-		format(coordsstring, sizeof(coordsstring), "DonateRank:[%s] MarriedTo:[%s] PlayingHours:[%d] LottoNr:[%d] Job:[%s]", drank,married,ptime,lotto,jtext);
-		SendClientMessage(playerid, COLOR_GRAD3,coordsstring);
-		format(coordsstring, sizeof(coordsstring), "FishesCaught:[%d] BiggestFish:[%d] CrimesCommited:[%d] TimesArrested:[%d] WantedDeaths:[%d]", fishes,bigfish,crimes,arrests,warrests );
-		SendClientMessage(playerid, COLOR_GRAD4,coordsstring);
-		format(coordsstring, sizeof(coordsstring), "Kills:[%d] Deaths:[%d] NextLevel:[$%d] Respect:[%d/%d] WantedLevel:[%d] Family:[%s]",kills,deaths,costlevel,exp,expamount,wanted,f2text);
-		SendClientMessage(playerid, COLOR_GRAD5,coordsstring);
-		format(coordsstring, sizeof(coordsstring), "Drugs:[%d] Materials:[%d] Team:[%s] Disease:[%s] Organisation:[%s] Rank:[%s]",drugs,mats,ttext,dtext,ftext,rtext);
-		SendClientMessage(playerid, COLOR_GRAD5,coordsstring);
-		if (PlayerInfo[playerid][pAdmin] >= 1)
-		{
-			format(coordsstring, sizeof(coordsstring), "House key [%d] Business key [%d] HireKey [%d] int:[%d] local[%d]", housekey,bizkey,HireCar[targetid],intir,local);
-			SendClientMessage(playerid, COLOR_GRAD6,coordsstring);
-		}
-		SendClientMessage(playerid, COLOR_GREEN,"_______________________________________");
+        if(PlayerInfo[targetid][pRank] == 1) { rtext = "Outsider"; }
+		else if(PlayerInfo[targetid][pRank] == 2) { rtext = "Associate"; }
+		else if(PlayerInfo[targetid][pRank] == 3) { rtext = "Soldier"; }
+		else if(PlayerInfo[targetid][pRank] == 4) { rtext = "Capo"; }
+		else if(PlayerInfo[targetid][pRank] == 5) { rtext = "Underboss"; }
+  		else if(PlayerInfo[targetid][pRank] == 6) { rtext = "Godfather"; }
+		else { rtext = "Outsider"; }
 	}
+	else if(PlayerInfo[targetid][pMember] == 1 || PlayerInfo[targetid][pLeader] == 1)//PD Ranks
+	{
+		if(PlayerInfo[targetid][pRank] == 1) { rtext = "Cadet"; }
+		else if(PlayerInfo[targetid][pRank] == 2) { rtext = "Officer"; }
+		else if(PlayerInfo[targetid][pRank] == 3) { rtext = "Sergeant"; }
+		else if(PlayerInfo[targetid][pRank] == 4) { rtext = "Lieutenant"; }
+		else if(PlayerInfo[targetid][pRank] == 5) { rtext = "Captain"; }
+	    else if(PlayerInfo[targetid][pRank] == 6) { rtext = "Chief"; }
+		else { rtext = "Cadet"; }
+	}
+	else if(PlayerInfo[targetid][pMember] == 2 || PlayerInfo[targetid][pLeader] == 2)//FBI Ranks
+	{
+		if(PlayerInfo[targetid][pRank] == 1) { rtext = "Professional Staff"; }
+		else if(PlayerInfo[targetid][pRank] == 2) { rtext = "Special Agent Trainee"; }
+		else if(PlayerInfo[targetid][pRank] == 3) { rtext = "Special Agent"; }
+		else if(PlayerInfo[targetid][pRank] == 4) { rtext = "Special Agent in Charge"; }
+		else if(PlayerInfo[targetid][pRank] == 5) { rtext = "Assistant Director in Charge"; }
+		else if(PlayerInfo[targetid][pRank] == 6) { rtext = "Director"; }
+		else { rtext = "Intern"; }
+	}
+	else if(PlayerInfo[targetid][pMember] == 3 || PlayerInfo[targetid][pLeader] == 3)//NG Ranks
+	{
+		if(PlayerInfo[targetid][pRank] == 1) { rtext = "Private"; }
+		else if(PlayerInfo[targetid][pRank] == 2) { rtext = "Sergeant"; }
+		else if(PlayerInfo[targetid][pRank] == 3) { rtext = "Major"; }
+		else if(PlayerInfo[targetid][pRank] == 4) { rtext = "Captain"; }
+		else if(PlayerInfo[targetid][pRank] == 5) { rtext = "Lieutenant"; }
+		else if(PlayerInfo[targetid][pRank] == 6) { rtext = "General"; }
+		else { rtext = "Private"; }
+	}
+	else if(PlayerInfo[targetid][pMember] == 8 || PlayerInfo[targetid][pLeader] == 8)//Hitman Ranks
+	{
+		if(PlayerInfo[targetid][pRank] == 1) { rtext = "Freelancer"; }
+		else if(PlayerInfo[targetid][pRank] == 2) { rtext = "Marksman"; }
+		else if(PlayerInfo[targetid][pRank] == 3) { rtext = "Agent"; }
+		else if(PlayerInfo[targetid][pRank] == 4) { rtext = "Special Agent"; }
+		else if(PlayerInfo[targetid][pRank] == 5) { rtext = "Vice-Director"; }
+		else if(PlayerInfo[targetid][pRank] == 6) { rtext = "Director"; }
+		else { rtext = "Freelancer"; }
+	}
+	else if(PlayerInfo[targetid][pMember] == 9 || PlayerInfo[targetid][pLeader] == 9)//NR Ranks
+	{
+		if(PlayerInfo[targetid][pRank] == 1) { rtext = "Intern"; }
+		else if(PlayerInfo[targetid][pRank] == 2) { rtext = "Local Reporter"; }
+		else if(PlayerInfo[targetid][pRank] == 3) { rtext = "Local Editor"; }
+		else if(PlayerInfo[targetid][pRank] == 4) { rtext = "Network Anchor"; }
+		else if(PlayerInfo[targetid][pRank] == 5) { rtext = "Network Editor"; }
+		else if(PlayerInfo[targetid][pRank] == 6) { rtext = "Network Producer"; }
+		else { rtext = "Intern"; }
+	}
+	else if(PlayerInfo[targetid][pMember] == 10 || PlayerInfo[targetid][pLeader] == 10)//Taxi Company Ranks
+	{
+		if(PlayerInfo[targetid][pRank] == 1) { rtext = "Trainee"; }
+		else if(PlayerInfo[targetid][pRank] == 2) { rtext = "Taxi Rookie"; }
+		else if(PlayerInfo[targetid][pRank] == 3) { rtext = "Cabbie"; }
+		else if(PlayerInfo[targetid][pRank] == 4) { rtext = "Dispatcher"; }
+		else if(PlayerInfo[targetid][pRank] == 5) { rtext = "Shift Supervisor"; }
+		else if(PlayerInfo[targetid][pRank] == 6) { rtext = "Taxi Company Owner"; }
+		else { rtext = "Trainee"; }
+	}
+	else if(IsAnInstructor(targetid))//Driving/Flying School Ranks
+	{
+		if(PlayerInfo[targetid][pRank] == 1) { rtext = "Trainee"; }
+		else if(PlayerInfo[targetid][pRank] == 2) { rtext = "Instructor"; }
+		else if(PlayerInfo[targetid][pRank] == 3) { rtext = "Senior Instructor"; }
+		else if(PlayerInfo[targetid][pRank] == 4) { rtext = "Manager"; }
+		else if(PlayerInfo[targetid][pRank] == 5) { rtext = "Under Boss"; }
+		else if(PlayerInfo[targetid][pRank] == 6) { rtext = "Boss"; }
+		else { rtext = "Trainee"; }
+	}
+	else
+	{
+		rtext = "None";
+	}
+
+    new jtext[20];
+
+    if(PlayerInfo[targetid][pJob] == 1) { jtext = "Detective"; }
+    else if(PlayerInfo[targetid][pJob] == 2) { jtext = "Lawyer"; }
+    else if(PlayerInfo[targetid][pJob] == 3) { jtext = "Whore"; }
+    else if(PlayerInfo[targetid][pJob] == 4) { jtext = "Drugs Dealer"; }
+    else if(PlayerInfo[targetid][pJob] == 5) { jtext = "Car Jacker"; }
+    else if(PlayerInfo[targetid][pJob] == 6) { jtext = "News Reporter"; }
+    else if(PlayerInfo[targetid][pJob] == 7) { jtext = "Car Mechanic"; }
+    else if(PlayerInfo[targetid][pJob] == 8) { jtext = "Bodyguard"; }
+	else if(PlayerInfo[targetid][pJob] == 9) { jtext = "Arms Dealer"; }
+    else if(PlayerInfo[targetid][pJob] == 10) { jtext = "Car Dealer"; }
+	else if(PlayerInfo[targetid][pJob] == 12) { jtext = "Boxer"; }
+    else if(PlayerInfo[targetid][pJob] == 14) { jtext = "Bus Driver"; }
+    else if(PlayerInfo[targetid][pJob] == 15) { jtext = "Paper Boy"; }
+    else if(PlayerInfo[targetid][pJob] == 16) { jtext = "Trucker"; }
+    else { jtext = "None"; }
+
+	new drank[20];
+	if(PlayerInfo[targetid][pDonateRank] == 1) { drank = "Power User"; }
+	else if(PlayerInfo[targetid][pDonateRank] >= 2) { drank = "Donater"; }
+	else { drank = "None"; }
+
+	new married[20];
+	strmid(married, PlayerInfo[targetid][pMarriedTo], 0, strlen(PlayerInfo[targetid][pMarriedTo]), 255);
+
+	new age = PlayerInfo[targetid][pAge];
+	new ptime = PlayerInfo[targetid][pConnectTime];
+	new lotto = PlayerInfo[targetid][pLottoNr];
+	new deaths = PlayerInfo[targetid][pDeaths];
+	new fishes = PlayerInfo[targetid][pFishes];
+	new bigfish = PlayerInfo[targetid][pBiggestFish];
+	new crimes = PlayerInfo[targetid][pCrimes];
+	new arrests = PlayerInfo[targetid][pArrested];
+	new warrests = PlayerInfo[targetid][pWantedDeaths];
+	new drugs = PlayerInfo[targetid][pDrugs];
+	new mats = PlayerInfo[targetid][pMats];
+	new wanted = WantedLevel[targetid];
+	new level = PlayerInfo[targetid][pLevel];
+	new exp = PlayerInfo[targetid][pExp];
+	new kills = PlayerInfo[targetid][pKills];
+	new pnumber = PlayerInfo[targetid][pPnumber];
+	new account = PlayerInfo[targetid][pAccount];
+	new nxtlevel = PlayerInfo[targetid][pLevel]+1;
+	new expamount = nxtlevel*levelexp;
+	new costlevel = nxtlevel*levelcost;//10k for testing purposes
+	new housekey = PlayerInfo[targetid][pPhousekey];
+	new bizkey = PlayerInfo[targetid][pPbiskey];
+	new intir = PlayerInfo[targetid][pInt];
+	new local = PlayerInfo[targetid][pLocal];
+	new Float:shealth = PlayerInfo[targetid][pSHealth];
+	new coordsstring[256];
+
+	format(coordsstring, sizeof(coordsstring), "___________________ Nick OOC: %s ___________________", accName[playerid]);
+	SendClientMessage(playerid, COLOR_GREEN, coordsstring);
+	format(coordsstring, sizeof(coordsstring), "Nick: [%s] Poziom: [%d] Doœwiadczenie: [%d/%d] Konto: [%s] Punkty Premium: [%d] Punkty Nagród: [%d] Warny: [%d]", PlayerInfo[playerid][pName], level, exp, expamount);
+	SendClientMessage(playerid, COLOR_GRAD1,coordsstring);
+	format(coordsstring, sizeof(coordsstring), "P³eæ: [%s] Wiek: [%d] Pochodzenie: [%s] Rasa: [%s] Telefon: [%d] Godzin na serwerze: [%d postaæ / %d konto]");
+	SendClientMessage(playerid, COLOR_GRAD3,coordsstring);
+	format(coordsstring, sizeof(coordsstring), "Pieni¹dze: [$%d] Przestêpstwa: [%d] Aresztowany: [%d] Poziom poszukiwania: [%d] Sylwetka: [%s] Kondycja: [%s]");
+	SendClientMessage(playerid, COLOR_GRAD4,coordsstring);
+	format(coordsstring, sizeof(coordsstring), "Z³apanych ryb: [%d] U¿ywana przynêta: [%s] Œlub z: [%s] Numer Lotto: [%s] Styl walki: [%s]");
+	SendClientMessage(playerid, COLOR_GRAD5,coordsstring);
+	format(coordsstring, sizeof(coordsstring), "Choroba: [%s] Organizacja: [%s] Ranga: [%s] Praca: [%s]");
+	SendClientMessage(playerid, COLOR_GRAD5,coordsstring);
+
+	if(PlayerInfo[playerid][pAdmin] >= 1) {
+		format(coordsstring, sizeof(coordsstring), "Int: [%d] World: [%d] Lokal: [%d] Dom: [%d] Biz: [%d] Pojazdy: [%d][%d][%d][%d][%d] Prawko: [B:1 C:1] FL: [%d] Bank: [$%d]", housekey,bizkey,HireCar[targetid],intir,local);
+		SendClientMessage(playerid, COLOR_GRAD6,coordsstring);
+	}
+
+	SendClientMessage(playerid, COLOR_GREEN,"___________________________________________________________");
 }
 //---------------------------------------------------------
 
-stock SetPlayerToTeamColor(playerid)
-{
-	if(IsPlayerConnected(playerid))
-	{
-	    SetPlayerColor(playerid,TEAM_HIT_COLOR); // white
-	}
+stock SetPlayerToTeamColor(playerid) {
+	SetPlayerColor(playerid,TEAM_HIT_COLOR); // white
 }
 
 stock SaveMission(playerid,name[])
@@ -2276,53 +2349,6 @@ stock GetClosestPlayer(p1)
 	return player;
 }
 
-stock Production()
-{
-	new string[256];
-	for(new i = 0; i < MAX_PLAYERS; i++)
-	{
-		if(IsPlayerConnected(i))
-		{
-		    if(PlayerInfo[i][pFishes] >= 5) { if(FishCount[i] >= 3) { PlayerInfo[i][pFishes] = 0; } else { FishCount[i] += 1; } }
-		    if(PlayerDrunk[i] > 0) { PlayerDrunk[i] = 0; PlayerDrunkTime[i] = 0; GameTextForPlayer(i, "~p~Drunk effect~n~~w~Gone", 3500, 1); }
-		    if(PlayerInfo[i][pPayDay] < 6) { PlayerInfo[i][pPayDay] += 1; } //+ 5 min to PayDay anti-abuse
-		    for(new k = 0; k < MAX_PLAYERS; k++)
-			{
-				if(IsPlayerConnected(k))
-				{
-				    if(gTeam[k] == 2 && CrimInRange(80.0, i,k))
-				    {
-					}
-					else
-					{
-					    WantedPoints[i] -= 3;
-					    if(WantedPoints[i] < 0) { WantedPoints[i] = 0; }
-					    new points = WantedPoints[i];
-					    new wlevel;
-					    if(points > 0)
-						{
-						    new yesno;
-							if(points == 3) { if(WantedLevel[i] != 1) { WantedLevel[i] = 1; wlevel = 1; yesno = 1; } }
-							else if(points >= 4 && points <= 5) { if(WantedLevel[i] != 2) { WantedLevel[i] = 2; wlevel = 2; yesno = 1; } }
-							else if(points >= 6 && points <= 7) { if(WantedLevel[i] != 3) { WantedLevel[i] = 3; wlevel = 3; yesno = 1; } }
-							else if(points >= 8 && points <= 9) { if(WantedLevel[i] != 4) { WantedLevel[i] = 4; wlevel = 4; yesno = 1; } }
-							else if(points >= 10 && points <= 11) { if(WantedLevel[i] != 5) { WantedLevel[i] = 5; wlevel = 5; yesno = 1; } }
-							else if(points >= 12 && points <= 13) { if(WantedLevel[i] != 6) { WantedLevel[i] = 6; wlevel = 6; yesno = 1; } }
-							else if(points >= 14) { if(WantedLevel[i] != 10) { WantedLevel[i] = 10; wlevel = 10; yesno = 1; } }
-							else if(points <= 0) { if(WantedLevel[i] != 0) { ClearCrime(i); WantedLevel[i] = 0; wlevel = 0; yesno = 1;} }
-							if(yesno)
-							{
-								format(string, sizeof(string), "Current Wanted Level: %d", wlevel);
-								SendClientMessage(i, COLOR_YELLOW, string);
-							}
-						}
-					}
-				}
-			}
-		}
-	}
-}
-
 stock DateProp(playerid)
 {
 	new playername[MAX_PLAYER_NAME];
@@ -2520,13 +2546,18 @@ stock OnPlayerRegister(playerid) {
 		return 1;
 	}
 
+	new day, month, year;
+
+	getdate(year, month, day);
+	format(PlayerInfo[playerid][pDate], 32, "%02d-%02d-%03d", day, month, year);
+
 	GetPlayerHealth(playerid,PlayerInfo[playerid][pHealth]);
 	PlayerInfo[playerid][pCash] = GetPlayerMoney(playerid);
 
-	if((PlayerInfo[playerid][pPos_x]==0.0 && PlayerInfo[playerid][pPos_y]==0.0 && PlayerInfo[playerid][pPos_z]==0.0)) {
-		PlayerInfo[playerid][pPos_x] = 1684.9;
-		PlayerInfo[playerid][pPos_y] = -2244.5;
-		PlayerInfo[playerid][pPos_z] = 13.5;
+	if(PlayerInfo[playerid][pPos_x] == 0.0 && PlayerInfo[playerid][pPos_y] == 0.0 && PlayerInfo[playerid][pPos_z] == 0.0) {
+		PlayerInfo[playerid][pPos_x] = DEFAULT_POS_X;
+		PlayerInfo[playerid][pPos_y] = DEFAULT_POS_Y;
+		PlayerInfo[playerid][pPos_z] = DEFAULT_POS_Z;
 	}
 
 	if(Spectate[playerid] != 255) {
@@ -2538,7 +2569,7 @@ stock OnPlayerRegister(playerid) {
 	}
 
 	queryStr[0] = EOS;
-	strcat(queryStr, "INSERT INTO `Characters` (`AID`, `Name`, `Level`, `AdminLevel`, `DonateRank`, `UpgradePoints`, `ConnectedTime`, ");
+	strcat(queryStr, "INSERT INTO `Characters` (`AID`, `Name`, `Date`, `Level`, `AdminLevel`, `DonateRank`, `UpgradePoints`, `ConnectedTime`, ");
 	strcat(queryStr, "`Registered`, `Sex`, `Age`, `Continent`, `Origin`, `CK`, `Muted`, `Respect`, `Money`, `Bank`, `Crimes`, `Kills`, ");
 	strcat(queryStr, "`Deaths`, `Arrested`, `WantedDeaths`, `Phonebook`, `LottoNr`, `Fishes`, `BiggestFish`, `Job`, `Paycheck`, ");
 	strcat(queryStr, "`HeadValue`, `Jailed`, `JailTime`, `Materials`, `Drugs`, `Leader`, `Member`, `FMember`, `Rank`, `Char`, ");
@@ -2552,41 +2583,126 @@ stock OnPlayerRegister(playerid) {
 
 	new temp[256];
 
-	format(temp, sizeof(temp), "'%d', '%s', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', ",
-		PlayerInfo[playerid][pAID], PlayerInfo[playerid][pName], PlayerInfo[playerid][pLevel], PlayerInfo[playerid][pAdmin], PlayerInfo[playerid][pDonateRank], PlayerInfo[playerid][gPupgrade], PlayerInfo[playerid][pConnectTime],
-		PlayerInfo[playerid][pReg], PlayerInfo[playerid][pSex], PlayerInfo[playerid][pAge], PlayerInfo[playerid][pContinent], PlayerInfo[playerid][pOrigin], PlayerInfo[playerid][pCK], PlayerInfo[playerid][pMuted], PlayerInfo[playerid][pExp]);
+	format(temp, sizeof(temp), "'%d', '%s', '%s', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', ",
+		PlayerInfo[playerid][pAID],
+		PlayerInfo[playerid][pName],
+		PlayerInfo[playerid][pDate],
+		PlayerInfo[playerid][pLevel],
+		PlayerInfo[playerid][pAdmin],
+		PlayerInfo[playerid][pDonateRank],
+		PlayerInfo[playerid][gPupgrade],
+		PlayerInfo[playerid][pConnectTime],
+		PlayerInfo[playerid][pReg],
+		PlayerInfo[playerid][pSex],
+		PlayerInfo[playerid][pAge],
+		PlayerInfo[playerid][pContinent],
+		PlayerInfo[playerid][pOrigin],
+		PlayerInfo[playerid][pCK],
+		PlayerInfo[playerid][pMuted],
+		PlayerInfo[playerid][pExp]
+	);
 	strcat(queryStr, temp);
 
 	format(temp, sizeof(temp), "'%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', ",
-		PlayerInfo[playerid][pCash], PlayerInfo[playerid][pAccount], PlayerInfo[playerid][pCrimes], PlayerInfo[playerid][pKills], PlayerInfo[playerid][pDeaths], PlayerInfo[playerid][pArrested], PlayerInfo[playerid][pWantedDeaths],
-		PlayerInfo[playerid][pPhoneBook], PlayerInfo[playerid][pLottoNr], PlayerInfo[playerid][pFishes], PlayerInfo[playerid][pBiggestFish], PlayerInfo[playerid][pJob], PlayerInfo[playerid][pPayCheck], PlayerInfo[playerid][pHeadValue], PlayerInfo[playerid][pJailed]);
+		PlayerInfo[playerid][pCash],
+		PlayerInfo[playerid][pAccount],
+		PlayerInfo[playerid][pCrimes],
+		PlayerInfo[playerid][pKills],
+		PlayerInfo[playerid][pDeaths],
+		PlayerInfo[playerid][pArrested],
+		PlayerInfo[playerid][pWantedDeaths],
+		PlayerInfo[playerid][pPhoneBook],
+		PlayerInfo[playerid][pLottoNr],
+		PlayerInfo[playerid][pFishes],
+		PlayerInfo[playerid][pBiggestFish],
+		PlayerInfo[playerid][pJob],
+		PlayerInfo[playerid][pPayCheck],
+		PlayerInfo[playerid][pHeadValue],
+		PlayerInfo[playerid][pJailed]
+	);
 	strcat(queryStr, temp);
 
 	format(temp, sizeof(temp), "'%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', ",
-		PlayerInfo[playerid][pJailTime], PlayerInfo[playerid][pMats], PlayerInfo[playerid][pDrugs], PlayerInfo[playerid][pLeader], PlayerInfo[playerid][pMember], PlayerInfo[playerid][pFMember],
-		PlayerInfo[playerid][pRank], PlayerInfo[playerid][pChar], PlayerInfo[playerid][pContractTime], PlayerInfo[playerid][pDetSkill], PlayerInfo[playerid][pSexSkill], PlayerInfo[playerid][pBoxSkill], PlayerInfo[playerid][pLawSkill],
-		PlayerInfo[playerid][pMechSkill], PlayerInfo[playerid][pJackSkill]);
+		PlayerInfo[playerid][pJailTime],
+		PlayerInfo[playerid][pMats],
+		PlayerInfo[playerid][pDrugs],
+		PlayerInfo[playerid][pLeader],
+		PlayerInfo[playerid][pMember],
+		PlayerInfo[playerid][pFMember],
+		PlayerInfo[playerid][pRank],
+		PlayerInfo[playerid][pChar],
+		PlayerInfo[playerid][pContractTime],
+		PlayerInfo[playerid][pDetSkill],
+		PlayerInfo[playerid][pSexSkill],
+		PlayerInfo[playerid][pBoxSkill],
+		PlayerInfo[playerid][pLawSkill],
+		PlayerInfo[playerid][pMechSkill],
+		PlayerInfo[playerid][pJackSkill]
+	);
 	strcat(queryStr, temp);
 
 	format(temp, sizeof(temp), "'%d', '%d', '%d', '%d', '%d', '%f', '%f', '%d', '%d', '%d', '%d', '%d', '%d', '%d', ",
-		PlayerInfo[playerid][pCarSkill], PlayerInfo[playerid][pNewsSkill], PlayerInfo[playerid][pDrugsSkill], PlayerInfo[playerid][pCookSkill], PlayerInfo[playerid][pFishSkill],
-		PlayerInfo[playerid][pSHealth], PlayerInfo[playerid][pHealth], PlayerInfo[playerid][pInt], PlayerInfo[playerid][pLocal], PlayerInfo[playerid][pTeam], PlayerInfo[playerid][pModel], PlayerInfo[playerid][pPnumber],
-		PlayerInfo[playerid][pPhousekey], PlayerInfo[playerid][pPbiskey]);
+		PlayerInfo[playerid][pCarSkill],
+		PlayerInfo[playerid][pNewsSkill],
+		PlayerInfo[playerid][pDrugsSkill],
+		PlayerInfo[playerid][pCookSkill],
+		PlayerInfo[playerid][pFishSkill],
+		PlayerInfo[playerid][pSHealth],
+		PlayerInfo[playerid][pHealth],
+		PlayerInfo[playerid][pInt],
+		PlayerInfo[playerid][pLocal],
+		PlayerInfo[playerid][pTeam],
+		PlayerInfo[playerid][pModel],
+		PlayerInfo[playerid][pPnumber],
+		PlayerInfo[playerid][pPhousekey],
+		PlayerInfo[playerid][pPbiskey]
+	);
 	strcat(queryStr, temp);
 
 	format(temp, sizeof(temp), "'%f', '%f', '%f', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', ",
-		PlayerInfo[playerid][pPos_x], PlayerInfo[playerid][pPos_y], PlayerInfo[playerid][pPos_z], PlayerInfo[playerid][pCarLic], PlayerInfo[playerid][pFlyLic],
-		PlayerInfo[playerid][pBoatLic], PlayerInfo[playerid][pFishLic], PlayerInfo[playerid][pGunLic], PlayerInfo[playerid][pGun1], PlayerInfo[playerid][pGun2], PlayerInfo[playerid][pGun3], PlayerInfo[playerid][pGun4],
-		PlayerInfo[playerid][pAmmo1], PlayerInfo[playerid][pAmmo2], PlayerInfo[playerid][pAmmo3]);
+		PlayerInfo[playerid][pPos_x],
+		PlayerInfo[playerid][pPos_y],
+		PlayerInfo[playerid][pPos_z],
+		PlayerInfo[playerid][pCarLic],
+		PlayerInfo[playerid][pFlyLic],
+		PlayerInfo[playerid][pBoatLic],
+		PlayerInfo[playerid][pFishLic],
+		PlayerInfo[playerid][pGunLic],
+		PlayerInfo[playerid][pGun1],
+		PlayerInfo[playerid][pGun2],
+		PlayerInfo[playerid][pGun3],
+		PlayerInfo[playerid][pGun4],
+		PlayerInfo[playerid][pAmmo1],
+		PlayerInfo[playerid][pAmmo2],
+		PlayerInfo[playerid][pAmmo3]
+	);
 	strcat(queryStr, temp);
 
 	format(temp, sizeof(temp), "'%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', ",
-		PlayerInfo[playerid][pAmmo4], PlayerInfo[playerid][pCarTime], PlayerInfo[playerid][pPayDay], PlayerInfo[playerid][pPayDayHad], PlayerInfo[playerid][pCDPlayer], PlayerInfo[playerid][pWins], PlayerInfo[playerid][pLoses],
-		PlayerInfo[playerid][pAlcoholPerk], PlayerInfo[playerid][pDrugPerk], PlayerInfo[playerid][pMiserPerk], PlayerInfo[playerid][pPainPerk], PlayerInfo[playerid][pTraderPerk], PlayerInfo[playerid][pTut], PlayerInfo[playerid][pMissionNr], PlayerInfo[playerid][pWarns]);
+		PlayerInfo[playerid][pAmmo4],
+		PlayerInfo[playerid][pCarTime],
+		PlayerInfo[playerid][pPayDay],
+		PlayerInfo[playerid][pPayDayHad],
+		PlayerInfo[playerid][pCDPlayer],
+		PlayerInfo[playerid][pWins],
+		PlayerInfo[playerid][pLoses],
+		PlayerInfo[playerid][pAlcoholPerk],
+		PlayerInfo[playerid][pDrugPerk],
+		PlayerInfo[playerid][pMiserPerk],
+		PlayerInfo[playerid][pPainPerk],
+		PlayerInfo[playerid][pTraderPerk],
+		PlayerInfo[playerid][pTut],
+		PlayerInfo[playerid][pMissionNr],
+		PlayerInfo[playerid][pWarns]
+	);
 	strcat(queryStr, temp);
 
 	format(temp, sizeof(temp), "'%d', '%d', '%d', '%s')",
-		PlayerInfo[playerid][pAdjustable], PlayerInfo[playerid][pFuel], PlayerInfo[playerid][pMarried], PlayerInfo[playerid][pMarriedTo]);
+		PlayerInfo[playerid][pAdjustable],
+		PlayerInfo[playerid][pFuel],
+		PlayerInfo[playerid][pMarried],
+		PlayerInfo[playerid][pMarriedTo]
+	);
 	strcat(queryStr, temp);
 	mysql_query(queryStr);
 
@@ -2596,11 +2712,11 @@ stock OnPlayerRegister(playerid) {
 }
 
 stock OnPlayerLogin(playerid, name[]) {
-	if(!createdChar[playerid] && strlen(name)) {
+	if(!createdChar[playerid] && !isnull(name)) {
 		format(PlayerInfo[playerid][pName], 24, name);
 
 		queryStr[0] = EOS;
-		strcat(queryStr, "SELECT `Level`, `AdminLevel`, `DonateRank`, `UpgradePoints`, `ConnectedTime`, `Registered`, `Sex`, `Age`, `Continent`, `Origin`, `CK`, `Muted`, `Respect`, ");
+		strcat(queryStr, "SELECT `ID`, `Level`, `AdminLevel`, `DonateRank`, `UpgradePoints`, `ConnectedTime`, `Registered`, `Sex`, `Age`, `Continent`, `Origin`, `CK`, `Muted`, `Respect`, ");
 		strcat(queryStr, "`Money`, `Bank`, `Crimes`, `Kills`, `Deaths`, `Arrested`, `WantedDeaths`, `Phonebook`, `LottoNr`, `Fishes`, `BiggestFish`, `Job`, `Paycheck`, `HeadValue`, ");
 		strcat(queryStr, "`Jailed`, `JailTime`, `Materials`, `Drugs`, `Leader`, `Member`, `FMember`, `Rank`, `Char`, `ContractTime`, `DetSkill`, `SexSkill`, `BoxSkill`, `LawSkill`, ");
 		strcat(queryStr, "`MechSkill`, `JackSkill`, `CarSkill`, `NewsSkill`, `DrugsSkill`, `CookSkill`, `FishSkill`, `pSHealth`, `pHealth`, `Int`, `Local`, `Team`, `Model`, `PhoneNr`, ");
@@ -2609,7 +2725,7 @@ stock OnPlayerLogin(playerid, name[]) {
 		strcat(queryStr, "`Mission`, `Warnings`, `Adjustable`, `Fuel`, `Married`, `MarriedTo` ");
 		strcat(queryStr, "FROM `Characters` WHERE `Name` = '");
 
-		new endPart[128];
+		new endPart[64];
 		format(endPart, sizeof(endPart), "%s' LIMIT 1", name);
 		strcat(queryStr, endPart);
 
@@ -2618,7 +2734,8 @@ stock OnPlayerLogin(playerid, name[]) {
 
 		if(mysql_result_stored()) {
 			mysql_fetch_row(queryStr, "|");
-			sscanf(queryStr, "p<|>iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiffiiiiifffiiiiiiiiiiiiiiiiiiiiiiiiiiis[128]",
+			sscanf(queryStr, "p<|>iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiffiiiiiiifffiiiiiiiiiiiiiiiiiiiiiiiiiiiiiis[128]",
+				PlayerInfo[playerid][pID],
 				PlayerInfo[playerid][pLevel],
 				PlayerInfo[playerid][pAdmin],
 				PlayerInfo[playerid][pDonateRank],
@@ -2726,21 +2843,50 @@ stock OnPlayerLogin(playerid, name[]) {
 	if(PlayerInfo[playerid][pReg] == 0) {
 		PlayerInfo[playerid][pLevel] = 1;
 		PlayerInfo[playerid][pSHealth] = 0.0;
-		PlayerInfo[playerid][pHealth] = 50.0;
-		PlayerInfo[playerid][pPos_x] = 2246.6;
-		PlayerInfo[playerid][pPos_y] = -1161.9;
-		PlayerInfo[playerid][pPos_z] = 1029.7;
-		PlayerInfo[playerid][pInt] = 15;
+		PlayerInfo[playerid][pHealth] = 100.0;
+		PlayerInfo[playerid][pPos_x] = DEFAULT_POS_X;
+		PlayerInfo[playerid][pPos_y] = DEFAULT_POS_Y;
+		PlayerInfo[playerid][pPos_z] = DEFAULT_POS_Z;
+		PlayerInfo[playerid][pInt] = 0;
 		PlayerInfo[playerid][pLocal] = 255;
 		PlayerInfo[playerid][pTeam] = 3;
-		PlayerInfo[playerid][pModel] = 264;
-		new randphone = 1000 + random(8999);//minimum 1000  max 9999 //giving one at the start
-		PlayerInfo[playerid][pPnumber] = randphone;
+
+		if(PlayerInfo[playerid][pSex] == 0) {
+			switch(PlayerInfo[playerid][pOrigin]) {
+				case 0: {
+					PlayerInfo[playerid][pModel] = DEFAULT_EUROPE_MALE_SKIN;
+				}
+				case 1: {
+					PlayerInfo[playerid][pModel] = DEFAULT_USA_MALE_SKIN;
+				}
+				case 2: {
+					PlayerInfo[playerid][pModel] = DEFAULT_ASIA_MALE_SKIN;
+				}
+			}
+		} else {
+			switch(PlayerInfo[playerid][pOrigin]) {
+				case 0: {
+					PlayerInfo[playerid][pModel] = DEFAULT_EUROPE_FEMALE_SKIN;
+				}
+				case 1: {
+					PlayerInfo[playerid][pModel] = DEFAULT_USA_FEMALE_SKIN;
+				}
+				case 2: {
+					PlayerInfo[playerid][pModel] = DEFAULT_ASIA_FEMALE_SKIN;
+				}
+			}
+		}
+
+		//new randphone = 1000 + random(8999);//minimum 1000  max 9999 //giving one at the start
+
+		PlayerInfo[playerid][pPnumber] = 0;
 		PlayerInfo[playerid][pPhousekey] = 255;
 		PlayerInfo[playerid][pPbiskey] = 255;
-		PlayerInfo[playerid][pAccount] = 50000;
+		PlayerInfo[playerid][pAccount] = 0;
 		PlayerInfo[playerid][pReg] = 1;
+
 		GivePlayerMoney(playerid, 5000);
+		osrp_ShowPlayerDialog(playerid, DIALOG_TUTORIAL, DIALOG_STYLE_MSGBOX, "Tutorial:", "{FFFFFF}To Twoje pierwsze logowanie na t¹ postaæ.\nCzy chcesz zobaczyæ tutorial?", "Tak", "Nie");
 	}
 
 	if(PlayerInfo[playerid][pLevel] == -999) { //autoban
@@ -2778,6 +2924,7 @@ stock OnPlayerLogin(playerid, name[]) {
 	}
 
 	gPlayerLogged[playerid] = 1;
+	createdChar[playerid] = false;
 	SpawnPlayer(playerid);
 	DateProp(playerid);
 
@@ -3095,19 +3242,6 @@ stock SendAdminMessage(color, string[])
 	}
 }
 
-stock AddCar(carcoords)
-{
-	new randcol = random(126);
-	new randcol2 = 1;
-	if (rccounter == 14)
-	{
-		rccounter = 0;
-	}
-	AddStaticVehicleEx(carselect[rccounter], CarSpawns[carcoords][pos_x], CarSpawns[carcoords][pos_y], CarSpawns[carcoords][pos_z], CarSpawns[carcoords][z_angle], randcol, randcol2, 60000);
-	rccounter++;
-	return 1;
-}
-
 stock PlayerPlayMusic(playerid)
 {
 	if(IsPlayerConnected(playerid))
@@ -3130,12 +3264,9 @@ stock StopMusic()
 
 stock PlayerFixRadio(playerid)
 {
-    if(IsPlayerConnected(playerid))
-	{
-	    SetTimer("PlayerFixRadio2", 1000, 0);
-		PlayerPlaySound(playerid, 1068, 0.0, 0.0, 0.0);
-		Fixr[playerid] = 1;
-	}
+	SetTimer("PlayerFixRadio2", 1000, 0);
+	PlayerPlaySound(playerid, 1068, 0.0, 0.0, 0.0);
+	Fixr[playerid] = 1;
 }
 
 stock PlayerFixRadio2()
@@ -3146,7 +3277,7 @@ stock PlayerFixRadio2()
 		{
 			if(Fixr[i])
 			{
-				PlayerPlaySound(i, 1069, 0.0, 0.0, 0.0);
+				PlayerPlaySound(i, 0, 0.0, 0.0, 0.0);
 				Fixr[i] = 0;
 			}
 		}
@@ -3296,311 +3427,6 @@ stock PlayerToPoint(Float:radi, playerid, Float:x, Float:y, Float:z)
 	return 0;
 }
 
-stock CustomPickups()
-{
-	new Float:oldposx, Float:oldposy, Float:oldposz;
-	new string[128];
-	NameTimer();
-	for(new i = 0; i < MAX_PLAYERS; i++)
-	{
-		if(IsPlayerConnected(i))
-		{
-			GetPlayerPos(i, oldposx, oldposy, oldposz);
-			new tmpcar = GetPlayerVehicleID(i);
-			if(oldposx!=0.0 && oldposy!=0.0 && oldposz!=0.0)
-			{
-				for(new h = 0; h < sizeof(SBizzInfo); h++)
-				{
-					if(IsATruck(tmpcar) && PlayerToPoint(10.0, i, SBizzInfo[h][sbEntranceX], SBizzInfo[h][sbEntranceY], SBizzInfo[h][sbEntranceZ]))
-					{
-						format(string, sizeof(string), "~w~%s~n~~r~Products Required~w~: %d~n~~y~Price per Product: ~w~: $%d~n~~g~Funds: ~w~: $%d",SBizzInfo[h][sbMessage],(SBizzInfo[h][sbMaxProducts]-SBizzInfo[h][sbProducts]),SBizzInfo[h][sbPriceProd],SBizzInfo[h][sbTill]);
-						GameTextForPlayer(i, string, 5000, 3);
-						return 1;
-					}
-					if(PlayerToPoint(2.0, i, SBizzInfo[h][sbEntranceX], SBizzInfo[h][sbEntranceY], SBizzInfo[h][sbEntranceZ]))
-					{
-						if(SBizzInfo[h][sbOwned] == 1)
-						{
-							format(string, sizeof(string), "~w~%s~w~~n~Owner : %s~n~Extortion by : %s~n~Entrance Fee : ~g~$%d ~w~Level : %d ~n~to enter type /enter",SBizzInfo[h][sbMessage],SBizzInfo[h][sbOwner],SBizzInfo[h][sbExtortion],SBizzInfo[h][sbEntranceCost],SBizzInfo[h][sbLevelNeeded]);
-						}
-						else
-						{
-							format(string, sizeof(string), "~w~%s~w~~n~This Business is for sale~n~Cost: ~g~$%d ~w~Level : %d ~n~to buy this Business type /buybiz",SBizzInfo[h][sbMessage],SBizzInfo[h][sbBuyPrice],SBizzInfo[h][sbLevelNeeded]);
-						}
-						GameTextForPlayer(i, string, 5000, 3);
-						return 1;
-					}
-				}
-				for(new h = 0; h < sizeof(HouseInfo); h++)
-				{
-					if(PlayerToPoint(2.0, i, HouseInfo[h][hEntrancex], HouseInfo[h][hEntrancey], HouseInfo[h][hEntrancez]))
-					{
-						if(HouseInfo[h][hOwned] == 1)
-						{
-							if(HouseInfo[h][hRentabil] == 0)
-							{
-								format(string, sizeof(string), "~w~This House is owned by~n~%s~n~Level : %d",HouseInfo[h][hOwner],HouseInfo[h][hLevel]);
-							}
-							else
-							{
-								format(string, sizeof(string), "~w~This House is owned by~n~%s~n~Rent: $%d Level : %d~n~Type /rentroom to rent a room",HouseInfo[h][hOwner],HouseInfo[h][hRent],HouseInfo[h][hLevel]);
-							}
-							GameTextForPlayer(i, string, 5000, 3);
-							return 1;
-						}
-						else
-						{
-							format(string, sizeof(string), "~w~This House is for sale~n~Discription: %s ~n~Cost: ~g~$%d~n~~w~ Level : %d~n~to buy this house type /buyhouse",HouseInfo[h][hDiscription],HouseInfo[h][hValue],HouseInfo[h][hLevel]);
-						}
-						GameTextForPlayer(i, string, 5000, 3);
-						return 1;
-					}
-				}
-				for(new h = 0; h < sizeof(BizzInfo); h++)
-				{
-					if(IsATruck(tmpcar) && PlayerToPoint(10.0, i, BizzInfo[h][bEntranceX], BizzInfo[h][bEntranceY], BizzInfo[h][bEntranceZ]))
-					{
-						format(string, sizeof(string), "~w~%s~n~~r~Products Required~w~: %d~n~~y~Price per Product: ~w~: $%d~n~~g~Funds: ~w~: $%d",BizzInfo[h][bMessage],(BizzInfo[h][bMaxProducts]-BizzInfo[h][bProducts]),BizzInfo[h][bPriceProd],BizzInfo[h][bTill]);
-						GameTextForPlayer(i, string, 5000, 3);
-						return 1;
-					}
-					if(PlayerToPoint(2.0, i, BizzInfo[h][bEntranceX], BizzInfo[h][bEntranceY], BizzInfo[h][bEntranceZ]))
-					{
-						if(BizzInfo[h][bOwned] == 1)
-						{
-							format(string, sizeof(string), "~w~%s~w~~n~Owner : %s~n~Extortion by : %s~n~Entrance Fee : ~g~$%d ~w~Level : %d ~n~to enter type /enter",BizzInfo[h][bMessage],BizzInfo[h][bOwner],BizzInfo[h][bExtortion],BizzInfo[h][bEntranceCost],BizzInfo[h][bLevelNeeded]);
-						}
-						else
-						{
-							format(string, sizeof(string), "~w~%s~w~~n~This Business is for sale~n~Cost: ~g~$%d ~w~Level : %d ~n~to buy this Business type /buybiz",BizzInfo[h][bMessage],BizzInfo[h][bBuyPrice],BizzInfo[h][bLevelNeeded]);
-						}
-						GameTextForPlayer(i, string, 5000, 3);
-						return 1;
-					}
-				}
-			}//custompickups end
-			if (PlayerToPoint(2.0, i, 1173.2563,-1323.3102,15.3943))
-			{// Hospital near Ammu
-				GameTextForPlayer(i, "~w~Type /healme to cure yourself", 5000, 5);
-			}
-			else if (PlayerToPoint(2.0, i, 2029.5945,-1404.6426,17.2512))
-			{// Hospital near speedway
-				GameTextForPlayer(i, "~w~Type /healme to cure yourself", 5000, 5);
-			}
-			else if (PlayerToPoint(2.0, i, 323.0342,1118.5804,1083.8828))
-			{//Buyable Drugs for Drug Dealers
-			    GameTextForPlayer(i, "~w~Type /get drugs, to get some ~r~Drugs~y~~n~Skill Level matters to price", 5000, 3);
-			}
-			else if (PlayerToPoint(3, i,-2162.2554,-2385.9541,30.6250))
-			{
-			    GameTextForPlayer(i, "~y~Welcome to the ~r~City Hall~n~~w~Type /enter to go in", 5000, 5);
-			}
-			else if (GetPlayerState(i) == 1 && PlayerToPoint(2.0, i,359.5408,206.7693,1008.3828))
-			{
-			    if(PlayerInfo[i][pJob] > 0 || PlayerInfo[i][pMember] > 0) {}
-			    else { GameTextForPlayer(i, "~g~Welcome,~n~~y~you can become a ~r~Detective~y~ here ~n~~w~Type /join if you wish to become one", 5000, 3); }
-			}
-			else if (GetPlayerState(i) == 1 && PlayerToPoint(2.0, i,347.7374,193.7241,1014.1875))
-			{
-			    if(PlayerInfo[i][pJob] > 0) {}
-			    else { GameTextForPlayer(i, "~g~Welcome,~n~~y~you can become a ~r~Lawyer~y~ here ~n~~w~Type /join if you wish to become one", 5000, 3); }
-			}
-			else if (GetPlayerState(i) == 1 && PlayerToPoint(2.0, i,1215.1304,-11.8431,1000.9219))
-			{
-			    if(PlayerInfo[i][pJob] > 0 || PlayerInfo[i][pMember] > 0) {}
-			    else { GameTextForPlayer(i, "~g~Welcome,~n~~y~you can become a ~r~Whore~y~ here ~n~~w~Type /join if you wish to become one", 5000, 3); }
-			}
-			else if (GetPlayerState(i) == 1 && PlayerToPoint(2.0, i,2166.3772,-1675.3829,15.0859))
-			{
-			    if(PlayerInfo[i][pJob] > 0 || PlayerInfo[i][pMember] > 0) {}
-			    else { GameTextForPlayer(i, "~g~Welcome,~n~~y~you can become a ~r~Drugs Dealer~y~ here ~n~~w~Type /join if you wish to become one", 5000, 3); }
-			}
-			else if (GetPlayerState(i) == 1 && PlayerToPoint(2.0, i,1109.3318,-1796.3042,16.5938))
-			{
-			    if(PlayerInfo[i][pJob] > 0) {}
-			    else { GameTextForPlayer(i, "~g~Welcome,~n~~y~you can become a ~r~Car Jacker~y~ here ~n~~w~Type /join if you wish to become one", 5000, 3); }
-			}
-			else if (GetPlayerState(i) == 1 && PlayerToPoint(2.0, i,-2050.8962,460.0262,35.1719))
-			{
-			    if(PlayerInfo[i][pMember] == 9 || PlayerInfo[i][pLeader] == 9) { GameTextForPlayer(i, "~w~Type ~r~/paper ~w~to create a newspaper",5000,3); }
-			    else if(PlayerInfo[i][pJob] == 15) { GameTextForPlayer(i, "~w~Type ~r~/papers ~w~to see all the made newspapers",5000, 3); }
-			}
-			else if (GetPlayerState(i) == 1 && PlayerToPoint(2.0, i,-1932.3859,276.2117,41.0391))
-			{
-			    if(PlayerInfo[i][pJob] > 0 || PlayerInfo[i][pMember] > 0) {}
-			    else { GameTextForPlayer(i, "~g~Welcome,~n~~y~you can become a ~r~Car Mechanic~y~ here ~n~~w~Type /join if you wish to become one", 5000, 3); }
-			}
-			else if (GetPlayerState(i) == 1 && PlayerToPoint(2.0, i,2226.1716,-1718.1792,13.5165))
-			{
-			    if(PlayerInfo[i][pJob] > 0 || PlayerInfo[i][pMember] > 0) {}
-			    else { GameTextForPlayer(i, "~g~Welcome,~n~~y~you can become a ~r~Bodyguard~y~ here ~n~~w~Type /join if you wish to become one", 5000, 3); }
-			}
-			else if (GetPlayerState(i) == 1 && PlayerToPoint(2.0, i,1366.4325,-1275.2096,13.5469))
-			{
-			    if(PlayerInfo[i][pJob] > 0 || PlayerInfo[i][pMember] > 0) {}
-			    else { GameTextForPlayer(i, "~g~Welcome,~n~~y~you can become a ~r~Arms Dealer~y~ here ~n~~w~Type /join if you wish to become one", 5000, 3); }
-			}
-			else if (GetPlayerState(i) == 1 && PlayerToPoint(2.0, i,531.7930,-1292.4044,17.2422))
-			{
-			    if(PlayerInfo[i][pJob] > 0) {}
-			    else { GameTextForPlayer(i, "~g~Welcome,~n~~y~you can become a ~r~Car Dealer~y~ here ~n~~w~Type /join if you wish to become one", 5000, 3); }
-			}
-			else if (GetPlayerState(i) == 1 && PlayerToPoint(2.0, i,766.0804,14.5133,1000.7004))
-			{
-			    if(PlayerInfo[i][pJob] > 0 || PlayerInfo[i][pMember] > 0) {}
-			    else { GameTextForPlayer(i, "~g~Welcome,~n~~y~you can become a ~r~Boxer~y~ here ~n~~w~Type /join if you wish to become one", 5000, 3); }
-			}
-			else if (GetPlayerState(i) == 1 && PlayerToPoint(2.0, i,1154.2208,-1770.8203,16.5992))
-			{
-			    if(PlayerInfo[i][pJob] > 0 || PlayerInfo[i][pMember] > 0) {}
-			    else { GameTextForPlayer(i, "~g~Welcome,~n~~y~you can become a ~r~Bus Driver~y~ here ~n~~w~Type /join if you wish to become one", 5000, 3); }
-			}
-			else if (GetPlayerState(i) == 1 && PlayerToPoint(2.0, i,-77.7288,-1136.3896,1.0781))
-			{
-			    if(PlayerInfo[i][pJob] > 0 || PlayerInfo[i][pMember] > 0) {}
-			    else { GameTextForPlayer(i, "~g~Welcome,~n~~y~you can become a ~r~Trucker~y~ here ~n~~w~Type /join if you wish to become one", 5000, 3); }
-			}
-			else if (GetPlayerState(i) == 1 && PlayerToPoint(2.0, i,1381.0413,-1088.8511,27.3906))
-			{
-			    GameTextForPlayer(i, "~g~Welcome,~n~~y~Use /mission to take on a Mission", 5000, 3);
-			}
-			else if(PlayerToPoint(2.0, i,1073.0619,-344.5148,73.9922))
-			{
-			    if(OrderReady[i] > 0)
-			    {
-			        switch (OrderReady[i])
-			        {
-			            case 1:
-			            {
-			                GivePlayerWeapon(i, 24, 50); GivePlayerWeapon(i, 29, 500); GivePlayerWeapon(i, 25, 50); GivePlayerWeapon(i, 4, 1);
-			                GivePlayerMoney(i, - 5000);
-			                SendClientMessage(i, COLOR_LIGHTBLUE, "* You picked up your Ordered Package.");
-			            }
-			            case 2:
-			            {
-			                GivePlayerWeapon(i, 24, 50); GivePlayerWeapon(i, 29, 500); GivePlayerWeapon(i, 25, 50); GivePlayerWeapon(i, 31, 500); GivePlayerWeapon(i, 4, 1);
-			                GivePlayerMoney(i, - 6000);
-			                SendClientMessage(i, COLOR_LIGHTBLUE, "* You picked up your Ordered Package.");
-			            }
-			            case 3:
-			            {
-			                GivePlayerWeapon(i, 24, 50); GivePlayerWeapon(i, 29, 500); GivePlayerWeapon(i, 25, 50); GivePlayerWeapon(i, 30, 500); GivePlayerWeapon(i, 4, 1);
-			                GivePlayerMoney(i, - 6000);
-			                SendClientMessage(i, COLOR_LIGHTBLUE, "* You picked up your Ordered Package.");
-			            }
-			            case 4:
-			            {
-			                GivePlayerWeapon(i, 24, 50); GivePlayerWeapon(i, 29, 500); GivePlayerWeapon(i, 25, 50); GivePlayerWeapon(i, 31, 500); GivePlayerWeapon(i, 4, 1); GivePlayerWeapon(i, 34, 20);
-			                GivePlayerMoney(i, - 8000);
-			                SendClientMessage(i, COLOR_LIGHTBLUE, "* You picked up your Ordered Package.");
-			            }
-			            case 5:
-			            {
-			                GivePlayerWeapon(i, 24, 50); GivePlayerWeapon(i, 29, 500); GivePlayerWeapon(i, 25, 50); GivePlayerWeapon(i, 30, 500); GivePlayerWeapon(i, 4, 1); GivePlayerWeapon(i, 34, 20);
-			                GivePlayerMoney(i, - 8000);
-			                SendClientMessage(i, COLOR_LIGHTBLUE, "* You picked up your Ordered Package.");
-			            }
-			            case 6:
-			            {
-			                GivePlayerWeapon(i, 24, 50); GivePlayerWeapon(i, 29, 500); GivePlayerWeapon(i, 25, 50); GivePlayerWeapon(i, 31, 500); GivePlayerWeapon(i, 4, 1); GivePlayerWeapon(i, 34, 20);
-							GivePlayerMoney(i, - 8500);
-							SendClientMessage(i, COLOR_LIGHTBLUE, "* You picked up your Ordered Package.");
-			            }
-			            case 7:
-			            {
-			                GivePlayerWeapon(i, 24, 50); GivePlayerWeapon(i, 29, 500); GivePlayerWeapon(i, 25, 50); GivePlayerWeapon(i, 30, 500); GivePlayerWeapon(i, 4, 1); GivePlayerWeapon(i, 34, 20);
-			                GivePlayerMoney(i, - 8500);
-			                SendClientMessage(i, COLOR_LIGHTBLUE, "* You picked up your Ordered Package.");
-			            }
-			        }
-			        OrderReady[i] = 0;
-			    }
-			}//Hitman delivery stuff
-			else if(PlayerOnMission[i] > 0 && PlayMission[kToggle] == 0)
-			{
-			    if(MissionCheckpoint[i] == 1 && PlayerToPoint(10.0, i,PlayMission[kCP1][0],PlayMission[kCP1][1],PlayMission[kCP1][2]))
-				{
-				    RingTone[i] = 20;
-				    format(string, sizeof(string), "%s", PlayMission[kGText1]);
-					GameTextForPlayer(i, string, 8000, 3);
-					format(string, sizeof(string), "%s", PlayMission[kText4]);
-					SendClientMessage(i, COLOR_YELLOW2, string);
-					format(string, sizeof(string), "%s", PlayMission[kText5]);
-					SendClientMessage(i, COLOR_YELLOW2, string);
-					format(string, sizeof(string), "%s", PlayMission[kText6]);
-					SendClientMessage(i, COLOR_YELLOW2, string);
-					MissionCheckpoint[i] = 2;
-				}
-				else if(MissionCheckpoint[i] == 2 && PlayerToPoint(10.0, i,PlayMission[kCP2][0],PlayMission[kCP2][1],PlayMission[kCP2][2]))
-				{
-				    RingTone[i] = 20;
-				    format(string, sizeof(string), "%s", PlayMission[kGText2]);
-					GameTextForPlayer(i, string, 8000, 3);
-					format(string, sizeof(string), "%s", PlayMission[kText7]);
-					SendClientMessage(i, COLOR_YELLOW2, string);
-					format(string, sizeof(string), "%s", PlayMission[kText8]);
-					SendClientMessage(i, COLOR_YELLOW2, string);
-					format(string, sizeof(string), "%s", PlayMission[kText9]);
-					SendClientMessage(i, COLOR_YELLOW2, string);
-					MissionCheckpoint[i] = 3;
-				}
-				else if(MissionCheckpoint[i] == 3 && PlayerToPoint(10.0, i,PlayMission[kCP3][0],PlayMission[kCP3][1],PlayMission[kCP3][2]))
-				{
-				    RingTone[i] = 20;
-				    format(string, sizeof(string), "%s", PlayMission[kGText3]);
-					GameTextForPlayer(i, string, 8000, 3);
-					format(string, sizeof(string), "%s", PlayMission[kText10]);
-					SendClientMessage(i, COLOR_YELLOW2, string);
-					format(string, sizeof(string), "%s", PlayMission[kText11]);
-					SendClientMessage(i, COLOR_YELLOW2, string);
-					format(string, sizeof(string), "%s", PlayMission[kText12]);
-					SendClientMessage(i, COLOR_YELLOW2, string);
-					MissionCheckpoint[i] = 4;
-				}
-				else if(MissionCheckpoint[i] == 4 && PlayerToPoint(10.0, i,PlayMission[kCP4][0],PlayMission[kCP4][1],PlayMission[kCP4][2]))
-				{
-				    RingTone[i] = 20;
-				    format(string, sizeof(string), "%s", PlayMission[kGText4]);
-					GameTextForPlayer(i, string, 8000, 3);
-					format(string, sizeof(string), "%s", PlayMission[kText13]);
-					SendClientMessage(i, COLOR_YELLOW2, string);
-					format(string, sizeof(string), "%s", PlayMission[kText14]);
-					SendClientMessage(i, COLOR_YELLOW2, string);
-					format(string, sizeof(string), "%s", PlayMission[kText15]);
-					SendClientMessage(i, COLOR_YELLOW2, string);
-					MissionCheckpoint[i] = 5;
-				}
-				else if(MissionCheckpoint[i] == 5 && PlayerToPoint(10.0, i,PlayMission[kCP5][0],PlayMission[kCP5][1],PlayMission[kCP5][2]))
-				{
-				    RingTone[i] = 20;
-				    format(string, sizeof(string), "%s", PlayMission[kGText5]);
-					GameTextForPlayer(i, string, 8000, 3);
-					format(string, sizeof(string), "%s", PlayMission[kText16]);
-					SendClientMessage(i, COLOR_YELLOW2, string);
-					format(string, sizeof(string), "%s", PlayMission[kText17]);
-					SendClientMessage(i, COLOR_YELLOW2, string);
-					format(string, sizeof(string), "%s", PlayMission[kText18]);
-					SendClientMessage(i, COLOR_YELLOW2, string);
-					MissionCheckpoint[i] = 6;
-				}
-				else if(MissionCheckpoint[i] == 6 && PlayerToPoint(10.0, i,PlayMission[kCP6][0],PlayMission[kCP6][1],PlayMission[kCP6][2]))
-				{
-				    RingTone[i] = 20;
-				    format(string, sizeof(string), "%s", PlayMission[kGText6]);
-					GameTextForPlayer(i, string, 8000, 3);
-					format(string, sizeof(string), "..:: Mission Passed : %s | Reward received: $%d ::..", PlayMission[kTitle], PlayMission[kReward]);
-					SendClientMessage(i, COLOR_GREEN, string);
-					GivePlayerMoney(i, PlayMission[kReward]);
-					PlayerInfo[i][pMissionNr] = PlayerOnMission[i];
-					MissionCheckpoint[i] = 0;
-					PlayerOnMission[i] = 0;
-				}
-			}
-		}
-	}
-	return 1;
-}
-
 stock SetCamBack(playerid)
 {
     if(IsPlayerConnected(playerid))
@@ -3686,95 +3512,10 @@ stock GetPlayerOrigin(playerid) {
 	}
 	return origin;
 }
-// Stuff from old incs
-stock IsNumeric(const string[])
-{
-	for (new i = 0, j = strlen(string); i < j; i++)
-	{
-		if (string[i] > '9' || string[i] < '0') return 0;
-	}
-	return 1;
-}
 
-stock ReturnUser(text[], playerid = INVALID_PLAYER_ID)
-{
-	new pos = 0;
-	while (text[pos] < 0x21) // Strip out leading spaces
-	{
-		if (text[pos] == 0) return INVALID_PLAYER_ID; // No passed text
-		pos++;
-	}
-	new userid = INVALID_PLAYER_ID;
-	if (IsNumeric(text[pos])) // Check whole passed string
-	{
-		// If they have a numeric name you have a problem (although names are checked on id failure)
-		userid = strval(text[pos]);
-		if (userid >=0 && userid < MAX_PLAYERS)
-		{
-			if(!IsPlayerConnected(userid))
-			{
-				/*if (playerid != INVALID_PLAYER_ID)
-				{
-					SendClientMessage(playerid, 0xFF0000AA, "User not connected");
-				}*/
-				userid = INVALID_PLAYER_ID;
-			}
-			else
-			{
-				return userid; // A player was found
-			}
-		}
-		/*else
-		{
-			if (playerid != INVALID_PLAYER_ID)
-			{
-				SendClientMessage(playerid, 0xFF0000AA, "Invalid user ID");
-			}
-			userid = INVALID_PLAYER_ID;
-		}
-		return userid;*/
-		// Removed for fallthrough code
-	}
-	// They entered [part of] a name or the id search failed (check names just incase)
-	new len = strlen(text[pos]);
-	new count = 0;
-	new name[MAX_PLAYER_NAME];
-	for (new i = 0; i < MAX_PLAYERS; i++)
-	{
-		if (IsPlayerConnected(i))
-		{
-			GetPlayerName(i, name, sizeof (name));
-			if (strcmp(name, text[pos], true, len) == 0) // Check segment of name
-			{
-				if (len == strlen(name)) // Exact match
-				{
-					return i; // Return the exact player on an exact match
-					// Otherwise if there are two players:
-					// Me and MeYou any time you entered Me it would find both
-					// And never be able to return just Me's id
-				}
-				else // Partial match
-				{
-					count++;
-					userid = i;
-				}
-			}
-		}
-	}
-	if (count != 1)
-	{
-		if (playerid != INVALID_PLAYER_ID)
-		{
-			if (count)
-			{
-				SendClientMessage(playerid, 0xFF0000AA, "Multiple users found, please narrow earch");
-			}
-			else
-			{
-				SendClientMessage(playerid, 0xFF0000AA, "No matching user found");
-			}
-		}
-		userid = INVALID_PLAYER_ID;
-	}
-	return userid; // INVALID_USER_ID for bad return
+stock FloatToInt(Float:fVal) {
+	new str[32];
+
+	format(str, sizeof(str), "%f", fVal);
+	return strval(str);
 }
