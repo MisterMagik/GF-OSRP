@@ -422,7 +422,7 @@ Callback VehicleEngineStarting(vehicleid) {
 	}
 
 	if(!VehicleInfo[vehicleid][vEngine]) {
-		SendClientMessage(driverid, COLOR_YELLOW, "Próbujesz odpaliæ silnik...");
+		SendClientMessage(driverid, COLOR_YELLOW, "Pr bujesz odpali  silnik...");
 		SetTimerEx("VehicleEngineOn", 2500, false, "i", vehicleid);
 	} else {
 		new engine, lights, alarm, doors, bonnet, boot, objective;
@@ -432,7 +432,7 @@ Callback VehicleEngineStarting(vehicleid) {
 		GetVehicleParamsEx(vehicleid, engine, lights, alarm, doors, bonnet, boot, objective);
 		SetVehicleParamsEx(vehicleid, VehicleInfo[vehicleid][vEngine], lights, alarm, doors, bonnet, boot, objective);
 
-		SendClientMessage(driverid, COLOR_YELLOW, "Wy³¹czy³eœ silnik.");
+		SendClientMessage(driverid, COLOR_YELLOW, "Wy  czy e  silnik.");
 		PlayerPlaySound(driverid, 1084, 0.0, 0.0, 0.0);
 	}
 	return 1;
@@ -457,7 +457,7 @@ Callback VehicleEngineOn(vehicleid) {
 	}
 
 	if(VehicleInfo[vehicleid][vEngineHp] <= 300.0) {
-		return SendClientMessage(driverid, COLOR_YELLOW, "Ten pojazd jest zepsuty, nie mo¿na go uruchomiæ. Aby go naprawiæ musisz wezwaæ mechanika.");
+		return SendClientMessage(driverid, COLOR_YELLOW, "Ten pojazd jest zepsuty, nie mo na go uruchomi . Aby go naprawi  musisz wezwa  mechanika.");
 	} else if((VehicleInfo[vehicleid][vEngineHp] > 500.0) || (VehicleInfo[vehicleid][vEngineHp] <= 300.0 && (rand == 1 || rand == 3))) {
 		new engine, lights, alarm, doors, bonnet, boot, objective;
 
@@ -466,7 +466,7 @@ Callback VehicleEngineOn(vehicleid) {
 		GetVehicleParamsEx(vehicleid, engine, lights, alarm, doors, bonnet, boot, objective);
 		SetVehicleParamsEx(vehicleid, VehicleInfo[vehicleid][vEngine], lights, alarm, doors, bonnet, boot, objective);
 
-		SendClientMessage(driverid, COLOR_YELLOW, "Odpali³eœ silnik.");
+		SendClientMessage(driverid, COLOR_YELLOW, "Odpali e  silnik.");
 	}
 	return 1;
 }

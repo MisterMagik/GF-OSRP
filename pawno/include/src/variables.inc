@@ -342,6 +342,7 @@ new Unspec[MAX_PLAYERS][pSpec];
 new News[hNews];
 new PlayerInfo[MAX_PLAYERS][pInfo];
 new VehicleInfo[MAX_VEHICLES][vInfo];
+new AtmInfo[MAX_ATMS][atmInfo];
 new HouseInfo[34][hInfo];
 new BizzInfo[5][bInfo];
 new SBizzInfo[12][sbInfo];
@@ -733,6 +734,7 @@ new VehicleNames[][] = {
 };
 
 new Iterator:VehItter<MAX_VEHICLES>;
+new Iterator:AtmItter<MAX_ATMS>;
 
 new Text:SplashScreen;
 new Text:Intro[4];

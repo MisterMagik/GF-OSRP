@@ -176,5 +176,8 @@
 #define VEHICLE_SAVE_ENGINE 2
 #define VEHICLE_SAVE_SPAWN 3
 
+// ATM system
+#define MAX_ATMS 1000
+
 // Funcs:
 forward Float:GetDistanceBetweenPlayers(p1, p2);

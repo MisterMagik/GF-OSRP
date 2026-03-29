@@ -481,3 +481,11 @@ enum vInfo {
 	vDesc[128],
 	vPlate[32]
 };
+
+enum atmInfo {
+	aID, // id from database
+	aName[24], //name
+	Float: aPos[4], // inc angle
+	bool: aIsWorking,
+	aObjectID // id object
+};
