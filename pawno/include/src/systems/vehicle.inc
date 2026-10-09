@@ -5,13 +5,15 @@
 	Date: 12.03.2026
 	Modified: 12.03.2026
 	Desc: Vehicle system.
+	
+	Wszystko z pojazdami.
 */
 
 stock InitVehicleData() {
 	printf("[POJAZD] Zaczynam ladowac pojazdy...");
 
 	new id;
-	new colorStr[8], posStr[32], windowStr[8], componentStr[82];
+	new colorStr[16], posStr[32], windowStr[16], componentStr[82];
 
 	queryStr[0] = EOS;
 	format(queryStr, sizeof(queryStr), "SELECT `ID`, `OwnerID`, `OwnerType`, `BizID`, `AccessID`, `RentID`, `ModelID`, `EngineType`, `Color`, `Pos`, `Fuel`, `Locked`, `Engine`, `EngineHp`, `Spawned`, `LightsOn`, `Window`, `Accessories`, `Panels`, `Doors`, `Lights`, `Tires`, `Vw`, `Int`, `Paintjob`, `Nitro`, `Components`, `Repair`, `Mileage`, `Block`, `Plate`, `Desc` FROM `Vehicles`");
@@ -23,7 +25,7 @@ stock InitVehicleData() {
 		while(mysql_fetch_row(queryStr, "|")) {
 			id++;
 
-			sscanf(queryStr, "p<|>iiiis[32]iiis[8]s[32]fiifiis[8]iiiiiiiifs[82]ffis[128]s[32]",
+			sscanf(queryStr, "p<|>iiiis[32]iiis[8]s[64]fiifiis[16]iiiiiiiifs[82]ffis[32]s[128]",
 				VehicleInfo[id][vID],
 				VehicleInfo[id][vOwnerID],
 				VehicleInfo[id][vOwnerType],
@@ -54,10 +56,12 @@ stock InitVehicleData() {
 				VehicleInfo[id][vRepair],
 				VehicleInfo[id][vMileage],
 				VehicleInfo[id][vBlock],
-				VehicleInfo[id][vDesc],
-				VehicleInfo[id][vPlate]
-				
+				VehicleInfo[id][vPlate],
+				VehicleInfo[id][vDesc]
 			);
+
+			VehicleInfo[id][vDriverID] = INVALID_PLAYER_ID;
+			VehicleInfo[id][v3DDesc] = Text3D:INVALID_STREAMER_ID;
 
 			sscanf(colorStr, "p<,>ii", VehicleInfo[id][vColor][0], VehicleInfo[id][vColor][1]);
 			sscanf(posStr, "p<,>ffff", VehicleInfo[id][vPos][0], VehicleInfo[id][vPos][1], VehicleInfo[id][vPos][2], VehicleInfo[id][vPos][3]);
@@ -80,11 +84,11 @@ stock InitVehicleData() {
 				VehicleInfo[id][vComponents][13]
 			);
 
+			Iter_Add(VehItter, id);
+
 			if(VehicleInfo[id][vSpawned]) {
 				SpawnVehicle(id);
 			}
-
-			Iter_Add(VehItter, id);
 
 			printf("[POJAZD] ID: %d, OwnerID: %d, OwnerType: %d, BizID: %d, AccessID: %s, RentID: %d, ModelID: %d, EngineType: %d, colorStr: %s, posStr: %s, Fuel: %0.1f, Lock: %d, Engine: %d, EngineHp: %0.1f, Spawned: %d, LightsOn: %d, Window: %s, Accessories: %d, Panels: %d, Doors: %d, Lights: %d, Tires: %d, Vw: %d, Int: %d, Paintjob: %d, Nitro: %0.1f, Components: %s, Repair: %0.1f, Mileage: %0.1f, Block: %d, Plate: %s, Desc: %s\n",
 				VehicleInfo[id][vID],
@@ -131,18 +135,7 @@ stock InitVehicleData() {
 }
 
 stock AddVehicle(ownerid, ownertype, modelid, enginetype, color1, color2, salon, Float:PosX, Float:PosY, Float:PosZ, Float:PosA) {
-	new id = INVALID_VEHICLE_ID;
-
-	mysql_query("SELECT COUNT(`ID`) FROM `Vehicles`");
-	mysql_store_result();
-
-	if(mysql_result_stored()) {
-		if(Iter_Count(VehItter) == mysql_fetch_int()) {
-			id = Iter_Count(VehItter) + 1;
-		}
-
-		mysql_free_result();
-	}
+	new id = GetVehicleFreeIndex();
 
 	if(id == INVALID_VEHICLE_ID) {
 		return 1;
@@ -154,7 +147,7 @@ stock AddVehicle(ownerid, ownertype, modelid, enginetype, color1, color2, salon,
 		return 1;
 	}
 
-	new colorStr[8], posStr[32];
+	new colorStr[16], posStr[64];
 
 	VehicleInfo[id][vID] = id;
 	VehicleInfo[id][vOwnerID] = ownerid;
@@ -187,6 +180,8 @@ stock AddVehicle(ownerid, ownertype, modelid, enginetype, color1, color2, salon,
 	VehicleInfo[id][vRepair] = 0.0;
 	VehicleInfo[id][vMileage] = 0.0;
 	VehicleInfo[id][vBlock] = false;
+	VehicleInfo[id][vDriverID] = INVALID_PLAYER_ID;
+	VehicleInfo[id][v3DDesc] = Text3D:INVALID_STREAMER_ID;
 	format(VehicleInfo[id][vPlate], 32, "Brak");
 	format(VehicleInfo[id][vDesc], 128, "Brak");
 
@@ -197,11 +192,11 @@ stock AddVehicle(ownerid, ownertype, modelid, enginetype, color1, color2, salon,
 	}
 
 	for(new i = 0; i < 4; i++) {
-		VehicleInfo[id][vWindow] = -1;
+		VehicleInfo[id][vWindow][i] = -1;
 	}
 
 	for(new i = 0; i < 14; i++) {
-		VehicleInfo[id][vComponents] = -1;
+		VehicleInfo[id][vComponents][i] = -1;
 	}
 
 	format(colorStr, sizeof(colorStr), "%d,%d", VehicleInfo[id][vColor][0], VehicleInfo[id][vColor][1]);
@@ -241,11 +236,17 @@ stock RemoveVehicle(vehicleid) {
 	format(queryStr, sizeof(queryStr), "DELETE FROM `Vehicles` WHERE `ID` = '%d'", VehicleInfo[vehicleid][vID]);
 	mysql_query(queryStr);
 
-	VehicleInfo[vehicleid][vID] = OSRP_INVALID_ID;
+	if(VehicleInfo[vehicleid][vSpawned]) {
+		ClearVehiclePlayers(vehicleid);
+		DestroyDynamic3DTextLabel(VehicleInfo[vehicleid][v3DDesc]);
+		DestroyVehicle(vehicleid);
+	}
+
+	VehicleInfo[vehicleid][vID] = 0;
 	VehicleInfo[vehicleid][vOwnerID] = VEHICLE_OWNER_NONE;
 	VehicleInfo[vehicleid][vOwnerType] = VEHICLE_OWNER_TYPE_NONE;
 	VehicleInfo[vehicleid][vBizID] = 0;
-	VehicleInfo[vehicleid][vAccessID] = "Brak";
+	format(VehicleInfo[vehicleid][vAccessID], 32, "Brak");
 	VehicleInfo[vehicleid][vRentID] = 0;
 	VehicleInfo[vehicleid][vModelID] = 0;
 	VehicleInfo[vehicleid][vEngineType] = -1;
@@ -259,6 +260,7 @@ stock RemoveVehicle(vehicleid) {
 	VehicleInfo[vehicleid][vLocked] = false;
 	VehicleInfo[vehicleid][vEngine] = false;
 	VehicleInfo[vehicleid][vEngineHp] = 0.0;
+	VehicleInfo[vehicleid][vSpawned] = false;
 	VehicleInfo[vehicleid][vLightsOn] = false;
 	VehicleInfo[vehicleid][vAccessories] = 0;
 	VehicleInfo[vehicleid][vPanels] = 0;
@@ -272,22 +274,16 @@ stock RemoveVehicle(vehicleid) {
 	VehicleInfo[vehicleid][vRepair] = 0.0;
 	VehicleInfo[vehicleid][vMileage] = 0.0;
 	VehicleInfo[vehicleid][vBlock] = false;
-	VehicleInfo[vehicleid][vPlate] = "Brak";
-	VehicleInfo[vehicleid][vDesc] = "Brak";
-
-	if(VehicleInfo[vehicleid][vDriverID] != INVALID_PLAYER_ID) {
-		VehicleInfo[vehicleid][vSpawned] = false;
-
-		DestroyVehicle(vehicleid);
-		DestroyDynamic3DTextLabel(VehicleInfo[vehicleid][v3DDesc]);
-	}
+	VehicleInfo[vehicleid][vDriverID] = INVALID_PLAYER_ID;
+	format(VehicleInfo[vehicleid][vPlate], 32, "Brak");
+	format(VehicleInfo[vehicleid][vDesc], 128, "Brak");
 
 	for(new i = 0; i < 4; i++) {
-		VehicleInfo[vehicleid][vWindow] = -1;
+		VehicleInfo[vehicleid][vWindow][i] = -1;
 	}
 
 	for(new i = 0; i < 14; i++) {
-		VehicleInfo[vehicleid][vComponents] = -1;
+		VehicleInfo[vehicleid][vComponents][i] = -1;
 	}
 
 	Iter_Remove(VehItter, vehicleid);
@@ -301,57 +297,86 @@ stock SaveVehicleData(vehicleid, option) {
 		return 1;
 	}
 
+	new QueryTmp[128], Fields;
+
 	queryStr[0] = EOS;
-	format(queryStr, sizeof(queryStr), "UPDATE `Vehicles` SET ");
+	strcat(queryStr, "UPDATE `Vehicles` SET ");
 
 	if(option & VEHICLE_SAVE_POS) {
-		new posStr[32];
+		if(!VehicleInfo[vehicleid][vSpawned]) {
+			return 1;
+		}
+
+		new posStr[64];
 
 		GetVehiclePos(vehicleid, VehicleInfo[vehicleid][vPos][0], VehicleInfo[vehicleid][vPos][1], VehicleInfo[vehicleid][vPos][2]);
 		GetVehicleZAngle(vehicleid, VehicleInfo[vehicleid][vPos][3]);
 
 		format(posStr, sizeof(posStr), "%f,%f,%f,%f", VehicleInfo[vehicleid][vPos][0], VehicleInfo[vehicleid][vPos][1], VehicleInfo[vehicleid][vPos][2], VehicleInfo[vehicleid][vPos][3]);
-		format(queryStr, sizeof(queryStr), "%s`Pos` = '%s'", queryStr, posStr);
+		format(QueryTmp, sizeof(QueryTmp), "`Pos` = '%s'", posStr);
 
-		if(strlen(queryStr) > 22) {
+		if(Fields++) {
 			strcat(queryStr, ", ");
 		}
+
+		strcat(queryStr, QueryTmp);
 	}
 
 	if(option & VEHICLE_SAVE_ENGINE) {
-		GetVehicleHealth(vehicleid, VehicleInfo[vehicleid][vEngineHp]);
-		format(queryStr, sizeof(queryStr), "%s`EngineType` = '%d', `Engine` = '%d', `EngineHp` = '%f'", queryStr, VehicleInfo[vehicleid][vEngineType], VehicleInfo[vehicleid][vEngine], VehicleInfo[vehicleid][vEngineHp]);
+		if(!VehicleInfo[vehicleid][vSpawned]) {
+			return 1;
+		}
 
-		if(strlen(queryStr) > 22) {
+		GetVehicleHealth(vehicleid, VehicleInfo[vehicleid][vEngineHp]);
+		format(QueryTmp, sizeof(QueryTmp), "`EngineType` = '%d', `Engine` = '%d', `EngineHp` = '%f'", VehicleInfo[vehicleid][vEngineType], VehicleInfo[vehicleid][vEngine], VehicleInfo[vehicleid][vEngineHp]);
+
+		if(Fields++) {
 			strcat(queryStr, ", ");
 		}
+
+		strcat(queryStr, QueryTmp);
 	}
 
 	if(option & VEHICLE_SAVE_LOCKED) {
-		format(queryStr, sizeof(queryStr), "%s`Locked` = '%d'", queryStr, VehicleInfo[vehicleid][vLocked]);
+		format(QueryTmp, sizeof(QueryTmp), "`Locked` = '%d'", VehicleInfo[vehicleid][vLocked]);
 
-		if(strlen(queryStr) > 22) {
+		if(Fields++) {
 			strcat(queryStr, ", ");
 		}
+
+		strcat(queryStr, QueryTmp);
 	}
 
 	if(option & VEHICLE_SAVE_MILEAGE) {
-<<<<<<< HEAD
-		format(queryStr, sizeof(queryStr), "%s`Fuel` = '%f', `Mileage` = '%f'", queryStr, VehicleInfo[vehicleid][vFuel], VehicleInfo[vehicleid][vMileage]);
+		format(QueryTmp, sizeof(QueryTmp), "`Fuel` = '%f', `Mileage` = '%f'", VehicleInfo[vehicleid][vFuel], VehicleInfo[vehicleid][vMileage]);
 
-		if(strlen(queryStr) > 22) {
+		if(Fields++) {
 			strcat(queryStr, ", ");
 		}
+
+		strcat(queryStr, QueryTmp);
 	}
 
 	if(option & VEHICLE_SAVE_VISUAL) {
-		format(queryStr, sizeof(queryStr), "%s`Panels` = '%d', `Doors` = '%d', `Lights` = '%d', `Tires` = '%d'", queryStr, VehicleInfo[vehicleid][vPanels], VehicleInfo[vehicleid][vDoors], VehicleInfo[vehicleid][vLights], VehicleInfo[vehicleid][vTires]);
-=======
-		format(queryStr, sizeof(queryStr), "%s`Fuel` = '%f', `Mileage` = '%f', `Plate` = '%s'", queryStr, VehicleInfo[vehicleid][vFuel], VehicleInfo[vehicleid][vMileage], VehicleInfo[vehicleid][vPlate]);
->>>>>>> 8213d328215f2181bf544ca2d8e5c0d1cba4e4ed
+		if(!VehicleInfo[vehicleid][vSpawned]) {
+			return 1;
+		}
+
+		format(QueryTmp, sizeof(QueryTmp), "`Panels` = '%d', `Doors` = '%d', `Lights` = '%d', `Tires` = '%d'", VehicleInfo[vehicleid][vPanels], VehicleInfo[vehicleid][vDoors], VehicleInfo[vehicleid][vLights], VehicleInfo[vehicleid][vTires]);
+
+		if(Fields++) {
+			strcat(queryStr, ", ");
+		}
+
+		strcat(queryStr, QueryTmp);
 	}
 
-	format(queryStr, sizeof(queryStr), "%s WHERE `ID` = '%d'", queryStr, VehicleInfo[vehicleid][vID]);
+	if(!Fields) {
+		return 1;
+	}
+
+	format(QueryTmp, sizeof(QueryTmp), " WHERE `ID` = '%d'", VehicleInfo[vehicleid][vID]);
+	strcat(queryStr, QueryTmp);
 	mysql_query(queryStr);
 	return 1;
 }
@@ -366,25 +391,23 @@ stock SpawnVehicle(vehicleid) {
 	}
 
 	CreateVehicle(VehicleInfo[vehicleid][vModelID], VehicleInfo[vehicleid][vPos][0], VehicleInfo[vehicleid][vPos][1], VehicleInfo[vehicleid][vPos][2], VehicleInfo[vehicleid][vPos][3], VehicleInfo[vehicleid][vColor][0], VehicleInfo[vehicleid][vColor][1], -1);
-<<<<<<< HEAD
 
 	if(!strcmp(VehicleInfo[vehicleid][vDesc], "Brak", true)) {
-		VehicleInfo[vehicleid][v3DDesc] = CreateDynamic3DTextLabel(" ", COLOR_WHITE, 0.0, 0.0, 0.1, 20.0, INVALID_PLAYER_ID, vehicleid, 0, 0, 0, -1, 20.0, -1, 0);
+		format(VehicleInfo[vehicleid][vDesc], 128, " ");
 	} else {
 		VehicleInfo[vehicleid][v3DDesc] = CreateDynamic3DTextLabel(VehicleInfo[vehicleid][vDesc], COLOR_WHITE, 0.0, 0.0, 0.1, 20.0, INVALID_PLAYER_ID, vehicleid, 0, 0, 0, -1, 20.0, -1, 0);
 	}
 
-=======
 	VehicleInfo[vehicleid][v3DDesc] = CreateDynamic3DTextLabel(VehicleInfo[vehicleid][vDesc], COLOR_WHITE, 0.0, 0.0, 0.1, 20.0, INVALID_PLAYER_ID, vehicleid, 0, 0, 0, -1, 20.0, -1, 0);
 	SetVehicleNumberPlate(vehicleid, VehicleInfo[vehicleid][vPlate]);
->>>>>>> 8213d328215f2181bf544ca2d8e5c0d1cba4e4ed
+
 	if(IsABicycle(VehicleInfo[vehicleid][vModelID])) {
 		SetVehicleParamsEx(vehicleid, 1, 0, 0, 0, 0, 0, 0);
 	} else {
-		new engine, lights, alarm, doors, bonnet, boot, objective;
+		new Engine, Lights, Alarm, Doors, Bonnet, Boot, Objective;
 
-		GetVehicleParamsEx(vehicleid, engine, lights, alarm, doors, bonnet, boot, objective);
-		SetVehicleParamsEx(vehicleid, VehicleInfo[vehicleid][vEngine], VehicleInfo[vehicleid][vLightsOn], alarm, doors, bonnet, boot, objective);
+		GetVehicleParamsEx(vehicleid, Engine, Lights, Alarm, Doors, Bonnet, Boot, Objective);
+		SetVehicleParamsEx(vehicleid, VehicleInfo[vehicleid][vEngine], VehicleInfo[vehicleid][vLightsOn], Alarm, VehicleInfo[vehicleid][vLocked], Bonnet, Boot, Objective);
 	}
 
 	SetVehicleVirtualWorld(vehicleid, VehicleInfo[vehicleid][vVw]);
@@ -407,10 +430,13 @@ stock UnSpawnVehicle(vehicleid) {
 		return 1;
 	}
 
-	DestroyVehicle(vehicleid);
-	VehicleInfo[vehicleid][vSpawned] = false;
-
 	SaveVehicleData(vehicleid, VEHICLE_SAVE_POS | VEHICLE_SAVE_ENGINE | VEHICLE_SAVE_MILEAGE);
+
+	DestroyVehicle(vehicleid);
+	DestroyDynamic3DTextLabel(VehicleInfo[vehicleid][v3DDesc]);
+
+	VehicleInfo[vehicleid][vSpawned] = false;
+	VehicleInfo[vehicleid][vDriverID] = INVALID_PLAYER_ID;
 	return 1;
 }
 
@@ -423,12 +449,12 @@ Callback VehicleLightsOn(vehicleid) {
 		return 1;
 	}
 
-	new engine, lights, alarm, doors, bonnet, boot, objective;
+	new Engine, Lights, Alarm, Doors, Bonnet, Boot, Objective;
 
 	VehicleInfo[vehicleid][vLightsOn] = true;
 
-	GetVehicleParamsEx(vehicleid, engine, lights, alarm, doors, bonnet, boot, objective);
-	SetVehicleParamsEx(vehicleid, engine, VehicleInfo[vehicleid][vLightsOn], alarm, doors, bonnet, boot, objective);
+	GetVehicleParamsEx(vehicleid, Engine, Lights, Alarm, Doors, Bonnet, Boot, Objective);
+	SetVehicleParamsEx(vehicleid, Engine, VehicleInfo[vehicleid][vLightsOn], Alarm, Doors, Bonnet, Boot, Objective);
 	return 1;
 }
 
@@ -441,12 +467,12 @@ Callback VehicleLightsOff(vehicleid) {
 		return 1;
 	}
 
-	new engine, lights, alarm, doors, bonnet, boot, objective;
+	new Engine, Lights, Alarm, Doors, Bonnet, Boot, Objective;
 
 	VehicleInfo[vehicleid][vLightsOn] = false;
 
-	GetVehicleParamsEx(vehicleid, engine, lights, alarm, doors, bonnet, boot, objective);
-	SetVehicleParamsEx(vehicleid, engine, VehicleInfo[vehicleid][vLightsOn], alarm, doors, bonnet, boot, objective);
+	GetVehicleParamsEx(vehicleid, Engine, Lights, Alarm, Doors, Bonnet, Boot, Objective);
+	SetVehicleParamsEx(vehicleid, Engine, VehicleInfo[vehicleid][vLightsOn], Alarm, Doors, Bonnet, Boot, Objective);
 	return 1;
 }
 
@@ -455,41 +481,45 @@ Callback VehicleEngineStarting(vehicleid) {
 		return 1;
 	}
 
-	if(VehicleInfo[vehicleid][vDriverID] == INVALID_PLAYER_ID) {
+	new driverid = VehicleInfo[vehicleid][vDriverID];
+
+	if(driverid == INVALID_PLAYER_ID) {
 		return 1;
 	}
 
-	new driverid = VehicleInfo[vehicleid][vDriverID];
+	if(VehAnim[driverid]) {
+		return 1;
+	}
 
 	if(!IsVehicleOwner(driverid, vehicleid)) {
 		return SendClientMessage(driverid, COLOR_GRAD1, "Nie masz klucza do tego pojazdu.");
 	}
 
-	if(!VehAnim[driverid]) {
-		ApplyAnimation(driverid, "PED", "CAR_tune_radio", 4.1, 0, 0, 0, 0, 0);
+	if(VehicleInfo[vehicleid][vEngine]) {
+		new Engine, Lights, Alarm, Doors, Bonnet, Boot, Objective;
 
-		VehAnim[driverid] = true;
+		VehicleInfo[vehicleid][vEngine] = false;
+
+		GetVehicleParamsEx(vehicleid, Engine, Lights, Alarm, Doors, Bonnet, Boot, Objective);
+		SetVehicleParamsEx(vehicleid, VehicleInfo[vehicleid][vEngine], Lights, Alarm, Doors, Bonnet, Boot, Objective);
+		return SendClientMessage(driverid, COLOR_YELLOW, "Wy³¹czy³eœ silnik.");
+	}
+
+	if(VehicleInfo[vehicleid][vEngineHp] <= 300.0) {
+		return SendClientMessage(driverid, COLOR_YELLOW, "Ten pojazd jest zepsuty, nie mo¿na go uruchomiæ. Aby go naprawiæ musisz wezwaæ mechanika.");
 	}
 
 	if(VehicleInfo[vehicleid][vFuel] <= 0.0) {
 		return SendClientMessage(driverid, COLOR_YELLOW, "Nie mo¿esz odpaliæ silnika, poniewa¿ nie ma paliwa w tym pojeŸdzie.");
 	}
 
+	VehAnim[driverid] = true;
+
+	ApplyAnimation(driverid, "PED", "CAR_tune_radio", 4.1, 0, 0, 0, 0, 0);
 	PlayerPlaySound(driverid, 1084, 0.0, 0.0, 0.0);
 
-	if(!VehicleInfo[vehicleid][vEngine]) {
-		SendClientMessage(driverid, COLOR_YELLOW, "Pr bujesz odpali  silnik...");
-		SetTimerEx("VehicleEngineOn", 2500, false, "i", vehicleid);
-	} else {
-		new engine, lights, alarm, doors, bonnet, boot, objective;
-
-		VehicleInfo[vehicleid][vEngine] = false;
-
-		GetVehicleParamsEx(vehicleid, engine, lights, alarm, doors, bonnet, boot, objective);
-		SetVehicleParamsEx(vehicleid, VehicleInfo[vehicleid][vEngine], lights, alarm, doors, bonnet, boot, objective);
-
-		SendClientMessage(driverid, COLOR_YELLOW, "Wy  czy e  silnik.");
-	}
+	SendClientMessage(driverid, COLOR_YELLOW, "Próbujesz odpaliæ silnik...");
+	SetTimerEx("VehicleEngineOn", 2500, false, "i", vehicleid);
 	return 1;
 }
 
@@ -507,14 +537,9 @@ Callback VehicleEngineOn(vehicleid) {
 
 	VehAnim[driverid] = false;
 
-	if(VehicleInfo[vehicleid][vEngineHp] <= 300.0) {
-<<<<<<< HEAD
+	if((VehicleInfo[vehicleid][vEngineHp] > 300.0 && VehicleInfo[vehicleid][vEngineHp] < 600.0) && (rand == 0 || rand == 2 || rand == 4)) {
 		SendClientMessage(driverid, COLOR_YELLOW, "Nie uda³o siê odpaliæ silnika.");
-		return SendClientMessage(driverid, COLOR_YELLOW, "Ten pojazd jest zepsuty, nie mo¿na go uruchomiæ. Aby go naprawiæ musisz wezwaæ mechanika.");
-=======
-		return SendClientMessage(driverid, COLOR_YELLOW, "Ten pojazd jest zepsuty, nie mo na go uruchomi . Aby go naprawi  musisz wezwa  mechanika.");
->>>>>>> 8213d328215f2181bf544ca2d8e5c0d1cba4e4ed
-	} else if((VehicleInfo[vehicleid][vEngineHp] > 500.0) || (VehicleInfo[vehicleid][vEngineHp] <= 300.0 && (rand == 1 || rand == 3))) {
+	} else if((VehicleInfo[vehicleid][vEngineHp] > 600.0) || (VehicleInfo[vehicleid][vEngineHp] < 600.0 && (rand == 1 || rand == 3))) {
 		new engine, lights, alarm, doors, bonnet, boot, objective;
 
 		VehicleInfo[vehicleid][vEngine] = true;
@@ -522,8 +547,24 @@ Callback VehicleEngineOn(vehicleid) {
 		GetVehicleParamsEx(vehicleid, engine, lights, alarm, doors, bonnet, boot, objective);
 		SetVehicleParamsEx(vehicleid, VehicleInfo[vehicleid][vEngine], lights, alarm, doors, bonnet, boot, objective);
 
-		SendClientMessage(driverid, COLOR_YELLOW, "Odpali e  silnik.");
+		SendClientMessage(driverid, COLOR_YELLOW, "Odpali³eœ silnik.");
 	}
+	return 1;
+}
+
+stock ClearVehiclePlayers(vehicleid) {
+	foreach(new i : Player) {
+		if(GetPlayerVehicleID(i) == vehicleid) {
+			if(GetPlayerVehicleSeat(i) != -1) {
+				RemovePlayerFromVehicle(i);
+
+				TextDrawShowForPlayer(i, VehicleStats[i][0]);
+				TextDrawShowForPlayer(i, VehicleStats[i][1]);
+			}
+		}
+	}
+
+	VehicleInfo[vehicleid][vDriverID] = INVALID_PLAYER_ID;
 	return 1;
 }
 
@@ -550,14 +591,12 @@ stock GetVehicleSpeed(vehicleid) {
 }
 
 stock CountVehicleMileage(vehicleid) {
-	new Float:dist;
+	new Speed = GetVehicleSpeed(vehicleid);
 
-	if(GetVehicleSpeed(vehicleid)) {
-		dist = GetVehicleSpeed(vehicleid) * 1000 / 3600 / 1;
-		dist = dist / 350.0;
+	if(Speed) {
+		VehicleInfo[vehicleid][vMileage] += float(Speed) * 1000.0 / 3600.0 / 350.0;
 	}
-
-	VehicleInfo[vehicleid][vMileage] += dist;
+	return 1;
 }
 
 stock GetVehicleModelIDFromName(const name[]) {
@@ -634,55 +673,13 @@ stock GetVehicleEngineTypeName(vehicleid) {
 	return name;
 }
 
-stock GenerateNewNumberPlate() {
-	new plate[32], platewithoutformatcolor[9], number[6];
-	new one, two, three, four, five, six;
-	new bool:found = false;
-
-	format(plate, sizeof(plate), "{000000}");
-	format(platewithoutformatcolor, sizeof(platewithoutformatcolor), "LS ");
-
-	while(!found) {
-		one = random(0, 10);
-		two = random(0, 10);
-		three = random(0, 10);
-		four = random(0, 10);
-		five = random(0, 10);
-		six = random(0, 10);
-
-		format(number, sizeof(number), "%d%d%d%d%d%d", one, two, three, four, five, six);
-		strcat(platewithoutformatcolor, number);
-
-		queryStr[0] = EOS;
-		format(queryStr, sizeof(queryStr), "SELECT `ID` FROM `Vehicles` WHERE `Plate` = '%s' LIMIT 1", platewithoutformatcolor);
-		mysql_query(queryStr);
-
-		mysql_store_result();
-
-		if(mysql_result_stored()) {
-			if(mysql_num_rows() == 0) {
-				printf("[REJESTRACJA] Wygenerowana %s jest unikatowa.", platewithoutformatcolor);
-				found = true;
-			} else {	
-				printf("[REJESTRACJA] Wygenerowana %s nie jest unikatowa.", platewithoutformatcolor);
-			}
-
-			mysql_free_result();
+stock GetVehicleFreeIndex() {
+	for(new i = 1; i < MAX_VEHICLES; i++) {
+		if(!Iter_Contains(VehItter, i)) {
+			return i;
 		}
 	}
-
-	strcat(plate, platewithoutformatcolor);
-	strcat(plate, "{000000}");
-	return platewithoutformatcolor;
-}
-
-stock RespawnVehicle(vehicleid) {
-	VehicleInfo[vehicleid][vSpawned] = false;
-	UnSpawnVehicle(vehicleid);
-
-	VehicleInfo[vehicleid][vSpawned] = true;
-	SpawnVehicle(vehicleid);
-	return 1;
+	return INVALID_VEHICLE_ID;
 }
 
 stock IsVehicleInUse(vehicleid) {
@@ -701,14 +698,13 @@ stock IsABicycle(carid) {
 	return 0;
 }
 
-<<<<<<< HEAD
 stock IsABike(carid) {
 	if(carid == 481 || carid == 509 || carid == 510) {
 		return 1;
 	}
 	return 0;
 }
-=======
+
 stock GenerateNewNumberPlate()
 {
 	new plate[32], platewithoutformatcolor[9], number[6];
@@ -719,12 +715,12 @@ stock GenerateNewNumberPlate()
 	while(!found) {
 
 		
-		one = random(0, 10);
-		two = random(0, 10);
-		three = random(0, 10);
-		four = random(0, 10);
-		five = random(0, 10);
-		six = random(0, 10);
+		one = random(10);
+		two = random(10);
+		three = random(10);
+		four = random(10);
+		five = random(10);
+		six = random(10);
 		
 		format(number, sizeof(number), "%i%i%i%i%i%i", one, two, three, four, five, six);
 		strcat(platewithoutformatcolor, number);
@@ -757,8 +753,5 @@ stock RespawnVehicle(vehicleid) {
 	UnSpawnVehicle(vehicleid);
 	VehicleInfo[vehicleid][vSpawned] = true;
 	SpawnVehicle(vehicleid);
-	
 	return 1;
 }
-
->>>>>>> 8213d328215f2181bf544ca2d8e5c0d1cba4e4ed

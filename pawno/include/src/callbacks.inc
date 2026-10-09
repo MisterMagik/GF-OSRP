@@ -41,7 +41,6 @@ sampCallback OnGameModeInit() {
 	LoadPapers();*/
 	InitServerObjects();
 	TextDrawsInit();
-	InitItemData();
 	InitVehicleData();
 	CreateTrashJobObjects();
 	CreateBushJobObjects();
@@ -237,7 +236,27 @@ sampCallback OnPlayerConnect(playerid) {
 	format(queryStr, sizeof(queryStr), "*** %s (id: %d) do³¹czy³ do serwera.", accName[playerid], playerid);
 	ABroadCast(COLOR_GREY, mainStr, 1);
 
-	VehicleStats[playerid][0] = TextDrawCreate(619.853393, 345.333526, "Ladowanie...");
+	HealthInfo[playerid][0] = TextDrawCreate(577.874084, 48.999996, "200/200");
+	TextDrawLetterSize(HealthInfo[playerid][0], 0.138385, 0.647415);
+	TextDrawAlignment(HealthInfo[playerid][0], 2);
+	TextDrawColor(HealthInfo[playerid][0], -1);
+	TextDrawSetShadow(HealthInfo[playerid][0], 0);
+	TextDrawSetOutline(HealthInfo[playerid][0], 1);
+	TextDrawBackgroundColor(HealthInfo[playerid][0], 255);
+	TextDrawFont(HealthInfo[playerid][0], 2);
+	TextDrawSetProportional(HealthInfo[playerid][0], 1);
+
+	HealthInfo[playerid][1] = TextDrawCreate(578.062072, 70.524993, "~r~100/100");
+	TextDrawLetterSize(HealthInfo[playerid][1], 0.138384, 0.647414);
+	TextDrawAlignment(HealthInfo[playerid][1], 2);
+	TextDrawColor(HealthInfo[playerid][1], -1);
+	TextDrawSetShadow(HealthInfo[playerid][1], 0);
+	TextDrawSetOutline(HealthInfo[playerid][1], 1);
+	TextDrawBackgroundColor(HealthInfo[playerid][1], 255);
+	TextDrawFont(HealthInfo[playerid][1], 2);
+	TextDrawSetProportional(HealthInfo[playerid][1], 1);
+
+	VehicleStats[playerid][0] = TextDrawCreate(619.853393, 345.333526, "_");
 	TextDrawLetterSize(VehicleStats[playerid][0], 0.299604, 1.494998);
 	TextDrawAlignment(VehicleStats[playerid][0], 3);
 	TextDrawColor(VehicleStats[playerid][0], -1);
@@ -247,7 +266,7 @@ sampCallback OnPlayerConnect(playerid) {
 	TextDrawFont(VehicleStats[playerid][0], 2);
 	TextDrawSetProportional(VehicleStats[playerid][0], 1);
 
-	VehicleStats[playerid][1] = TextDrawCreate(619.853454, 330.166778, "Ladowanie...");
+	VehicleStats[playerid][1] = TextDrawCreate(619.853454, 330.166778, "_");
 	TextDrawLetterSize(VehicleStats[playerid][1], 0.299604, 1.494998);
 	TextDrawAlignment(VehicleStats[playerid][1], 3);
 	TextDrawColor(VehicleStats[playerid][1], -1);
@@ -256,6 +275,8 @@ sampCallback OnPlayerConnect(playerid) {
 	TextDrawBackgroundColor(VehicleStats[playerid][1], 255);
 	TextDrawFont(VehicleStats[playerid][1], 2);
 	TextDrawSetProportional(VehicleStats[playerid][1], 1);
+
+	HungerBar[playerid] = CreateProgressBar(548.00, 36.00, 57.50, 4.50, 0, 100.0);
 
 	gActivePlayers[playerid]++;
 	numplayers++;
@@ -849,7 +870,6 @@ sampCallback OnVehicleSpawn(vehicleid) {
 		SetVehicleNumberPlate(vehicleid, VehicleInfo[vehicleid][vPlate]);
 	}
 
-	SetVehicleToRespawn(vehicleid);
 	SetVehicleHealth(vehicleid, VehicleInfo[vehicleid][vEngineHp]);
 
 	VehicleInfo[vehicleid][vSpawned] = true;
@@ -872,6 +892,10 @@ sampCallback OnVehicleStreamIn(vehicleid, forplayerid) {
 }
 
 sampCallback OnVehicleDeath(vehicleid, killerid) {
+	VehicleInfo[vehicleid][vEngineHp] = 0.0;
+	SaveVehicleData(vehicleid, VEHICLE_SAVE_ENGINE);
+
+	VehicleInfo[vehicleid][vSpawned] = false;
 	return 1;
 }
 

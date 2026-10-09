@@ -438,21 +438,6 @@ enum kInfo
 	kToggle,
 };
 
-enum iInfo {
-	iID,
-	iOwnerID,
-	iOwnerType,
-	iName[64],
-	iType,
-	iSubType,
-	iAmount,
-	Float:iPos[3],
-	bool:iUsed,
-	iObject,
-	iVw,
-	iInt
-};
-
 enum vInfo {
 	vID, //id from database
 	vOwnerID, // -1 - server

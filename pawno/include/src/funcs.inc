@@ -62,6 +62,7 @@ stock ClearPlayerData(playerid) {
 	loadedIntro[playerid] = false;
 	createdChar[playerid] = false;
 	VehAnim[playerid] = false;
+	Spawned[playerid] = false;
 	SelectChar[playerid] = 0;
 	HidePM[playerid] = 0;
 	PhoneOnline[playerid] = 0;
@@ -2716,25 +2717,26 @@ stock PayDay() {
 				PlayerPlayMusic(i);
 				PlayerInfo[i][pAccount] = account+interest;
 
-				SendClientMessage(i, COLOR_WHITE, "|___ BANK STATMENT ___|");
-				format(string, sizeof(string), "  Paycheck: $%d   Tax Money: -$%d", checks, TaxValue);
+				SendClientMessage(i, COLOR_WHITE, "|__________ {E6BA43}Bilans Banku {FFFFFF}___________|");
+				format(string, sizeof(string), "  {6495ED}Wyp³ata:{DCDCDC} $%d (-$%d)  {6495ED}Podatek:{DCDCDC} %d%", checks, TaxValue, tmpintrate);
 				SendClientMessage(i, COLOR_GRAD1, string);
+				format(string, sizeof(string), "  {6495ED}Wyp³ata po odjêciu podatku:{DCDCDC} $%d", account);
+				SendClientMessage(i, COLOR_GRAD1, string);
+				format(string, sizeof(string), "  {6495ED}Oprocentowanie:{DCDCDC} 0.%d%",tmpintrate);
+				SendClientMessage(i, COLOR_GRAD2, string);
+				format(string, sizeof(string), "  {6495ED}Zysk z oprocentowania:{DCDCDC} $%d", interest);
+				SendClientMessage(i, COLOR_GRAD3, string);
 
 				if(PlayerInfo[i][pPhousekey] != 255 || PlayerInfo[i][pPbiskey] != 255) {
-					format(string, sizeof(string), "  Electricity Bill: -$%d", ebill);
+					format(string, sizeof(string), "  {6495ED}Rachunek za pr¹d:{DCDCDC} -$%d", ebill);
 					SendClientMessage(i, COLOR_GRAD1, string);
+				} else {
+					format(string, sizeof(string), "  {6495ED}Czynsz:{DCDCDC} -$%d", rent);
+					SendClientMessage(i, COLOR_GRAD5, string);
 				}
 
-				format(string, sizeof(string), "  Balance: $%d", account);
-				SendClientMessage(i, COLOR_GRAD1, string);
-				format(string, sizeof(string), "  Interest Rate: 0.%d percent",tmpintrate);
-				SendClientMessage(i, COLOR_GRAD2, string);
-				format(string, sizeof(string), "  Interest Gained $%d", interest);
-				SendClientMessage(i, COLOR_GRAD3, string);
-				SendClientMessage(i, COLOR_GRAD4, "|--------------------------------------|");
-				format(string, sizeof(string), "  New Balance: $%d", PlayerInfo[i][pAccount]);
-				SendClientMessage(i, COLOR_GRAD5, string);
-				format(string, sizeof(string), "  Rent: -$%d", rent);
+				SendClientMessage(i, COLOR_WHITE, "|_________________________________|");
+				format(string, sizeof(string), "  {6495ED}Nowy stan konta:{DCDCDC} $%d", PlayerInfo[i][pAccount]);
 				SendClientMessage(i, COLOR_GRAD5, string);
 				format(string, sizeof(string), "~y~Wyplata~n~~w~PayDay");
 				GameTextForPlayer(i, string, 5000, 1);
@@ -3076,6 +3078,7 @@ stock OnPlayerLogin(playerid, name[]) {
 	PlayerInfo[playerid][pAdjustable] = 0;
 	ResetPlayerMoney(playerid);
 	ConsumingMoney[playerid] = 1;
+	Spawned[playerid] = true;
 	GivePlayerMoney(playerid,PlayerInfo[playerid][pCash]);
 	CurrentMoney[playerid] = PlayerInfo[playerid][pCash];
 	osrp_TogglePlayerSpectating(playerid, 0);
@@ -3141,7 +3144,7 @@ stock OnPlayerLogin(playerid, name[]) {
 		if(PlayerInfo[playerid][pAdmin] == 1) {
 			format(mainStr, sizeof(mainStr), "Serwer: Zalogowa³eœ siê jako moderator z poziomem %d.", PlayerInfo[playerid][pAdmin]);
 		} else {
-			format(mainStr, sizeof(mainStr), "Serwer: You are logged in as a Level %d Admin.", PlayerInfo[playerid][pAdmin]);
+			format(mainStr, sizeof(mainStr), "Serwer: Zalogowa³eœ siê jako admin z poziomem %d.", PlayerInfo[playerid][pAdmin]);
 		}
 
 		SendClientMessage(playerid, COLOR_WHITE, mainStr);
@@ -3158,9 +3161,20 @@ stock OnPlayerLogin(playerid, name[]) {
 	printf("%s has logged in.", PlayerInfo[playerid][pName]);
 	SetPlayerName(playerid, PlayerInfo[playerid][pName]);
 
+	mainStr[0] = EOS;
+	format(mainStr, sizeof(mainStr), "Logowanie: %s (id: %d) zalogowa³ siê na postaæ %s.", accName[playerid], playerid, PlayerInfo[playerid][pName]);
+	ABroadCast(COLOR_LIGHTRED, mainStr, 1);
+
 	for(new i = 0; i < 4; i++) {
 		TextDrawHideForPlayer(playerid, Intro[i]);
 	}
+
+	TextDrawShowForPlayer(playerid, HealthInfo[playerid][0]);
+	TextDrawShowForPlayer(playerid, HealthInfo[playerid][1]);
+
+	SetProgressBarMaxValue(HungerBar[playerid], 100.0);
+	SetProgressBarColor(HungerBar[playerid], 0x099D39AA);
+	ShowProgressBarForPlayer(playerid, HungerBar[playerid]);
 
 	SetSpawnInfo(playerid, PlayerInfo[playerid][pTeam], PlayerInfo[playerid][pModel], PlayerInfo[playerid][pPos_x], PlayerInfo[playerid][pPos_y], PlayerInfo[playerid][pPos_z], 1.0, -1, -1, -1, -1, -1, -1);
 

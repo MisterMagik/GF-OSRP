@@ -8,29 +8,30 @@
 */
 
 Timer:GlobalTimer[1000]() {
-	new plname[MAX_PLAYER_NAME];
-	new string[256];
     new Float:maxspeed = 175.0;
 	new Float:oldposx, Float:oldposy, Float:oldposz;
+
 	if(PaintballPlayers >= 2 && PaintballRound != 1 && StartingPaintballRound != 1)
 	{
 		StartingPaintballRound = 1;
 	   	SetTimer("PreparePaintball", 15000, 0);
 	}
+
 	if(KartingPlayers >= 2 && KartingRound != 1 && StartingKartRound != 1)
 	{
 	    StartingKartRound = 1;
 	    SetTimer("PrepareKarting", 15000, 0);
 	}
+
 	if(KartingRound != 0 && KartingPlayers < 2)
 	{
 	    StartingKartRound = 0;
 	    KartingRound = 0;
 	    EndingKartRound = 1;
 	}
-	for(new i = 0; i < MAX_PLAYERS; i++)
+
+	foreach(new i : Player)
 	{
-	    if(IsPlayerConnected(i))
 	    {
 			new newcar = GetPlayerVehicleID(i);
 			new level = PlayerInfo[i][pLevel];
@@ -67,8 +68,8 @@ Timer:GlobalTimer[1000]() {
 					}
 					PlayerInfo[i][pJailed] = 0;
 					SendClientMessage(i, COLOR_GRAD1,"   You have paid your debt to society.");
-					format(string, sizeof(string), "~g~Freedom~n~~w~Try to be a better citizen");
-					GameTextForPlayer(i, string, 5000, 1);
+					format(mainStr, sizeof(mainStr), "~g~Freedom~n~~w~Try to be a better citizen");
+					GameTextForPlayer(i, mainStr, 5000, 1);
 					if(gTeam[i] == 4) { gTeam[i] = 3; }
 					ClearCrime(i);
 					SetPlayerToTeamColor(i);
@@ -83,10 +84,9 @@ Timer:GlobalTimer[1000]() {
 		        }
 		        else
 		        {
-			        GetPlayerName(i, plname, sizeof(plname));
-			        format(string, 256, "AdmWarning: [%d]%s just spawned above $50000 in one second (moneycheat), use /check on him.",i,plname);
-					ABroadCast(COLOR_YELLOW,string,1);
-					PayLog(string);
+			        format(mainStr, 256, "AdmWarning: [%d]%s just spawned above $50000 in one second (moneycheat), use /check on him.",i,PlayerInfo[i][pName]);
+					ABroadCast(COLOR_YELLOW,mainStr,1);
+					PayLog(mainStr);
 			        CurrentMoney[i] = GetPlayerMoney(i);
 		        }
 		    }
@@ -326,8 +326,8 @@ Timer:GlobalTimer[1000]() {
 				}
 			    else
 				{
-				    format(string, sizeof(string), "%d", BoxDelay - BoxWaitTime[i]);
-					GameTextForPlayer(i, string, 1500, 6);
+				    format(mainStr, sizeof(mainStr), "%d", BoxDelay - BoxWaitTime[i]);
+					GameTextForPlayer(i, mainStr, 1500, 6);
 					BoxWaitTime[i] += 1;
 				}
 			}
@@ -377,8 +377,8 @@ Timer:GlobalTimer[1000]() {
 					                	        Titel[TitelWins] = PlayerInfo[TBoxer][pWins];
 					                	        Titel[TitelLoses] = PlayerInfo[TBoxer][pLoses];
 					                	        SaveBoxer();
-							                	format(string, sizeof(string), "Boxing News: %s has Won the fight against Champion %s and is now the new Boxing Champion.",  titel, loser);
-												OOCOff(COLOR_WHITE,string);
+							                	format(mainStr, sizeof(mainStr), "Boxing News: %s has Won the fight against Champion %s and is now the new Boxing Champion.",  titel, loser);
+												OOCOff(COLOR_WHITE,mainStr);
 				                	        }
 				                	        else
 				                	        {
@@ -388,19 +388,19 @@ Timer:GlobalTimer[1000]() {
 										else
 										{
 										    GetPlayerName(TBoxer, titel, sizeof(titel));
-										    format(string, sizeof(string), "Boxing News: Boxing Champion %s has Won the fight against %s.",  titel, loser);
-											OOCOff(COLOR_WHITE,string);
+										    format(mainStr, sizeof(mainStr), "Boxing News: Boxing Champion %s has Won the fight against %s.",  titel, loser);
+											OOCOff(COLOR_WHITE,mainStr);
 											Titel[TitelWins] = PlayerInfo[TBoxer][pWins];
 				                	        Titel[TitelLoses] = PlayerInfo[Boxer2][pLoses];
 				                	        SaveBoxer();
 										}
 									}
 								}//TBoxer
-								format(string, sizeof(string), "* You have Lost the Fight against %s.", winner);
-								SendClientMessage(Boxer1, COLOR_LIGHTBLUE, string);
+								format(mainStr, sizeof(mainStr), "* You have Lost the Fight against %s.", winner);
+								SendClientMessage(Boxer1, COLOR_LIGHTBLUE, mainStr);
 								GameTextForPlayer(Boxer1, "~r~You lost", 3500, 1);
-								format(string, sizeof(string), "* You have Won the Fight against %s.", loser);
-								SendClientMessage(Boxer2, COLOR_LIGHTBLUE, string);
+								format(mainStr, sizeof(mainStr), "* You have Won the Fight against %s.", loser);
+								SendClientMessage(Boxer2, COLOR_LIGHTBLUE, mainStr);
 								GameTextForPlayer(Boxer2, "~r~You won", 3500, 1);
 								if(GetPlayerHealth(Boxer1, health) < 20)
 								{
@@ -454,8 +454,8 @@ Timer:GlobalTimer[1000]() {
 					                	        Titel[TitelWins] = PlayerInfo[TBoxer][pWins];
 					                	        Titel[TitelLoses] = PlayerInfo[TBoxer][pLoses];
 					                	        SaveBoxer();
-							                	format(string, sizeof(string), "Boxing News: %s has Won the fight against Champion %s and is now the new Boxing Champion.",  titel, loser);
-												OOCOff(COLOR_WHITE,string);
+							                	format(mainStr, sizeof(mainStr), "Boxing News: %s has Won the fight against Champion %s and is now the new Boxing Champion.",  titel, loser);
+												OOCOff(COLOR_WHITE,mainStr);
 											}
 				                	        else
 				                	        {
@@ -465,19 +465,19 @@ Timer:GlobalTimer[1000]() {
 										else
 										{
 										    GetPlayerName(TBoxer, titel, sizeof(titel));
-										    format(string, sizeof(string), "Boxing News: Boxing Champion %s has Won the fight against %s.",  titel, loser);
-											OOCOff(COLOR_WHITE,string);
+										    format(mainStr, sizeof(mainStr), "Boxing News: Boxing Champion %s has Won the fight against %s.",  titel, loser);
+											OOCOff(COLOR_WHITE,mainStr);
 											Titel[TitelWins] = PlayerInfo[TBoxer][pWins];
 				                	        Titel[TitelLoses] = PlayerInfo[Boxer1][pLoses];
 				                	        SaveBoxer();
 										}
 									}
 								}//TBoxer
-								format(string, sizeof(string), "* You have Lost the Fight against %s.", winner);
-								SendClientMessage(Boxer2, COLOR_LIGHTBLUE, string);
+								format(mainStr, sizeof(mainStr), "* You have Lost the Fight against %s.", winner);
+								SendClientMessage(Boxer2, COLOR_LIGHTBLUE, mainStr);
 								GameTextForPlayer(Boxer2, "~r~You lost", 3500, 1);
-								format(string, sizeof(string), "* You have Won the Fight against %s.", loser);
-								SendClientMessage(Boxer1, COLOR_LIGHTBLUE, string);
+								format(mainStr, sizeof(mainStr), "* You have Won the Fight against %s.", loser);
+								SendClientMessage(Boxer1, COLOR_LIGHTBLUE, mainStr);
 								GameTextForPlayer(Boxer1, "~g~You won", 3500, 1);
 								if(GetPlayerHealth(Boxer1, health) < 20)
 								{
@@ -543,8 +543,8 @@ Timer:GlobalTimer[1000]() {
 			    if(FindTime[i] == FindTimePoints[i]) { FindTime[i] = 0; FindTimePoints[i] = 0; DisablePlayerCheckpoint(i); PlayerPlaySound(i, 1056, 0.0, 0.0, 0.0); GameTextForPlayer(i, "~r~RedMarker gone", 2500, 1); }
 			    else
 				{
-				    format(string, sizeof(string), "%d", FindTimePoints[i] - FindTime[i]);
-					GameTextForPlayer(i, string, 1500, 6);
+				    format(mainStr, sizeof(mainStr), "%d", FindTimePoints[i] - FindTime[i]);
+					GameTextForPlayer(i, mainStr, 1500, 6);
 					FindTime[i] += 1;
 				}
 			}
@@ -577,8 +577,8 @@ Timer:GlobalTimer[1000]() {
 			    if(MedicCallTime[i] == 30) { MedicCallTime[i] = 0; DisablePlayerCheckpoint(i); PlayerPlaySound(i, 1056, 0.0, 0.0, 0.0); GameTextForPlayer(i, "~r~RedMarker gone", 2500, 1); }
 			    else
 				{
-				    format(string, sizeof(string), "%d", 30 - MedicCallTime[i]);
-					GameTextForPlayer(i, string, 1500, 6);
+				    format(mainStr, sizeof(mainStr), "%d", 30 - MedicCallTime[i]);
+					GameTextForPlayer(i, mainStr, 1500, 6);
 					MedicCallTime[i] += 1;
 				}
 			}
@@ -587,8 +587,8 @@ Timer:GlobalTimer[1000]() {
 			    if(MechanicCallTime[i] == 30) { MechanicCallTime[i] = 0; DisablePlayerCheckpoint(i); PlayerPlaySound(i, 1056, 0.0, 0.0, 0.0); GameTextForPlayer(i, "~r~RedMarker gone", 2500, 1); }
 			    else
 				{
-				    format(string, sizeof(string), "%d", 30 - MechanicCallTime[i]);
-					GameTextForPlayer(i, string, 1500, 6);
+				    format(mainStr, sizeof(mainStr), "%d", 30 - MechanicCallTime[i]);
+					GameTextForPlayer(i, mainStr, 1500, 6);
 					MechanicCallTime[i] += 1;
 				}
 			}
@@ -732,26 +732,25 @@ Timer:GlobalTimer[1000]() {
 					{
 						if(distance <10)
 						{
-							format(string, 256, "~n~~n~~n~~n~~n~~n~~n~~g~mph :   ~w~%.0f",distance);
+							format(mainStr, 256, "~n~~n~~n~~n~~n~~n~~n~~g~mph :   ~w~%.0f",distance);
 						}
 						if(distance > 10 && distance < 100)
 						{
-							format(string, 256, "~n~~n~~n~~n~~n~~n~~n~~g~mph :  ~w~%.0f",distance);
+							format(mainStr, 256, "~n~~n~~n~~n~~n~~n~~n~~g~mph :  ~w~%.0f",distance);
 						}
 						if(distance > 100)
 						{
-							format(string, 256, "~n~~n~~n~~n~~n~~n~~n~~g~mph : ~w~%.0f",distance);
+							format(mainStr, 256, "~n~~n~~n~~n~~n~~n~~n~~g~mph : ~w~%.0f",distance);
 						}
-						GameTextForPlayer(i, string, 2000, 5);
+						GameTextForPlayer(i, mainStr, 2000, 5);
 					}
 					if(distance > maxspeed && PlayerInfo[i][pAdmin] < 1)
 					{
 						new tmpcar = GetPlayerVehicleID(i);
 						if(!IsAPlane(tmpcar))
 						{
-							GetPlayerName(i, plname, sizeof(plname));
-							format(string, 256, "AdmWarning: [%d]%s %.0f mph",i,plname,distance);
-							ABroadCast(COLOR_YELLOW,string,1);
+							format(mainStr, 256, "AdmWarning: [%d]%s %.0f mph",i,PlayerInfo[i][pName],distance);
+							ABroadCast(COLOR_YELLOW,mainStr,1);
 						}
 					}
 				}
@@ -776,10 +775,8 @@ Timer:GlobalTimer[1000]() {
 								new oldcash = gSpentCash[i];
 								new Total = GetPlayerMoney(i) - oldcash;
 								printf("Total %d = GetPlayerMoney(playerid) %d - oldcash %d",Total,GetPlayerMoney(i),oldcash);
-								new name[MAX_PLAYER_NAME];
-								GetPlayerName(i, name, sizeof(name));
-								format(string,128,"<< %s has left the homemodshop with $%d >>",name,Total);
-								PayLog(string);
+								format(mainStr,128,"<< %s has left the homemodshop with $%d >>",PlayerInfo[i][pName],Total);
+								PayLog(mainStr);
 								gSpentCash[i] = 0;
 								TelePos[i][0] = 0.0;
 								TelePos[i][1] = 0.0;
@@ -837,19 +834,19 @@ Timer:GlobalTimer[1000]() {
 				    {
 						new called[MAX_PLAYER_NAME];
 						GetPlayerName(Mobile[i], called, sizeof(called));
-						format(string, sizeof(string), "* %s's phone rings.", called);
+						format(mainStr, sizeof(mainStr), "* %s's phone rings.", called);
 						RingTone[Mobile[i]] = 10;
-						ProxDetector(30.0, Mobile[i], string, COLOR_PURPLE,COLOR_PURPLE,COLOR_PURPLE,COLOR_PURPLE,COLOR_PURPLE);
+						ProxDetector(30.0, Mobile[i], mainStr, COLOR_PURPLE,COLOR_PURPLE,COLOR_PURPLE,COLOR_PURPLE,COLOR_PURPLE);
 					}
 				}
 			}
 			if(CellTime[i] == 0 && CallCost[i] > 0)
 			{
-				format(string, sizeof(string), "~w~The call cost~n~~r~$%d",CallCost[i]);
+				format(mainStr, sizeof(mainStr), "~w~The call cost~n~~r~$%d",CallCost[i]);
 				GivePlayerMoney(i, -CallCost[i]);
 				SBizzInfo[2][sbTill] += CallCost[i];
 				ExtortionSBiz(2, CallCost[i]);
-				GameTextForPlayer(i, string, 5000, 1);
+				GameTextForPlayer(i, mainStr, 5000, 1);
 				CallCost[i] = 0;
 			}
 			if(TransportTime[i] > 0)
@@ -867,8 +864,30 @@ Timer:GlobalTimer[1000]() {
 					}
 				}
 			    TransportTime[i] += 1;
-			    format(string, sizeof(string), "~r~%d ~w~: ~g~$%d",TransportTime[i],TransportCost[i]);
-			    GameTextForPlayer(i, string, 15000, 6);
+			    format(mainStr, sizeof(mainStr), "~r~%d ~w~: ~g~$%d",TransportTime[i],TransportCost[i]);
+			    GameTextForPlayer(i, mainStr, 15000, 6);
+			}
+
+			if(Spawned[i]) {
+				new Float:HP, Float:AP;
+				new hpStr[16];
+
+				GetPlayerHealth(i, HP);
+				GetPlayerArmour(i, AP);
+
+				if(AP > 0.0) {
+					format(hpStr, sizeof(hpStr), "~w~%d/200", FloatToInt(AP));
+					TextDrawSetString(HealthInfo[i][0], hpStr);
+
+					TextDrawShowForPlayer(i, HealthInfo[i][0]);
+				} else {
+					TextDrawHideForPlayer(i, HealthInfo[i][0]);
+				}
+
+				format(hpStr, sizeof(hpStr), "~r~%d/100", FloatToInt(HP));
+				TextDrawSetString(HealthInfo[i][1], hpStr);
+
+				TextDrawShowForPlayer(i, HealthInfo[i][1]);
 			}
 
 			foreach(new j : VehItter) {
@@ -989,7 +1008,6 @@ Timer:SyncUp[60000]() {
 }
 
 Timer:CarCheck[30000]() {
-	new string[256];
 	for(new j = 0; j<MAX_PLAYERS; j++)
 	{
 	    if(IsPlayerConnected(j))
@@ -1031,8 +1049,8 @@ Timer:CarCheck[30000]() {
 			{
 			    if(MoneyMessage[j]==0)
 			    {
-				    format(string, sizeof(string), "You are in debt, you have till next Time Check to get: $%d or you go to jail.", GetPlayerMoney(j));
-					SendClientMessage(j, COLOR_LIGHTRED, string);
+				    format(mainStr, sizeof(mainStr), "You are in debt, you have till next Time Check to get: $%d or you go to jail.", GetPlayerMoney(j));
+					SendClientMessage(j, COLOR_LIGHTRED, mainStr);
 					MoneyMessage[j] = 1;
 				}
 			}

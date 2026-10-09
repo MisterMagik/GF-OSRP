@@ -22,6 +22,7 @@ new bool:accLastCrash[MAX_PLAYERS];
 
 new bool:loadedIntro[MAX_PLAYERS];
 new bool:createdChar[MAX_PLAYERS];
+new bool:Spawned[MAX_PLAYERS];
 new bool:VehAnim[MAX_PLAYERS];
 new bool:pTrashZone[MAX_PLAYERS];
 new bool:pBushZone[MAX_PLAYERS];
@@ -345,7 +346,6 @@ new Groceries[MAX_PLAYERS][pGroceries];
 new Unspec[MAX_PLAYERS][pSpec];
 new News[hNews];
 new PlayerInfo[MAX_PLAYERS][pInfo];
-new ItemInfo[MAX_ITEMS][iInfo];
 new VehicleInfo[MAX_VEHICLES][vInfo];
 new HouseInfo[34][hInfo];
 new BizzInfo[5][bInfo];
@@ -705,9 +705,11 @@ new VehicleNames[][] = {
 	"Utility Trailer"
 };
 
-new Iterator:ItemItter<MAX_ITEMS>;
 new Iterator:VehItter<MAX_VEHICLES>;
+
+new Bar:HungerBar[MAX_PLAYERS];
 
 new Text:SplashScreen;
 new Text:Intro[4];
 new Text:VehicleStats[MAX_PLAYERS][2];
+new Text:HealthInfo[MAX_PLAYERS][2];

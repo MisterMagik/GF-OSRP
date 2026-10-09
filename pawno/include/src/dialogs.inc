@@ -459,54 +459,6 @@ sampCallback OnDialogResponse(playerid, dialogid, response, listitem, inputtext[
 
 			TutTime[playerid] = 1;
 		}
-		case DIALOG_SHOW_ITEMS: {
-			if(!response) {
-				return 1;
-			}
-
-			ShowPlayerItemToSomeOne(playerid, playerid, DIALOG_PLAYER_ITEMS);
-		}
-		case DIALOG_PLAYER_ITEMS: {
-			if(!response) {
-				return callcmd::p(playerid, "");
-			}
-
-			new name[64], tmp[32];
-
-			sscanf(inputtext, "s[64]s[32]", name, tmp);
-
-			foreach(new i : ItemItter) {
-				if(PlayerInfo[playerid][pID] == ItemInfo[i][iOwnerID]) {
-					if(!strcmp(ItemInfo[i][iName], name, false)) {
-						pChosenItemID[playerid] = i;
-						break;
-					}
-				}
-			}
-
-			osrp_ShowPlayerDialog(playerid, DIALOG_ACTION_ITEM, DIALOG_STYLE_LIST, "Co chcesz zrobiæ z tym przedmiotem?", "{FFFFFF}U¿yj\nOddaj\nOd³ó¿\nZniszcz", "Wybierz", "Cofnij");
-		}
-		case DIALOG_ACTION_ITEM: {
-			if(!response) {
-				pChosenItemID[playerid] = -1;
-				return ShowPlayerItemToSomeOne(playerid, playerid, DIALOG_PLAYER_ITEMS);
-			}
-
-			switch(listitem) {
-				case 0: {
-					UseItemForPlayer(playerid, pChosenItemID[playerid], GetItemTypeFromID(pChosenItemID[playerid]), GetItemSubTypeFromID(pChosenItemID[playerid]));
-				}
-				case 1: {
-					
-				}
-				case 2: {
-					
-				}
-				case 3: {
-					DestroyItem(pChosenItemID[playerid]);
-				}
-			}
-		}
 		case DIALOG_ADMIN_VEHICLE: {
 			if(!response) {
 				return 1;
@@ -519,7 +471,7 @@ sampCallback OnDialogResponse(playerid, dialogid, response, listitem, inputtext[
 			if(GetVehicleModelIDFromName(vehName) != -1) {
 				AdminVehModelID = GetVehicleModelIDFromName(vehName);
 
-				osrp_ShowPlayerDialog(playerid, DIALOG_ADMIN_VEHICLE_COLOR, DIALOG_STYLE_INPUT, "Dodawanie Pojazdu (Kolor):", "{FFFFFF}Podaj kolor pojazdu np. (0, 0): ", "Dalej", "Cofnij");
+				osrp_ShowPlayerDialog(playerid, DIALOG_ADMIN_VEHICLE_COLOR, DIALOG_STYLE_INPUT, "Wybierz kolor pojazdu:", "{FFFFFF}Podaj kolor pojazdu.\nPrzyk³ad: 0, 0: ", "Dalej", "Cofnij");
 			}
 		}
 		case DIALOG_ADMIN_VEHICLE_COLOR: {
@@ -535,11 +487,22 @@ sampCallback OnDialogResponse(playerid, dialogid, response, listitem, inputtext[
 			AdminVehColor[0] = color[0];
 			AdminVehColor[1] = color[1];
 
-			osrp_ShowPlayerDialog(playerid, DIALOG_ADMIN_VEHICLE_OWNER, DIALOG_STYLE_INPUT, "Dodawanie Pojazdu (W³aœciciel):", "{FFFFFF}Podaj w³aœciciela pojazdu (ID, Typ):\nTypy:\n-1 - Nikt\n0 - Server\n1 - Gracz\n2 Biznes", "Dalej", "Cofnij");
+			osrp_ShowPlayerDialog(playerid, DIALOG_ADMIN_VEHICLE_ENGINE, DIALOG_STYLE_INPUT, "Wybierz silnik pojazdu:", "{FFFFFF}Podaj rodzaj silnika pojazdu.\nTypy:\n\t0 - Benzyna\n\t1 - Olej napêdowy\n\t2 - Bateria\n\t3 - Paliwo lotnicze", "Dalej", "Cofnij");
+		}
+		case DIALOG_ADMIN_VEHICLE_ENGINE: {
+			if(!response) {
+				return osrp_ShowPlayerDialog(playerid, DIALOG_ADMIN_VEHICLE_COLOR, DIALOG_STYLE_INPUT, "Podaj kolor pojazdu:", "{FFFFFF}Podaj kolor pojazdu.\nPrzyk³ad: 0, 0: ", "Dalej", "Cofnij");
+			}
+
+			new engineType = strval(inputtext);
+
+			AdminVehEngine = engineType;
+
+			osrp_ShowPlayerDialog(playerid, DIALOG_ADMIN_VEHICLE_OWNER, DIALOG_STYLE_INPUT, "Wybierz w³aœciciela pojazdu:", "{FFFFFF}Podaj w³aœciciela pojazdu (ID, Typ):\nTypy:\n\t-1 - Nikt\n\t0 - Server\n\t1 - Gracz\n\t2 Biznes", "Dalej", "Cofnij");
 		}
 		case DIALOG_ADMIN_VEHICLE_OWNER: {
 			if(!response) {
-				return osrp_ShowPlayerDialog(playerid, DIALOG_ADMIN_VEHICLE_COLOR, DIALOG_STYLE_INPUT, "Dodawanie Pojazdu (Kolor):", "{FFFFFF}Podaj kolor pojazdu np. (0, 0): ", "Dalej", "Cofnij");
+				return osrp_ShowPlayerDialog(playerid, DIALOG_ADMIN_VEHICLE_ENGINE, DIALOG_STYLE_INPUT, "Wybierz silnik pojazdu:", "{FFFFFF}Podaj rodzaj silnika pojazdu.\nTypy:\n\t0 - Benzyna\n\t1 - Olej napêdowy\n\t2 - Bateria\n\t3 - Paliwo lotnicze", "Dalej", "Cofnij");
 			}
 
 			new ownerParms[2];
@@ -550,19 +513,20 @@ sampCallback OnDialogResponse(playerid, dialogid, response, listitem, inputtext[
 			AdminVehOwner[1] = ownerParms[1];
 
 			mainStr[0] = EOS;
-			format(mainStr, sizeof(mainStr), "{FFFFFF}Nazwa: %s\nKolor1: %d, Kolor2: %d\nID Ownera: %d\nTyp Ownera: %d",
+			format(mainStr, sizeof(mainStr), "{BDCB92}Nazwa: {FFFFFF}%s\n{BDCB92}Kolor1: {FFFFFF}%d\n{BDCB92}Kolor2: {FFFFFF}%d\n{BDCB92}Rodzaj silnika: {FFFFFF}%d\n{BDCB92}ID Ownera: {FFFFFF}%d\n{BDCB92}Typ Ownera: {FFFFFF}%d",
 				VehicleNames[AdminVehModelID - 400],
 				AdminVehColor[0],
 				AdminVehColor[1],
+				AdminVehEngine,
 				AdminVehOwner[0],
 				AdminVehOwner[1]
 			);
 
-			osrp_ShowPlayerDialog(playerid, DIALOG_ADMIN_VEHICLE_SUMMARY, DIALOG_STYLE_MSGBOX, "Dodawanie Pojazdu (Podsumowanie):", mainStr, "Stwórz", "Cofnij");
+			osrp_ShowPlayerDialog(playerid, DIALOG_ADMIN_VEHICLE_SUMMARY, DIALOG_STYLE_MSGBOX, "Podsumowanie pojazdu:", mainStr, "Stwórz", "Cofnij");
 		}
 		case DIALOG_ADMIN_VEHICLE_SUMMARY: {
 			if(!response) {
-				return osrp_ShowPlayerDialog(playerid, DIALOG_ADMIN_VEHICLE_OWNER, DIALOG_STYLE_INPUT, "Dodawanie Pojazdu (W³aœciciel):", "{FFFFFF}Podaj w³aœciciela pojazdu (ID, Typ):\nTypy:\n-1 - Nikt\n0 - Server\n1 - Gracz\n2 Biznes", "Dalej", "Cofnij");
+				return osrp_ShowPlayerDialog(playerid, DIALOG_ADMIN_VEHICLE_OWNER, DIALOG_STYLE_INPUT, "Wybierz w³aœciciela pojazdu:", "{FFFFFF}Podaj w³aœciciela pojazdu (ID, Typ):\nTypy:\n\t-1 - Nikt\n\t0 - Server\n\t1 - Gracz\n\t2 Biznes", "Dalej", "Cofnij");
 			}
 
 			new Float:PosX, Float:PosY, Float:PosZ, Float:PosA;
@@ -573,13 +537,14 @@ sampCallback OnDialogResponse(playerid, dialogid, response, listitem, inputtext[
 			PosX += 2.0;
 			PosY += 1.0;
 
-			AddVehicle(AdminVehOwner[0], AdminVehOwner[1], AdminVehModelID, 0, AdminVehColor[0], AdminVehColor[1], 1, PosX, PosY, PosZ, PosA);
+			AddVehicle(AdminVehOwner[0], AdminVehOwner[1], AdminVehModelID, AdminVehEngine, AdminVehColor[0], AdminVehColor[1], 1, PosX, PosY, PosZ, PosA);
 
 			AdminVehModelID = 0;
-			AdminVehOwner[0] = 0;
-			AdminVehOwner[1] = 0;
 			AdminVehColor[0] = 0;
 			AdminVehColor[1] = 0;
+			AdminVehEngine = 0;
+			AdminVehOwner[0] = 0;
+			AdminVehOwner[1] = 0;
 		}
 	}
 	return 1;
