@@ -167,14 +167,14 @@ stock Tree_UpdateObject(idx) {
 
 stock Tree_Save(idx) {
 	queryStr[0] = EOS;
-	format(queryStr, sizeof(queryStr), "UPDATE `Trees` SET `Grown` = '%d', `WateredUntil` = '%d', `LastUpdate` = '%d' WHERE `ID` = '%d' LIMIT 1",
+	format(queryStr, sizeof(queryStr), "UPDATE `Plants` SET `Grown` = '%d', `WateredUntil` = '%d', `LastUpdate` = '%d' WHERE `ID` = '%d' LIMIT 1",
 		TreeData[idx][tGrown], TreeData[idx][tWateredUntil], TreeData[idx][tLastUpdate], TreeData[idx][tSQL]);
 	mysql_query(queryStr);
 }
 
 stock Tree_Remove(idx) {
 	queryStr[0] = EOS;
-	format(queryStr, sizeof(queryStr), "DELETE FROM `Trees` WHERE `ID` = '%d' LIMIT 1", TreeData[idx][tSQL]);
+	format(queryStr, sizeof(queryStr), "DELETE FROM `Plants` WHERE `ID` = '%d' LIMIT 1", TreeData[idx][tSQL]);
 	mysql_query(queryStr);
 
 	if(TreeData[idx][tObject]) DestroyDynamicObject(TreeData[idx][tObject]);
@@ -191,7 +191,7 @@ stock Tree_Create(owner, Float:x, Float:y, Float:z, Float:rot) {
 	new now = gettime();
 
 	queryStr[0] = EOS;
-	format(queryStr, sizeof(queryStr), "INSERT INTO `Trees` (`OwnerID`, `PosX`, `PosY`, `PosZ`, `RotZ`, `Grown`, `WateredUntil`, `LastUpdate`, `Planted`) VALUES ('%d', '%.4f', '%.4f', '%.4f', '%.1f', '0', '%d', '%d', '%d')",
+	format(queryStr, sizeof(queryStr), "INSERT INTO `Plants` (`OwnerID`, `PosX`, `PosY`, `PosZ`, `RotZ`, `Grown`, `WateredUntil`, `LastUpdate`, `Planted`) VALUES ('%d', '%.4f', '%.4f', '%.4f', '%.1f', '0', '%d', '%d', '%d')",
 		owner, x, y, z, rot, now + TREE_WATER_AMOUNT, now, now);
 	mysql_query(queryStr);
 
@@ -218,7 +218,7 @@ stock Tree_Load() {
 
 	for(new i = 0; i < MAX_TREES; i++) TreeData[i][tUsed] = 0;
 
-	mysql_query("SELECT `ID`, `OwnerID`, `PosX`, `PosY`, `PosZ`, `RotZ`, `Grown`, `WateredUntil`, `LastUpdate` FROM `Trees`");
+	mysql_query("SELECT `ID`, `OwnerID`, `PosX`, `PosY`, `PosZ`, `RotZ`, `Grown`, `WateredUntil`, `LastUpdate` FROM `Plants`");
 	mysql_store_result();
 
 	if(mysql_result_stored()) {
@@ -241,23 +241,27 @@ stock Tree_Load() {
 			TreeData[loaded][tLastUpdate] = last;
 			TreeData[loaded][tObject] = 0;
 
-			// dogonienie wzrostu z czasu, gdy serwer / gracz byl offline
-			Tree_Sync(loaded, now);
-			TreeData[loaded][tStage] = Tree_CalcStage(loaded);
-			Tree_Save(loaded);
-			Tree_UpdateObject(loaded);
-
+			// UWAGA: w tej petli nie wolno wywolywac zadnych mysql_query() - nowe zapytanie
+			// zastepuje wynik, po ktorym iterujemy, i wczytaloby sie tylko pierwsze drzewo.
 			loaded++;
 		}
 	}
 
 	mysql_free_result();
 
+	// dogonienie wzrostu z czasu, gdy serwer / gracz byl offline (dopiero po zwolnieniu wyniku)
+	for(new i = 0; i < loaded; i++) {
+		Tree_Sync(i, now);
+		TreeData[i][tStage] = Tree_CalcStage(i);
+		Tree_Save(i);
+		Tree_UpdateObject(i);
+	}
+
 	printf("[TREES] Wczytano %d drzew.", loaded);
 }
 
 // Co minute sprawdza, czy ktores drzewo nie wskoczylo na kolejny etap.
-Timer:TreeGrowth[60000]() {
+task TreeGrowth[60000]() {
 	new now = gettime(), stage, owner, str[128];
 
 	for(new i = 0; i < MAX_TREES; i++) {

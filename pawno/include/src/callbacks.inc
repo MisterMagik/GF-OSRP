@@ -22,6 +22,7 @@ sampCallback OnGameModeInit() {
 	SetGameModeText(""SERVER_SHORT_NAME" "SERVER_VERSION"");
 
 	ConnectingMySQL();
+	Tree_Load();
 
     new string[MAX_PLAYER_NAME];
     new string1[MAX_PLAYER_NAME];
@@ -233,7 +234,7 @@ sampCallback OnPlayerConnect(playerid) {
 	}
 
 	mainStr[0] = EOS;
-	format(queryStr, sizeof(queryStr), "*** %s (id: %d) do³¹czy³ do serwera.", accName[playerid], playerid);
+	format(queryStr, sizeof(queryStr), "*** %s (id: %d) do  czy  do serwera.", accName[playerid], playerid);
 	ABroadCast(COLOR_GREY, mainStr, 1);
 
 	HealthInfo[playerid][0] = TextDrawCreate(577.874084, 48.999996, "200/200");
@@ -302,12 +303,12 @@ sampCallback OnPlayerDisconnect(playerid, reason) {
 
 	new DisconnectReasons[][] = {
 		"Crash",
-		"Wyszed³",
+		"Wyszed ",
 		"Kick/Ban"
 	};
 
 	mainStr[0] = EOS;
-	format(queryStr, sizeof(queryStr), "*** %s (( %s )) (id: %d) wyszed³ z serwera. (%s)", PlayerInfo[playerid][pName], accName[playerid], playerid, DisconnectReasons[reason]);
+	format(queryStr, sizeof(queryStr), "*** %s (( %s )) (id: %d) wyszed  z serwera. (%s)", PlayerInfo[playerid][pName], accName[playerid], playerid, DisconnectReasons[reason]);
 	ABroadCast(COLOR_GREY, mainStr, 1);
 
 	if(reason == 0) {
@@ -1890,7 +1891,7 @@ sampCallback OnPlayerText(playerid, text[])
 	        return 0;
       	}
 
-		format(string, sizeof(string), "%s mówi: %s", PlayerInfo[playerid][pName], text);
+		format(string, sizeof(string), "%s m wi: %s", PlayerInfo[playerid][pName], text);
 		ProxDetector(20.0, playerid, string, COLOR_FADE1, COLOR_FADE2, COLOR_FADE3, COLOR_FADE4, COLOR_FADE5);
 		return 0;
 	}
@@ -2422,7 +2423,7 @@ sampCallback OnPlayerStateChange(playerid, newstate, oldstate)
 			if(PlayerInfo[playerid][pBikeLic] < 1) {
 			    if(TakingLesson[playerid] == 1) { }
 			    else {
-			    SendClientMessage(playerid, COLOR_GREY, "Nie umiesz jeŸdziæ motorem.");
+			    SendClientMessage(playerid, COLOR_GREY, "Nie umiesz je dzi  motorem.");
 			    RemovePlayerFromVehicle(playerid); }
 			}
 		}
@@ -2464,7 +2465,7 @@ sampCallback OnPlayerStateChange(playerid, newstate, oldstate)
 		{
 			format(string, sizeof(string), "Produkty: %d/%d", PlayerHaul[newcar][pLoad],PlayerHaul[newcar][pCapasity]);
 			SendClientMessage(playerid, TEAM_GROVE_COLOR, string);
-			SendClientMessage(playerid, COLOR_WHITE, "Informacja: Mo¿esz dowoziæ produkty do biznesów. Obecna cena za 1 produkt: $23.");
+			SendClientMessage(playerid, COLOR_WHITE, "Informacja: Mo esz dowozi  produkty do biznes w. Obecna cena za 1 produkt: $23.");
 			SendClientMessage(playerid, COLOR_WHITE, "Komendy: /dostawy /load /buyprods /sellprods");
 		}
 
@@ -2608,7 +2609,7 @@ sampCallback OnPlayerStateChange(playerid, newstate, oldstate)
 		if(GetClosestVehicle(playerid) == newcar) {
 			if(VehicleInfo[newcar][vOwnerType] != VEHICLE_OWNER_TYPE_NONE && VehicleInfo[newcar][vOwnerType] != VEHICLE_OWNER_TYPE_SERVER) {
 				mainStr[0] = EOS;
-				format(mainStr, sizeof(mainStr), "W³aœciciel: %s", GetVehicleOwnerName(newcar));
+				format(mainStr, sizeof(mainStr), "W a ciciel: %s", GetVehicleOwnerName(newcar));
 				SendClientMessage(playerid, COLOR_YELLOW, mainStr);
 			}
 
@@ -2961,7 +2962,7 @@ Callback LoadIntro(playerid) {
 		SendClientMessage(playerid, COLOR_GREY, " ");
 	}
 
-	SendClientMessage(playerid, COLOR_YELLOW, "Witaj w "SERVER_NAME": Proszê czekaæ na za³adowanie mapy "SERVER_SHORT_NAME" "SERVER_VERSION".");
+	SendClientMessage(playerid, COLOR_YELLOW, "Witaj w "SERVER_NAME": Prosz  czeka  na za adowanie mapy "SERVER_SHORT_NAME" "SERVER_VERSION".");
 	TextDrawHideForPlayer(playerid, SplashScreen);
 
 	for(new i = 0; i < 4; i++) {
@@ -2981,17 +2982,17 @@ Callback LoadIntro(playerid) {
 		if(mysql_result_stored()) {
 			if(mysql_num_rows() < 1) {
 				gPlayerAccount[playerid] = 0;
-				SendClientMessage(playerid, COLOR_YELLOW2, "Serwer: To konto nie jest jeszcze zarejestrowane, aby zagraæ musisz siê zarejestrowaæ.");
+				SendClientMessage(playerid, COLOR_YELLOW2, "Serwer: To konto nie jest jeszcze zarejestrowane, aby zagra  musisz si  zarejestrowa .");
 
 				mainStr[0] = EOS;
-				strcat(mainStr, "{FFFFFF}Kompletny regulamin serwera {FFC801}"SERVER_NAME" {FFFFFF}znajduje siê na naszej stronie internetowej "WEBSITE_URL".\n");
-				strcat(mainStr, "Prosimy o zapoznanie siê z nim, poniewa¿ jego nieznajomoœæ nie jest usprawiedliwieniem do ³amania go.\n");
-				strcat(mainStr, "Za nieprzestrzeganie regulaminu gro¿¹ kary.\n\n");
-				strcat(mainStr, "Klikaj¹c przycisk {BDCB92}Akceptuj {FFFFFF}zobowi¹zujesz siê do przestrzegania regulaminu, {FFC801}Odrzuæ {FFFFFF}wi¹¿e siê z opuszczeniem serwera.");
-				osrp_ShowPlayerDialog(playerid, DIALOG_REGISTER_RULES, DIALOG_STYLE_MSGBOX, "Regulamin:", mainStr, "Akceptuj", "Odrzuæ");
+				strcat(mainStr, "{FFFFFF}Kompletny regulamin serwera {FFC801}"SERVER_NAME" {FFFFFF}znajduje si  na naszej stronie internetowej "WEBSITE_URL".\n");
+				strcat(mainStr, "Prosimy o zapoznanie si  z nim, poniewa  jego nieznajomo   nie jest usprawiedliwieniem do  amania go.\n");
+				strcat(mainStr, "Za nieprzestrzeganie regulaminu gro   kary.\n\n");
+				strcat(mainStr, "Klikaj c przycisk {BDCB92}Akceptuj {FFFFFF}zobowi zujesz si  do przestrzegania regulaminu, {FFC801}Odrzu  {FFFFFF}wi  e si  z opuszczeniem serwera.");
+				osrp_ShowPlayerDialog(playerid, DIALOG_REGISTER_RULES, DIALOG_STYLE_MSGBOX, "Regulamin:", mainStr, "Akceptuj", "Odrzu ");
 			} else {
 				gPlayerAccount[playerid] = 1;
-				SendClientMessage(playerid, COLOR_YELLOW2, "Serwer: To konto jest ju¿ zarejestrowane. Mo¿esz siê zalogowaæ.");
+				SendClientMessage(playerid, COLOR_YELLOW2, "Serwer: To konto jest ju  zarejestrowane. Mo esz si  zalogowa .");
 
 				queryStr[0] = EOS;
 				format(queryStr, sizeof(queryStr), "SELECT `Password`, `Salt` FROM `Accounts` WHERE `Name` = '%s' LIMIT 1", escapedName[playerid]);
@@ -3004,7 +3005,7 @@ Callback LoadIntro(playerid) {
 					sscanf(queryStr, "s[65]s[17]", accPassword[playerid], accSalt[playerid]);
 
 					mysql_free_result();
-					osrp_ShowPlayerDialog(playerid, DIALOG_LOGIN, DIALOG_STYLE_PASSWORD, "Zaloguj:", "{FFFFFF}To konto ju¿ istnieje.\nWpisz has³o, aby siê zalogowaæ.", "Zaloguj", "WyjdŸ");
+					osrp_ShowPlayerDialog(playerid, DIALOG_LOGIN, DIALOG_STYLE_PASSWORD, "Zaloguj:", "{FFFFFF}To konto ju  istnieje.\nWpisz has o, aby si  zalogowa .", "Zaloguj", "Wyjd ");
 				}
 			}
 
@@ -3029,6 +3030,6 @@ Callback RelogCharacter(playerid) {
 
 	mainStr[0] = EOS;
 	format(mainStr, sizeof(mainStr), "Opcje konta %s:", accName[playerid]);
-	osrp_ShowPlayerDialog(playerid, DIALOG_ACCOUNT_OPTIONS, DIALOG_STYLE_LIST, mainStr, "{FFFFFF}Zaloguj siê na postaæ\nStwórz now¹ postaæ\nUsuñ istniej¹c¹ postaæ\nAnty Crash\nZmieñ has³o do konta", "Dalej", "");
+	osrp_ShowPlayerDialog(playerid, DIALOG_ACCOUNT_OPTIONS, DIALOG_STYLE_LIST, mainStr, "{FFFFFF}Zaloguj si  na posta \nStw rz now  posta \nUsu  istniej c  posta \nAnty Crash\nZmie  has o do konta", "Dalej", "");
 	return 1;
 }
