@@ -631,7 +631,7 @@ stock GetClosestVehicle(playerid) {
 }
 
 stock GetVehicleOwnerName(vehicleid) {
-	new name[32];
+	new Name[32];
 
 	if(VehicleInfo[vehicleid][vOwnerType] == VEHICLE_OWNER_TYPE_PLAYER) {
 		if(VehicleInfo[vehicleid][vOwnerID] != VEHICLE_OWNER_NONE && VehicleInfo[vehicleid][vOwnerID] != VEHICLE_OWNER_SERVER) {
@@ -642,35 +642,35 @@ stock GetVehicleOwnerName(vehicleid) {
 			mysql_store_result();
 
 			if(mysql_result_stored()) {
-				mysql_fetch_string(name);
+				mysql_fetch_string(Name);
 				mysql_free_result();
 			}
 		}
 	}
-	return name;
+	return Name;
 }
 
 stock GetVehicleEngineTypeName(vehicleid) {
-	new name[32];
+	new Name[32];
 
 	switch(VehicleInfo[vehicleid][vEngineType]) {
 		case -1: {
-			name = "Brak";
+			Name = "Brak";
 		}
 		case 0: {
-			name = "Benzyna";
+			Name = "Benzyna";
 		}
 		case 1: {
-			name = "Olej napedowy";
+			Name = "Olej napedowy";
 		}
 		case 2: {
-			name = "Bateria";
+			Name = "Bateria";
 		}
 		case 3: {
-			name = "Paliwo lotnicze";
+			Name = "Paliwo lotnicze";
 		}
 	}
-	return name;
+	return Name;
 }
 
 stock GetVehicleFreeIndex() {

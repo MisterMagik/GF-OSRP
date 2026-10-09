@@ -901,15 +901,15 @@ static stock SSCANF_RunInit()
 		{
 			// SA:MP plugin.
 			new
-				name[MAX_PLAYER_NAME + 1];
+				name2[MAX_PLAYER_NAME + 1];//name steeZ was here
 
 			// Check if there are any players that aren't initialized.
 			for (new i = 0; i != MAX_PLAYERS; ++i)
 			{
 				if (IsPlayerConnected(i) && !SSCANF_IsConnected(i))
 				{
-					GetPlayerName(i, name, sizeof (name));
-					SSCANF_Join(i, name, bool:IsPlayerNPC(i));
+					GetPlayerName(i, name2, sizeof (name2));
+					SSCANF_Join(i, name2, bool:IsPlayerNPC(i));
 				}
 			}
 		}
@@ -1122,9 +1122,9 @@ forward OnCachedInit();
 		if (SSCANF_gInit == 1)
 		{
 			new
-				name[MAX_PLAYER_NAME + 1];
-			GetPlayerName(playerid, name, sizeof(name));
-			SSCANF_Join(playerid, name, bool:IsPlayerNPC(playerid));
+				name2[MAX_PLAYER_NAME + 1];// steeZ
+			GetPlayerName(playerid, name2, sizeof(name2));
+			SSCANF_Join(playerid, name2, bool:IsPlayerNPC(playerid));
 		}
 		SSCANF_OnPlayerConnect(playerid);
 		return 1;
@@ -1263,14 +1263,14 @@ stock SSCANF_GetSimilarString(const input[], const candidates[][], Float:thresho
 {
 	new
 		closest = cellmin,
-		Float:distance;
+		Float:distance2;//steeZ
 	while (count--)
 	{
-		distance = SSCANF_TextSimilarity(input, candidates[count]);
-		if (distance >= threshold)
+		distance2 = SSCANF_TextSimilarity(input, candidates[count]);
+		if (distance2 >= threshold)
 		{
 			closest = count,
-			threshold = distance;
+			threshold = distance2;
 		}
 	}
 	return closest;
@@ -1405,7 +1405,7 @@ stock SSCANF_GetClosestValue(const input[], const candidates[][], const results[
 	/* */ native SSCANF_no_k_weapon();
 	#define SSCANF_no_k_weapon()
 #else
-	SSCANF:weapon(const string[])
+	SSCANF:weapon(const string2[])//steeZ
 	{
 		static const results[] = {
 			0, 0, 1, 1, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 22, 23, 24, 25,
@@ -1464,10 +1464,10 @@ stock SSCANF_GetClosestValue(const input[], const candidates[][], const results[
 		};
 		
 		// This function is VERY basic, needs VASTLY improving to detect variations.
-		if ('0' <= string[0] <= '9')
+		if ('0' <= string2[0] <= '9')
 		{
 			new
-				ret = strval(string);
+				ret = strval(string2);
 			if (0 <= ret <= 18 || 22 <= ret <= 46)
 			{
 				return ret;
@@ -1475,7 +1475,7 @@ stock SSCANF_GetClosestValue(const input[], const candidates[][], const results[
 		}
 		else
 		{
-			return SSCANF_GetSimilarValue(string, candidates, results, -1);
+			return SSCANF_GetSimilarValue(string2, candidates, results, -1);
 		}
 		return -1;
 	}
@@ -1493,7 +1493,7 @@ stock SSCANF_GetClosestValue(const input[], const candidates[][], const results[
 	/* */ native SSCANF_no_k_vehicle();
 	#define SSCANF_no_k_vehicle()
 #else
-	SSCANF:vehicle(const string[])
+	SSCANF:vehicle(const string2[])//steeZ
 	{
 		static const results[] = {
 			400, 401, 402, 403, 404, 405, 406, 407, 408, 409, 410, 411, 412, 413, 414, 415, 416, 417,
@@ -1726,10 +1726,10 @@ stock SSCANF_GetClosestValue(const input[], const candidates[][], const results[
 		};
 
 		// This function is VERY basic, needs VASTLY improving to detect variations.
-		if ('0' <= string[0] <= '9')
+		if ('0' <= string2[0] <= '9')
 		{
 			new
-				ret = strval(string);
+				ret = strval(string2);
 			if (400 <= ret <= 611)
 			{
 				return ret;
@@ -1737,7 +1737,7 @@ stock SSCANF_GetClosestValue(const input[], const candidates[][], const results[
 		}
 		else
 		{
-			return SSCANF_GetSimilarValue(string, candidates, results, -1);
+			return SSCANF_GetSimilarValue(string2, candidates, results, -1);
 		}
 		return -1;
 	}

@@ -7,7 +7,7 @@
 	Desc: Server timers.
 */
 
-Timer:GlobalTimer[1000]() {
+task GlobalTimer[1000]() {
     new Float:maxspeed = 175.0;
 	new Float:oldposx, Float:oldposy, Float:oldposz;
 
@@ -995,19 +995,19 @@ Timer:GlobalTimer[1000]() {
 	}
 }
 
-Timer:CasualJobTimer[250]() {
+task CasualJobTimer[250]() {
 	foreach(new i : Player) {
 		TrashJobPickUpObject(i);
 		BushJobPickUpObject(i);
 	}
 }
 
-Timer:SyncUp[60000]() {
+task SyncUp[60000]() {
 	SyncTime();
 	DollahScoreUpdate();
 }
 
-Timer:CarCheck[30000]() {
+task CarCheck[30000]() {
 	for(new j = 0; j<MAX_PLAYERS; j++)
 	{
 	    if(IsPlayerConnected(j))
@@ -1085,7 +1085,7 @@ Timer:CarCheck[30000]() {
 	return 1;
 }
 
-Timer:CustomPickups[1000]() {
+task CustomPickups[1000]() {
 	new Float:oldposx, Float:oldposy, Float:oldposz;
 	new string[128];
 	for(new i = 0; i < MAX_PLAYERS; i++)
@@ -1388,7 +1388,7 @@ Timer:CustomPickups[1000]() {
 	return 1;
 }
 
-Timer:Spectator[2000]() {
+task Spectator[2000]() {
 	new string[256];
 	for(new i = 0; i < MAX_PLAYERS; i++)
 	{
@@ -1478,7 +1478,7 @@ Timer:Spectator[2000]() {
 	}
 }
 
-Timer:IdleKick[600000]() {
+task IdleKick[600000]() {
 	foreach(new i : Player)
 	{
 		if(PlayerInfo[i][pAdmin] < 1)
@@ -1495,7 +1495,7 @@ Timer:IdleKick[600000]() {
 	}
 }
 
-Timer:Production[300000]() {
+task Production[300000]() {
 	new string[256];
 	for(new i = 0; i < MAX_PLAYERS; i++)
 	{
@@ -1541,7 +1541,7 @@ Timer:Production[300000]() {
 	}
 }
 
-Timer:SaveAccounts[1800000]() {
+task SaveAccounts[1800000]() {
     for(new i = 0; i < MAX_PLAYERS; i++)
 	{
 		if(IsPlayerConnected(i))
@@ -1558,7 +1558,7 @@ Timer:SaveAccounts[1800000]() {
 	}
 }
 
-Timer:CheckGas[15000]() {
+task CheckGas[15000]() {
 	new string[256];
 	for(new i=0;i<MAX_PLAYERS;i++)
 	{
@@ -1588,7 +1588,7 @@ Timer:CheckGas[15000]() {
 	return 1;
 }
 
-Timer:StoppedVehicle[15000]() {
+task StoppedVehicle[15000]() {
 	new Float:x,Float:y,Float:z;
 	new Float:distance,value;
 	for(new i=0; i<MAX_PLAYERS; i++)

@@ -33,13 +33,13 @@ sampCallback OnDialogResponse(playerid, dialogid, response, listitem, inputtext[
 				return osrp_ShowPlayerDialog(playerid, DIALOG_REGISTER_PASS, DIALOG_STYLE_PASSWORD, "Zarejestruj:", "{AA3333}Podane has³o zawiera spacjê.\n{FFFFFF}To konto nie jest jeszcze zarejestrowane.\nWpisz has³o, aby siê zarejestrowaæ.", "Zarejestruj", "WyjdŸ");
 			}
 
-			new day, month, year, second, minute, hour;
-			new date[64], IP[16];
+			new Day, Month, Year, Second, Minute, Hour;
+			new Date[64], IP[16];
 
-			gettime(hour, minute, second);
-			getdate(year, month, day);
+			gettime(Hour, Minute, Second);
+			getdate(Year, Month, Day);
 
-			format(date, sizeof(date), "%02d/%02d/%03d %02d:%02d:%02d", day, month, year, hour, minute, second);
+			format(Date, sizeof(Date), "%02d/%02d/%03d %02d:%02d:%02d", Day, Month, Year, Hour, Minute, Second);
 			format(accSalt[playerid], 17, "%s", GeneratePasswordSalt());
 
 			SHA256_PassHash(inputtext, accSalt[playerid], accPassword[playerid], 65);
@@ -51,8 +51,8 @@ sampCallback OnDialogResponse(playerid, dialogid, response, listitem, inputtext[
 				accPassword[playerid],
 				accSalt[playerid],
 				IP,
-				date,
-				date
+				Date,
+				Date
 				);
 			mysql_query(queryStr);
 
@@ -70,12 +70,12 @@ sampCallback OnDialogResponse(playerid, dialogid, response, listitem, inputtext[
 				return osrp_ShowPlayerDialog(playerid, DIALOG_LOGIN, DIALOG_STYLE_PASSWORD, "Zaloguj:", "{FFFFFF}Pomyœlnie zarejestrowa³eœ konto.\nProsze wpisaæ has³o, aby siê teraz zalogowaæ.", "Zaloguj", "WyjdŸ");
 			}
 
-			new recommenderName[24];
+			new RecommenderName[24];
 
-			mysql_real_escape_string(inputtext, recommenderName);
+			mysql_real_escape_string(inputtext, RecommenderName);
 
 			queryStr[0] = EOS;
-			format(queryStr, sizeof(queryStr), "SELECT * FROM `Accounts` WHERE `Name` = '%s' LIMIT 1", recommenderName);
+			format(queryStr, sizeof(queryStr), "SELECT * FROM `Accounts` WHERE `Name` = '%s' LIMIT 1", RecommenderName);
 			mysql_query(queryStr);
 
 			mysql_store_result();
@@ -87,7 +87,7 @@ sampCallback OnDialogResponse(playerid, dialogid, response, listitem, inputtext[
 					mysql_query(queryStr);
 
 					queryStr[0] = EOS;
-					format(queryStr, sizeof(queryStr), "UPDATE `Accounts` SET `PendingPP` = '%d' WHERE `Name` = '%s'", RECOMMENDER_PRIZE, recommenderName);
+					format(queryStr, sizeof(queryStr), "UPDATE `Accounts` SET `PendingPP` = '%d' WHERE `Name` = '%s'", RECOMMENDER_PRIZE, RecommenderName);
 					mysql_query(queryStr);
 
 					osrp_ShowPlayerDialog(playerid, DIALOG_LOGIN, DIALOG_STYLE_PASSWORD, "Zaloguj:", "{FFFFFF}Pomyœlnie zarejestrowa³eœ konto.\nProsze wpisaæ has³o, aby siê teraz zalogowaæ.", "Zaloguj", "WyjdŸ");
@@ -107,11 +107,11 @@ sampCallback OnDialogResponse(playerid, dialogid, response, listitem, inputtext[
 				return Kick(playerid);
 			}
 
-			new hash[65];
+			new Hash[65];
 
-			SHA256_PassHash(inputtext, accSalt[playerid], hash, sizeof(hash) - 1);
+			SHA256_PassHash(inputtext, accSalt[playerid], Hash, sizeof(Hash) - 1);
 
-			if(!strcmp(hash, accPassword[playerid], false)) {
+			if(!strcmp(Hash, accPassword[playerid], false)) {
 				SendClientMessage(playerid, COLOR_YELLOW, motd);
 
 				mainStr[0] = EOS;
@@ -159,7 +159,7 @@ sampCallback OnDialogResponse(playerid, dialogid, response, listitem, inputtext[
 			};
 
 			new Characters[MAX_PLAYER_CHARS][Character];
-			new count, charStr[512];
+			new Count, CharStr[512];
 
 			switch(listitem) {
 				case 0: {
@@ -171,21 +171,21 @@ sampCallback OnDialogResponse(playerid, dialogid, response, listitem, inputtext[
 
 					if(mysql_result_stored()) {
 						while(mysql_fetch_row(queryStr, "|")) {
-							sscanf(queryStr, "p<|>s[24]i", Characters[count][Name], Characters[count][Hours]);
-							format(charStr, sizeof(charStr), "%s\n{FFFFFF}%s (%d przegranych godzin)", charStr, Characters[count][Name], Characters[count][Hours]);
+							sscanf(queryStr, "p<|>s[24]i", Characters[Count][Name], Characters[Count][Hours]);
+							format(CharStr, sizeof(CharStr), "%s\n{FFFFFF}%s (%d przegranych godzin)", CharStr, Characters[Count][Name], Characters[Count][Hours]);
 
-							count++;
+							Count++;
 						}
 
 						mysql_free_result();
 
-						if(!count) {
+						if(!Count) {
 							SendClientMessage(playerid, COLOR_WHITE, "Serwer: Twoje konto nie posiada ¿adnej postaci. Musisz jak¹œ stworzyæ.");
 
 							mainStr[0] = EOS;
 							format(mainStr, sizeof(mainStr), "Opcje konta %s:", accName[playerid]);
 							return osrp_ShowPlayerDialog(playerid, DIALOG_ACCOUNT_OPTIONS, DIALOG_STYLE_LIST, mainStr, "{FFFFFF}Zaloguj siê na postaæ\nStwórz now¹ postaæ\nUsuñ istniej¹c¹ postaæ\nAnty Crash\nZmieñ has³o do konta", "Dalej", "");
-						} else if(count == 5) {
+						} else if(Count == 5) {
 							mainStr[0] = EOS;
 							format(mainStr, sizeof(mainStr), "Serwer: Wykorzysta³eœ limit tworzenia postaci (%d).", MAX_PLAYER_CHARS);
 							SendClientMessage(playerid, COLOR_WHITE, mainStr);
@@ -197,7 +197,7 @@ sampCallback OnDialogResponse(playerid, dialogid, response, listitem, inputtext[
 
 						mainStr[0] = EOS;
 						format(mainStr, sizeof(mainStr), "Postacie konta %s:", accName[playerid]);
-						osrp_ShowPlayerDialog(playerid, DIALOG_ACCOUNT_CHARACTERS, DIALOG_STYLE_LIST, mainStr, charStr, "Zaloguj", "Cofnij");
+						osrp_ShowPlayerDialog(playerid, DIALOG_ACCOUNT_CHARACTERS, DIALOG_STYLE_LIST, mainStr, CharStr, "Zaloguj", "Cofnij");
 					}
 				}
 				case 1: {
@@ -212,15 +212,15 @@ sampCallback OnDialogResponse(playerid, dialogid, response, listitem, inputtext[
 
 					if(mysql_result_stored()) {
 						while(mysql_fetch_row(queryStr, "|")) {
-							sscanf(queryStr, "p<|>s[24]s[32]", Characters[count][Name], Characters[count][Date]);
-							format(charStr, sizeof(charStr), "%s\n{FFFFFF}%s (Ostatnia wizyta: %s)", charStr, Characters[count][Name], Characters[count][Date]);
+							sscanf(queryStr, "p<|>s[24]s[32]", Characters[Count][Name], Characters[Count][Date]);
+							format(CharStr, sizeof(CharStr), "%s\n{FFFFFF}%s (Ostatnia wizyta: %s)", CharStr, Characters[Count][Name], Characters[Count][Date]);
 
-							count++;
+							Count++;
 						}
 
 						mysql_free_result();
 
-						if(!count) {
+						if(!Count) {
 							SendClientMessage(playerid, COLOR_WHITE, "Serwer: Twoje konto nie posiada ¿adnej postaci do usuniêcia.");
 
 							mainStr[0] = EOS;
@@ -230,7 +230,7 @@ sampCallback OnDialogResponse(playerid, dialogid, response, listitem, inputtext[
 
 						mainStr[0] = EOS;
 						format(mainStr, sizeof(mainStr), "Postacie konta %s:", accName[playerid]);
-						osrp_ShowPlayerDialog(playerid, DIALOG_ACCOUNT_REMOVE_CHAR_INFO, DIALOG_STYLE_LIST, mainStr, charStr, "Usuñ", "Cofnij");
+						osrp_ShowPlayerDialog(playerid, DIALOG_ACCOUNT_REMOVE_CHAR_INFO, DIALOG_STYLE_LIST, mainStr, CharStr, "Usuñ", "Cofnij");
 					}
 				}
 				case 3: {
@@ -263,11 +263,12 @@ sampCallback OnDialogResponse(playerid, dialogid, response, listitem, inputtext[
 			}
 
 			if(strlen(inputtext)) {
-				new name[24], tmp[64];
+				new Name[24], Tmp[64];
 
-				sscanf(inputtext, "s[24]s[64]", name, tmp);
-				printf("Login: %s", name);
-				OnPlayerLogin(playerid, name);
+				sscanf(inputtext, "s[24]s[64]", Name, Tmp);
+				printf("Login: %s", Name);
+
+				OnPlayerLogin(playerid, Name);
 			}
 		}
 		case DIALOG_ACCOUNT_CREATE_CHAR: {
@@ -285,12 +286,12 @@ sampCallback OnDialogResponse(playerid, dialogid, response, listitem, inputtext[
 				return osrp_ShowPlayerDialog(playerid, DIALOG_ACCOUNT_CREATE_CHAR, DIALOG_STYLE_INPUT, "Tworzenie nowej postaci:", "{AA3333}Brak znaku (_) w imieniu.\n{FFFFFF}Wpisz imiê i nazwisko postaci, któr¹ chcesz stworzyæ.\nWzór: Imiê_Nazwisko", "Dalej", "Cofnij");
 			}
 
-			new name[24];
+			new Name[24];
 
-			mysql_real_escape_string(inputtext, name);
+			mysql_real_escape_string(inputtext, Name);
 
 			queryStr[0] = EOS;
-			format(queryStr, sizeof(queryStr), "SELECT * FROM `Characters` WHERE `Name` = '%s' LIMIT 1", name);
+			format(queryStr, sizeof(queryStr), "SELECT * FROM `Characters` WHERE `Name` = '%s' LIMIT 1", Name);
 			mysql_query(queryStr);
 
 			mysql_store_result();
@@ -313,10 +314,10 @@ sampCallback OnDialogResponse(playerid, dialogid, response, listitem, inputtext[
 				return osrp_ShowPlayerDialog(playerid, DIALOG_ACCOUNT_OPTIONS, DIALOG_STYLE_LIST, mainStr, "{FFFFFF}Zaloguj siê na postaæ\nStwórz now¹ postaæ\nUsuñ istniej¹c¹ postaæ\nAnty Crash\nZmieñ has³o do konta", "Dalej", "");
 			}
 
-			new name[24], tmp[64];
+			new Name[24], Tmp[64];
 
-			sscanf(inputtext, "s[24]s[64]", name, tmp);
-			format(PlayerInfo[playerid][pName], 24, name);
+			sscanf(inputtext, "s[24]s[64]", Name, Tmp);
+			format(PlayerInfo[playerid][pName], 24, Name);
 
 			osrp_ShowPlayerDialog(playerid, DIALOG_ACCOUNT_REMOVE_CHAR, DIALOG_STYLE_MSGBOX, "Usuniêcie postaci:", "{FFFFFF}Czy napewno chcesz usun¹æ swoj¹ postaæ?\nNie bêdziesz móg³ ju¿ nigdy ni¹ zagraæ.\nJej maj¹tek zostanie bezpowrotnie usuniêty.\n{AA3333}Zastanów siê nad t¹ decyzj¹.", "Tak", "Nie");
 		}
@@ -327,12 +328,12 @@ sampCallback OnDialogResponse(playerid, dialogid, response, listitem, inputtext[
 				return osrp_ShowPlayerDialog(playerid, DIALOG_ACCOUNT_OPTIONS, DIALOG_STYLE_LIST, mainStr, "{FFFFFF}Zaloguj siê na postaæ\nStwórz now¹ postaæ\nUsuñ istniej¹c¹ postaæ\nAnty Crash\nZmieñ has³o do konta", "Dalej", "");
 			}
 
-			new name[24];
+			new Name[24];
 
-			mysql_real_escape_string(PlayerInfo[playerid][pName], name);
+			mysql_real_escape_string(PlayerInfo[playerid][pName], Name);
 
 			queryStr[0] = EOS;
-			format(queryStr, sizeof(queryStr), "DELETE FROM `Characters` WHERE `Name` = '%s'", name);
+			format(queryStr, sizeof(queryStr), "DELETE FROM `Characters` WHERE `Name` = '%s'", Name);
 			mysql_query(queryStr);
 
 			mainStr[0] = EOS;
@@ -383,9 +384,9 @@ sampCallback OnDialogResponse(playerid, dialogid, response, listitem, inputtext[
 				return osrp_ShowPlayerDialog(playerid, DIALOG_ACCOUNT_CREATE_CHAR, DIALOG_STYLE_INPUT, "Tworzenie nowej postaci:", "{FFFFFF}Wpisz imiê i nazwisko postaci, któr¹ chcesz stworzyæ.\nWzór: Imiê_Nazwisko", "Dalej", "Cofnij");
 			}
 
-			new sex = listitem;
+			new Sex = listitem;
 
-			PlayerInfo[playerid][pSex] = sex;
+			PlayerInfo[playerid][pSex] = Sex;
 
 			osrp_ShowPlayerDialog(playerid, DIALOG_ACCOUNT_CHAR_AGE, DIALOG_STYLE_INPUT, "Wybierz wiek swojej postaci:", "{FFFFFF}Wpisz wiek z przedzia³u od 18 do 65 lat.", "Dalej", "Cofnij");
 		}
@@ -395,13 +396,13 @@ sampCallback OnDialogResponse(playerid, dialogid, response, listitem, inputtext[
 				return osrp_ShowPlayerDialog(playerid, DIALOG_ACCOUNT_CHAR_SEX, DIALOG_STYLE_LIST, "Wybierz p³eæ Twojej postaci:", "{FFFFFF}Mê¿czyzna\nKobieta", "Dalej", "Cofnij");
 			}
 
-			new age = strval(inputtext);
+			new Age = strval(inputtext);
 
-			if(age > 65 || age < 18) {
+			if(Age > 65 || Age < 18) {
 				return osrp_ShowPlayerDialog(playerid, DIALOG_ACCOUNT_CHAR_AGE, DIALOG_STYLE_INPUT, "Wybierz wiek swojej postaci:", "{AA3333}Podany wiek jest nieprawid³owy.\n{FFFFFF}Wpisz wiek z przedzia³u od 18 do 65 lat.", "Dalej", "Cofnij");
 			}
 
-			PlayerInfo[playerid][pAge] = age;
+			PlayerInfo[playerid][pAge] = Age;
 
 			osrp_ShowPlayerDialog(playerid, DIALOG_ACCOUNT_CHAR_CONTINENT, DIALOG_STYLE_LIST, "Wybierz kontynent z którego pochodzi Twoja postaæ:", "{FFFFFF}Ameryka\nEuropa\nAustralia\nAzja\nAfryka", "Dalej", "Cofnij");
 		}
@@ -411,9 +412,9 @@ sampCallback OnDialogResponse(playerid, dialogid, response, listitem, inputtext[
 				return osrp_ShowPlayerDialog(playerid, DIALOG_ACCOUNT_CHAR_AGE, DIALOG_STYLE_INPUT, "Wybierz wiek swojej postaci:", "{FFFFFF}Wpisz wiek z przedzia³u od 18 do 65 lat.", "Dalej", "Cofnij");
 			}
 
-			new continent = listitem;
+			new Continent = listitem;
 
-			PlayerInfo[playerid][pContinent] = continent;
+			PlayerInfo[playerid][pContinent] = Continent;
 
 			osrp_ShowPlayerDialog(playerid, DIALOG_ACCOUNT_CHAR_ORIGIN, DIALOG_STYLE_LIST, "Wybierz rasê Twojej postaci:", "{FFFFFF}Bia³a\nCzarna\n¯ó³ta", "Dalej", "Cofnij");
 		}
@@ -423,9 +424,9 @@ sampCallback OnDialogResponse(playerid, dialogid, response, listitem, inputtext[
 				return osrp_ShowPlayerDialog(playerid, DIALOG_ACCOUNT_CHAR_CONTINENT, DIALOG_STYLE_LIST, "Wybierz kontynent z którego pochodzi Twoja postaæ:", "{FFFFFF}Ameryka\nEuropa\nAustralia\nAzja\nAfryka", "Dalej", "Cofnij");
 			}
 
-			new origin = listitem;
+			new Origin = listitem;
 
-			PlayerInfo[playerid][pOrigin] = origin;
+			PlayerInfo[playerid][pOrigin] = Origin;
 
 			mainStr[0] = EOS;
 			format(mainStr, sizeof(mainStr), "{AA3333}SprawdŸ czy dane podane poni¿ej siê zgadzaj¹:\n\n{BDCB92}Nick: {FFFFFF}%s\n{BDCB92}P³eæ: {FFFFFF}%s\n{BDCB92}Wiek: {FFFFFF}%d\n{BDCB92}Pochodzenie: {FFFFFF}%s\n{BDCB92}Rasa: {FFFFFF}%s",
@@ -464,12 +465,12 @@ sampCallback OnDialogResponse(playerid, dialogid, response, listitem, inputtext[
 				return 1;
 			}
 
-			new vehName[32], tmp[8];
+			new VehName[32], Tmp[8];
 
-			sscanf(inputtext, "s[32]s[8]", vehName, tmp);
+			sscanf(inputtext, "s[32]s[8]", VehName, Tmp);
 
-			if(GetVehicleModelIDFromName(vehName) != -1) {
-				AdminVehModelID = GetVehicleModelIDFromName(vehName);
+			if(GetVehicleModelIDFromName(VehName) != -1) {
+				AdminVehModelID = GetVehicleModelIDFromName(VehName);
 
 				osrp_ShowPlayerDialog(playerid, DIALOG_ADMIN_VEHICLE_COLOR, DIALOG_STYLE_INPUT, "Wybierz kolor pojazdu:", "{FFFFFF}Podaj kolor pojazdu.\nPrzyk³ad: 0, 0: ", "Dalej", "Cofnij");
 			}
@@ -480,12 +481,12 @@ sampCallback OnDialogResponse(playerid, dialogid, response, listitem, inputtext[
 				return 1;
 			}
 
-			new color[2];
+			new Color[2];
 
-			sscanf(inputtext, "p<,>ii", color[0], color[1]);
+			sscanf(inputtext, "p<,>ii", Color[0], Color[1]);
 
-			AdminVehColor[0] = color[0];
-			AdminVehColor[1] = color[1];
+			AdminVehColor[0] = Color[0];
+			AdminVehColor[1] = Color[1];
 
 			osrp_ShowPlayerDialog(playerid, DIALOG_ADMIN_VEHICLE_ENGINE, DIALOG_STYLE_INPUT, "Wybierz silnik pojazdu:", "{FFFFFF}Podaj rodzaj silnika pojazdu.\nTypy:\n\t0 - Benzyna\n\t1 - Olej napêdowy\n\t2 - Bateria\n\t3 - Paliwo lotnicze", "Dalej", "Cofnij");
 		}
@@ -494,9 +495,9 @@ sampCallback OnDialogResponse(playerid, dialogid, response, listitem, inputtext[
 				return osrp_ShowPlayerDialog(playerid, DIALOG_ADMIN_VEHICLE_COLOR, DIALOG_STYLE_INPUT, "Podaj kolor pojazdu:", "{FFFFFF}Podaj kolor pojazdu.\nPrzyk³ad: 0, 0: ", "Dalej", "Cofnij");
 			}
 
-			new engineType = strval(inputtext);
+			new EngineType = strval(inputtext);
 
-			AdminVehEngine = engineType;
+			AdminVehEngine = EngineType;
 
 			osrp_ShowPlayerDialog(playerid, DIALOG_ADMIN_VEHICLE_OWNER, DIALOG_STYLE_INPUT, "Wybierz w³aœciciela pojazdu:", "{FFFFFF}Podaj w³aœciciela pojazdu (ID, Typ):\nTypy:\n\t-1 - Nikt\n\t0 - Server\n\t1 - Gracz\n\t2 Biznes", "Dalej", "Cofnij");
 		}
@@ -505,12 +506,12 @@ sampCallback OnDialogResponse(playerid, dialogid, response, listitem, inputtext[
 				return osrp_ShowPlayerDialog(playerid, DIALOG_ADMIN_VEHICLE_ENGINE, DIALOG_STYLE_INPUT, "Wybierz silnik pojazdu:", "{FFFFFF}Podaj rodzaj silnika pojazdu.\nTypy:\n\t0 - Benzyna\n\t1 - Olej napêdowy\n\t2 - Bateria\n\t3 - Paliwo lotnicze", "Dalej", "Cofnij");
 			}
 
-			new ownerParms[2];
+			new OwnerParms[2];
 
-			sscanf(inputtext, "p<,>ii", ownerParms[0], ownerParms[1]);
+			sscanf(inputtext, "p<,>ii", OwnerParms[0], OwnerParms[1]);
 
-			AdminVehOwner[0] = ownerParms[0];
-			AdminVehOwner[1] = ownerParms[1];
+			AdminVehOwner[0] = OwnerParms[0];
+			AdminVehOwner[1] = OwnerParms[1];
 
 			mainStr[0] = EOS;
 			format(mainStr, sizeof(mainStr), "{BDCB92}Nazwa: {FFFFFF}%s\n{BDCB92}Kolor1: {FFFFFF}%d\n{BDCB92}Kolor2: {FFFFFF}%d\n{BDCB92}Rodzaj silnika: {FFFFFF}%d\n{BDCB92}ID Ownera: {FFFFFF}%d\n{BDCB92}Typ Ownera: {FFFFFF}%d",

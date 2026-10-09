@@ -572,7 +572,7 @@ stock DollahScoreUpdate() {
 	return 1;
 }
 
-stock right(source[], len)
+stock right(const source[], len)
 {
 	new retval[MAX_STRING], srclen;
 	srclen = strlen(source);
@@ -3378,7 +3378,7 @@ stock OOCNews(color,const string[])
 	}
 }
 
-stock SendTeamMessage(team, color, string[])
+stock SendTeamMessage(team, color, const string[])
 {
 	for(new i = 0; i < MAX_PLAYERS; i++)
 	{
@@ -3406,7 +3406,7 @@ stock SendRadioMessage(member, color, string[])
 	}
 }
 
-stock SendJobMessage(job, color, string[])
+stock SendJobMessage(job, color, const string[])
 {
 	for(new i = 0; i < MAX_PLAYERS; i++)
 	{
@@ -3437,7 +3437,7 @@ stock SendNewFamilyMessage(family, color, string[])
 	}
 }
 
-stock SendFamilyMessage(family, color, string[])
+stock SendFamilyMessage(family, color, const string[])
 {
 	for(new i = 0; i < MAX_PLAYERS; i++)
 	{
@@ -3454,7 +3454,7 @@ stock SendFamilyMessage(family, color, string[])
 	}
 }
 
-stock SendTeamBeepMessage(team, color, string[])
+stock SendTeamBeepMessage(team, color, const string[])
 {
 	for(new i = 0; i < MAX_PLAYERS; i++)
 	{
@@ -3483,7 +3483,7 @@ stock SendEnemyMessage(color, string[])
 	}
 }
 
-stock SendAdminMessage(color, string[])
+stock SendAdminMessage(color, const string[])
 {
 	for(new i = 0; i < MAX_PLAYERS; i++)
 	{
@@ -3571,7 +3571,7 @@ stock CHouseLevel(houseid)
 	return 0;
 }
 
-stock ProxDetector(Float:radi, playerid, string[],col1,col2,col3,col4,col5)
+stock ProxDetector(Float:radi, playerid, const string[],col1,col2,col3,col4,col5)
 {
 	if(IsPlayerConnected(playerid))
 	{

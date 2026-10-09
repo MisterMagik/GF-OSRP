@@ -7,11 +7,16 @@
 	Desc: Thx for this code.
 */
 
+// Rozmiar stosu:
+#define DYNAMIC_MEMORY 131072
+//
+#define FOREACH_NO_VEHICLES
+//
 #include <a_samp>
 #include <Pawn.CMD>
 #include <streamer>
 #include <sscanf2>
-#include <foreach>
+#include <YSI_Data\y_iterate>
 #include <mysql>
 #include <YSI\y_timers>
 #include <progress>

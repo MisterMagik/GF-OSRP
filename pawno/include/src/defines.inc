@@ -18,8 +18,7 @@
 #define MAX_TRASH_JOB_OBJECTS 24
 #define MAX_BUSH_JOB_OBJECTS 20
 
-// Rozmiar stosu:
-#pragma dynamic 8096
+//#pragma dynamic 8096
 
 // Callbacks:
 #define sampCallback%0(%1) \
@@ -29,17 +28,27 @@
 	forward %0(%1); public %0(%1)
 
 // MySQL
+#if defined LOCALHOST__
+
 #define MYSQL_HOST "localhost"
 #define MYSQL_USER "osrp"
 #define MYSQL_PASSWORD "1234"
 #define MYSQL_DB "gf"
+
+#else
+
+#define MYSQL_HOST "localhost"
+#define MYSQL_USER "osrp"
+#define MYSQL_PASSWORD "1234"
+#define MYSQL_DB "gf"
+#endif
 
 #define SERVER_NAME "Old School Role Play"
 #define SERVER_SHORT_NAME "OSRP"
 #define SERVER_VERSION "v1.0"
 
 // Strona:
-#define WEBSITE_NAME ""
+#define WEBSITE_NAME "www.osrp.pl"
 #define WEBSITE_URL "www.osrp.pl"
 
 #define PRESSED(%0) \
