@@ -203,8 +203,7 @@ stock AddVehicle(ownerid, ownertype, modelid, enginetype, color1, color2, salon,
 	format(posStr, sizeof(posStr), "%f,%f,%f,%f", VehicleInfo[id][vPos][0], VehicleInfo[id][vPos][1], VehicleInfo[id][vPos][2], VehicleInfo[id][vPos][3]);
 
 	queryStr[0] = EOS;
-	format(queryStr, sizeof(queryStr), "INSERT INTO `Vehicles` (`ID`, `OwnerID`, `OwnerType`, `ModelID`, `EngineType`, `Color`, `Pos`, `Fuel`, `EngineHp`, `Spawned`) VALUES ('%d', '%d', '%d', '%d', '%d', '%s', '%s', '%f', '%f', '%d')",
-		VehicleInfo[id][vID],
+	format(queryStr, sizeof(queryStr), "INSERT INTO `Vehicles` (`OwnerID`, `OwnerType`, `ModelID`, `EngineType`, `Color`, `Pos`, `Fuel`, `EngineHp`, `Spawned`) VALUES ('%d', '%d', '%d', '%d', '%s', '%s', '%f', '%f', '%d')",
 		VehicleInfo[id][vOwnerID],
 		VehicleInfo[id][vOwnerType],
 		VehicleInfo[id][vModelID],
@@ -487,13 +486,21 @@ Callback VehicleEngineStarting(vehicleid) {
 		return 1;
 	}
 
+	if(!IsVehicleOwner(driverid, vehicleid)) {
+		return SendClientMessage(driverid, COLOR_GRAD1, "Nie masz klucza do tego pojazdu.");
+	}
+
 	if(VehAnim[driverid]) {
 		return 1;
 	}
 
-	if(!IsVehicleOwner(driverid, vehicleid)) {
-		return SendClientMessage(driverid, COLOR_GRAD1, "Nie masz klucza do tego pojazdu.");
+	if(IsABike(vehicleid)) {
+		ApplyAnimation(driverid, "CARRY", "crry_prtial", 4.0, 0, 0, 0, 0, 0, 0);
+	} else {
+		ApplyAnimation(driverid, "PED", "CAR_tune_radio", 4.1, 0, 0, 0, 0, 0);
 	}
+
+	PlayerPlaySound(driverid, 1084, 0.0, 0.0, 0.0);
 
 	if(VehicleInfo[vehicleid][vEngine]) {
 		new Engine, Lights, Alarm, Doors, Bonnet, Boot, Objective;
@@ -514,9 +521,6 @@ Callback VehicleEngineStarting(vehicleid) {
 	}
 
 	VehAnim[driverid] = true;
-
-	ApplyAnimation(driverid, "PED", "CAR_tune_radio", 4.1, 0, 0, 0, 0, 0);
-	PlayerPlaySound(driverid, 1084, 0.0, 0.0, 0.0);
 
 	SendClientMessage(driverid, COLOR_YELLOW, "Próbujesz odpaliæ silnik...");
 	SetTimerEx("VehicleEngineOn", 2500, false, "i", vehicleid);

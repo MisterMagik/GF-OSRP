@@ -327,6 +327,8 @@ CMD:dodajpojazd(playerid, params[]) {
 	strcat(str, "{FFFFFF}Model pojazdu\t{FFFFFF}ID pojazdu\n");
 
 	for(new i = 0; i < sizeof(VehicleNames); i++) {
+		if(i == 201) break;
+
 		format(str, sizeof(str), "%s\n{FFFFFF}%s\t%d", str, VehicleNames[i], i + 400);
 	}
 

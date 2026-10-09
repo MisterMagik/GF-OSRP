@@ -17,7 +17,7 @@ sampCallback OnGameModeInit() {
 	ManualVehicleEngineAndLights();
 	ShowPlayerMarkers(PLAYER_MARKERS_MODE_OFF);
 	AddPlayerClassEx(0, 0, 0.0, 0.0, 0.0, 0.0, 0, 0, 0, 0, 0, 0);
-	SendRconCommand("hostname "SERVER_SHORT_NAME" @1shot1kill.pl");
+	SendRconCommand("hostname "SERVER_NAME"");
 	AllowAdminTeleport(1);
 	SetGameModeText(""SERVER_SHORT_NAME" "SERVER_VERSION"");
 

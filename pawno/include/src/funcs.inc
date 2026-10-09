@@ -1302,6 +1302,7 @@ stock SetPlayerSpawn(playerid)
 		}
 	    else
 	    {
+			SetPlayerHealth(playerid, 100);
 			SetPlayerToTeamColor(playerid);
 			SetCameraBehindPlayer(playerid);
 			SetPlayerPos(playerid, PlayerInfo[playerid][pPos_x], PlayerInfo[playerid][pPos_y], PlayerInfo[playerid][pPos_z]);
