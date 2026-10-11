@@ -381,7 +381,7 @@ CMD:dajtablice(playerid, params[]) {
 		return SendClientMessage(playerid, COLOR_GRAD1, "Podany pojazd nie istnieje.");
 	}
 
-	format(VehicleInfo[vehicleid][vPlate], 32, "%s", GenerateNewNumberPlate());
+	format(VehicleInfo[vehicleid][vPlate], 32, "%s", GenerateNewNumberPlate(vehicleid));
 	RespawnVehicle(vehicleid);
 	return 1;
 }
