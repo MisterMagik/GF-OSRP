@@ -457,8 +457,3 @@ stock BackDealershipKeyStep(playerid) {
 	UpdateDealershipTextDraws(playerid);
 	return 1;
 }
-
-CMD:kuppojazd(playerid, params[]) {
-	ShowDealershipInterface(playerid, 0);
-	return 1;
-}

@@ -43,6 +43,7 @@ sampCallback OnGameModeInit() {
 	InitServerObjects();
 	TextDrawsInit();
 	InitVehicleData();
+	InitDealershipData();
 	CreateTrashJobObjects();
 	CreateBushJobObjects();
 

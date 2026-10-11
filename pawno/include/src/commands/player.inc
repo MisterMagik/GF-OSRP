@@ -34,6 +34,11 @@ CMD:pojazdy(playerid, params[]) {
 	return 1;
 }
 
+CMD:kuppojazd(playerid, params[]) {
+	ShowDealershipInterface(playerid, 0);
+	return 1;
+}
+
 CMD:admin(playerid, params[]) {
 	new msg[64];
 
