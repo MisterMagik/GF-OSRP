@@ -19,6 +19,7 @@
 #define MAX_BUSH_JOB_OBJECTS 20
 #define MAX_DEALERSHIPS 5
 #define MAX_DEALERSHIP_OFFERS 64
+#define MAX_DEALERSHIP_SPAWN_POS 8 // max liczba stworzonych aut obok siebie
 
 //#pragma dynamic 8096
 

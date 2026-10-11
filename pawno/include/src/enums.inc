@@ -267,6 +267,7 @@ enum pInfo
 	pFuel,
 	pMarried,
 	pMarriedTo[128],
+	pPickupTime,
 	pDialog,
 	bool:pToggle,
 	bool:pFreeze

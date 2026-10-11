@@ -35,7 +35,13 @@ CMD:pojazdy(playerid, params[]) {
 }
 
 CMD:kuppojazd(playerid, params[]) {
-	ShowDealershipInterface(playerid, 0);
+	new DealershipId = GetDealershipID(playerid);
+
+	if(DealershipId == DEALERSHIP_NONE) {
+		return SendClientMessage(playerid, COLOR_GRAD1, "Nie jesteœ w miejscu gdzie mo¿na kupiæ pojazd.");
+	}
+
+	ShowDealershipInterface(playerid, DealershipId);
 	return 1;
 }
 

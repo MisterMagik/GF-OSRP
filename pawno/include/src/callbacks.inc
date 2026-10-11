@@ -304,12 +304,12 @@ sampCallback OnPlayerDisconnect(playerid, reason) {
 
 	new DisconnectReasons[][] = {
 		"Crash",
-		"Wyszed ",
+		"Wyszed³",
 		"Kick/Ban"
 	};
 
 	mainStr[0] = EOS;
-	format(queryStr, sizeof(queryStr), "*** %s (( %s )) (id: %d) wyszed  z serwera. (%s)", PlayerInfo[playerid][pName], accName[playerid], playerid, DisconnectReasons[reason]);
+	format(queryStr, sizeof(queryStr), "*** %s (( %s )) (id: %d) wyszed³ z serwera. (%s)", PlayerInfo[playerid][pName], accName[playerid], playerid, DisconnectReasons[reason]);
 	ABroadCast(COLOR_GREY, mainStr, 1);
 
 	if(reason == 0) {
@@ -2226,6 +2226,26 @@ sampCallback OnPlayerLeaveDynamicArea(playerid, areaid) {
 }
 
 sampCallback OnPlayerPickUpDynamicPickup(playerid, pickupid) {
+	if(PlayerInfo[playerid][pPickupTime] + 1 > gettime()) {
+		return 1;
+	}
+
+	if(GetDealershipID(playerid) != DEALERSHIP_NONE) {
+		new DealershipId = GetDealershipID(playerid);
+		static bool:bShowed = false;
+
+		if(pickupid == DealershipInfo[DealershipId][dPickupID]) {
+			if(!bShowed) {
+				SendClientMessage(playerid, COLOR_YELLOW, "Kupno pojazdu: {FFFFFF}Aby przejœæ do kupowania pojazdu wpisz /kuppojazd i postêpuj wed³ug wskazówek.");
+				SendClientMessage(playerid, COLOR_YELLOW, "Kupno pojazdu: {FFFFFF}U¿ywaj strza³ek w celu poruszania siê po interfejsie.");
+				SendClientMessage(playerid, COLOR_YELLOW, "Kupno pojazdu: {FFFFFF}Aby podj¹æ decyzjê przejdŸ do podsumowania i naciœnij {FF0000}N {FFFFFF}lub {93C572}Y{FFFFFF}.");
+			}
+
+			bShowed = true;
+		}
+	}
+
+	PlayerInfo[playerid][pPickupTime] = gettime();
 	return 1;
 }
 

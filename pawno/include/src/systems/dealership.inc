@@ -11,6 +11,10 @@
 	Iloœæ salonów bêdzie wynosi³a ok 5. S¹ one po³¹czone z systemem biznesów.
 	Salon musi zostaæ stworzony obok dzia³aj¹cego biznesu.
 	Doda³em tu inny styl deklarowania zmiennych lokalnych.
+	
+	git fetch magik
+	git merge magik/main
+	git push origin main
 */
 
 stock PlayerText:CreateDealershipBox(playerid, Float:X, Float:Y, Float:EndX, Float:Height, Color) {
@@ -56,10 +60,11 @@ stock PlayerText:CreateDealershipOption(playerid, Float:X, Float:Y, Float:EndX, 
 stock InitDealershipData() {
 	printf("[SALON] Zaczynam ladowac salony...");
 
+	// Coutt & Schutz Skilla i Rafixa i steeZa
 	format(DealershipInfo[0][dName], 32, "Coutt & Schutz");
-	DealershipInfo[0][dPickupPos][0] = 2131.8259;
-	DealershipInfo[0][dPickupPos][1] = -1151.3245;
-	DealershipInfo[0][dPickupPos][2] = 24.0601;
+	DealershipInfo[0][dPickupPos][0] = 2131.9697;
+	DealershipInfo[0][dPickupPos][1] = -1150.6177;
+	DealershipInfo[0][dPickupPos][2] = 24.1393;
 	DealershipInfo[0][dVehSpawn][0] = 2135.9910;
 	DealershipInfo[0][dVehSpawn][1] = -1143.2273;
 	DealershipInfo[0][dVehSpawn][2] = 24.8318;
@@ -70,10 +75,10 @@ stock InitDealershipData() {
 	}
 
 	for(new i = 0; i < MAX_DEALERSHIPS; i++) {
-		if(DealershipInfo[i][dPickupPos][0] != 0.0 && DealershipInfo[i][dPickupPos][1]) {
-			DealershipInfo[i][dPickupID] = CreateDynamicPickup(1239, 1, DealershipInfo[i][dPickupPos][0], DealershipInfo[i][dPickupPos][1], DealershipInfo[i][dPickupPos][2]);
+		if(DealershipInfo[i][dPickupPos][0] != 0.0 && DealershipInfo[i][dPickupPos][1] != 0.0) {
+			DealershipInfo[i][dPickupID] = CreateDynamicPickup(1239, 1, DealershipInfo[i][dPickupPos][0], DealershipInfo[i][dPickupPos][1], DealershipInfo[i][dPickupPos][2], 0, 0, -1, 100.0);
 
-			CreateDynamic3DTextLabel("/kuppojazd", COLOR_WHITE, DealershipInfo[i][dPickupPos][0], DealershipInfo[i][dPickupPos][1], DealershipInfo[i][dPickupPos][2]+0.5, 30.0);
+			CreateDynamicMapIcon(DealershipInfo[i][dPickupPos][0], DealershipInfo[i][dPickupPos][1], DealershipInfo[i][dPickupPos][2], 55, COLOR_WHITE, 0, 0, -1, 1000.0, MAPICON_GLOBAL, -1, 0);
 		}
 	}
 
@@ -97,9 +102,9 @@ stock CreateDealershipTextDraws(playerid, DealershipId) {
 
 	pTD = CreatePlayerTextDraw(playerid, 125.0, 135.0, "_");
 	PlayerTextDrawFont(playerid, pTD, 5);
-	PlayerTextDrawTextSize(playerid, pTD, 200.0, 132.0);
+	PlayerTextDrawTextSize(playerid, pTD, 180.0, 150.0);
 	PlayerTextDrawBackgroundColor(playerid, pTD, 0x00000000);
-	PlayerTextDrawSetPreviewRot(playerid, pTD, -16.0, 0.0, -55.0, 0.9);
+	PlayerTextDrawSetPreviewRot(playerid, pTD, -16.0, 0.0, -55.0, 1.1);
 
 	DealershipTDs[playerid][7] = pTD;
 
@@ -399,8 +404,18 @@ stock BuyDealershipVehicle(playerid) {
 	//new Price = GetDealershipFinalPrice(playerid);
 	new ColorId = DealershipColorIDs[pDealershipColor[playerid]];
 	new EngineType = DealershipFuelTypes[pDealershipFuel[playerid]];
+	new Slot = GetDealershipFreeSlot(DealershipId);
+	new Float:X, Float:Y, Float:Z, Float:A;
 
-	AddVehicle(PlayerInfo[playerid][pID], VEHICLE_OWNER_TYPE_PLAYER, DealershipOffer[OfferId][doModelID], EngineType, ColorId, ColorId, 1, DealershipInfo[DealershipId][dVehSpawn][0], DealershipInfo[DealershipId][dVehSpawn][1], DealershipInfo[DealershipId][dVehSpawn][2], DealershipInfo[DealershipId][dVehSpawn][3]);
+	if(Slot == -1) {
+		return 1;
+	}
+
+	GetDealershipFreeSlotPosition(DealershipId, Slot, X, Y, Z, A);
+	AddVehicle(PlayerInfo[playerid][pID], VEHICLE_OWNER_TYPE_PLAYER, DealershipOffer[OfferId][doModelID], EngineType, ColorId, ColorId, 1, X, Y, Z, A);
+
+	SendClientMessage(playerid, COLOR_LIGHTBLUE, "Gratulujemy nowego zakupu! Wpisz /vehpomoc aby zobaczyæ dostêpne komendy.");
+	SendClientMessage(playerid, COLOR_LIGHTBLUE, "Musisz zarejestrowaæ pojazd w Urzêdzie Miasta, aby byæ jego legalnym w³aœcicielem.");
 
 	HideDealershipInterface(playerid);
 	return 1;
@@ -487,4 +502,46 @@ stock BackDealershipKeyStep(playerid) {
 
 	UpdateDealershipTextDraws(playerid);
 	return 1;
+}
+
+// steeZ
+/*
+	Te 2 funkcje szukaj¹ wolnego miesjca na parkingu, jest ich 8.
+	Je¿eli jakiœ gracz kupi auto i zostawi je przy biznesie, kolejny
+	gracz mo¿e je kupowaæ, bed¹ pojawia³y siê one obok siebie w odstêpach.
+*/
+stock GetDealershipFreeSlotPosition(DealershipId, Slot, &Float:X, &Float:Y, &Float:Z, &Float:A) {
+	new Float:Angle = DealershipInfo[DealershipId][dVehSpawn][3];
+
+	// Podobne obliczanie odleg³oœci jak w funkcji GetXYInFrontOfPlayer
+	X = DealershipInfo[DealershipId][dVehSpawn][0] + (Slot * 3.5) * floatcos(Angle, degrees);
+	Y = DealershipInfo[DealershipId][dVehSpawn][1] + (Slot * 3.5) * floatsin(Angle, degrees);
+	Z = DealershipInfo[DealershipId][dVehSpawn][2];
+	A = Angle;
+}
+
+stock GetDealershipFreeSlot(DealershipId) {
+	new Float:X, Float:Y, Float:Z, Float:A;
+
+	for(new i = 0; i < MAX_DEALERSHIP_SPAWN_POS; i++) {
+		GetDealershipFreeSlotPosition(DealershipId, i, X, Y, Z, A);
+
+		new bool:bTaken = false;
+
+		foreach(new v : VehItter) {
+			if(!VehicleInfo[v][vSpawned]) {
+				continue;
+			}
+
+			if(GetVehicleDistanceFromPoint(v, X, Y, Z) < 2.5) {
+				bTaken = true;
+				break;
+			}
+		}
+
+		if(!bTaken) {
+			return i;
+		}
+	}
+	return -1;
 }
