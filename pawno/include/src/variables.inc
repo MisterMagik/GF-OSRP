@@ -455,6 +455,39 @@ new JoinPed[52][1] = {
 {150}//DRIVING/FLYING_SCHOOL
 };
 
+// Dealership:
+new const DealershipColorIDs[DEALERSHIP_COLORS] = { 0, 1, 8, 13, 3, 6, 16, 79, 7, 2, 126, 57 };
+new const DealershipColorHexes[DEALERSHIP_COLORS] = {
+	0x000000FF, 0xF5F5F5FF, 0xBDBEC6FF, 0x58595AFF, 0x840410FF, 0xD78E10FF,
+	0x335F3FFF, 0x0E316DFF, 0x4C75B7FF, 0x2A77A1FF, 0xEC6AAEFF, 0x9C8D71FF
+};
+new const DealershipColorNames[DEALERSHIP_COLORS][] = {
+	"Czarny", "Bialy", "Srebrny", "Grafitowy", "Czerwony", "Pomaranczowy",
+	"Zielony", "Granatowy", "Niebieski", "Blekitny", "Rozowy", "Bezowy"
+};
+//
+new const DealershipFuelTypes[DEALERSHIP_FUEL_TYPES] = { VEHICLE_ENGINE_PETROL, VEHICLE_ENGINE_DIESEL, VEHICLE_ENGINE_ELECTRIC };
+new const DealershipFuelPrices[DEALERSHIP_FUEL_TYPES] = { 0, 500, 2000 };
+new const DealershipFuelNames[DEALERSHIP_FUEL_TYPES][] = { "Benzyna", "Olej napedowy", "Elektryczny" };
+//
+new DealershipInfo[MAX_DEALERSHIPS][eDealership];
+new DealershipOffer[MAX_DEALERSHIP_OFFERS][eDealershipOffer];
+new ActualDealershipOffers;
+
+new pDealership[MAX_PLAYERS] = { DEALERSHIP_NONE, ... };
+new pDealershipStep[MAX_PLAYERS];
+new pDealershipOffer[MAX_PLAYERS];
+new pDealershipColor[MAX_PLAYERS];
+new pDealershipFuel[MAX_PLAYERS];
+new pDealershipLastUDKey[MAX_PLAYERS];
+new pDealershipLastLRKey[MAX_PLAYERS];
+
+new PlayerText:DealershipTDs[MAX_PLAYERS][16];
+new PlayerText:DealershipTDColorFrame[MAX_PLAYERS][DEALERSHIP_COLORS];
+new PlayerText:DealershipTDColor[MAX_PLAYERS][DEALERSHIP_COLORS];
+new PlayerText:DealershipTDFuel[MAX_PLAYERS][DEALERSHIP_FUEL_TYPES];
+//
+
 stock femaleSkinsId[] = {
 	9, 10, 11, 12, 13, 31, 38, 39, 40, 41, 53,
 	54, 55, 56, 63, 64, 65, 69, 75, 76, 77, 85, 87, 88, 89, 90, 91, 92, 93, 
@@ -478,8 +511,10 @@ stock maleSkinsId[] = {
 	301, 302, 303, 304, 305, 310, 311
 };
 
-stock cheapVehicles[] = {
-	
+stock cheapVehicles[][] = {
+// Model Cena
+	{436, 5500}, {529, 5500}, {419, 5500}, {404, 5500},
+	{496, 5500}, {549, 5500}, {542, 5500}, {526, 5500}
 };
 
 stock bicycyleVehicles[] = {

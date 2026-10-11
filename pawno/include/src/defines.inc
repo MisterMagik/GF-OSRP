@@ -17,6 +17,8 @@
 #define MAX_PLAYER_VEHS 5
 #define MAX_TRASH_JOB_OBJECTS 24
 #define MAX_BUSH_JOB_OBJECTS 20
+#define MAX_DEALERSHIPS 5
+#define MAX_DEALERSHIP_OFFERS 64
 
 //#pragma dynamic 8096
 
@@ -194,6 +196,11 @@
 #define VEHICLE_SAVE_LOCKED 4
 #define VEHICLE_SAVE_MILEAGE 8
 #define VEHICLE_SAVE_VISUAL 16
+
+// Dealership:
+#define DEALERSHIP_NONE -1
+#define DEALERSHIP_COLORS 12
+#define DEALERSHIP_FUEL_TYPES 3
 
 // Funcs:
 forward Float:GetDistanceBetweenPlayers(p1, p2);

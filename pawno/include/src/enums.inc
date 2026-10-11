@@ -474,3 +474,17 @@ enum vInfo {
 	vPlate[32],
 	vDesc[128]
 };
+
+enum eDealership {
+	dName[32],
+	Float:dPickupPos[3],
+	Float:dVehSpawn[4],
+	dPickupID
+};
+
+enum eDealershipOffer {
+	doDealershipID,
+	doModelID,
+	doPrice,
+	doName[24]
+};

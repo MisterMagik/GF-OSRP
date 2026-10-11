@@ -5,6 +5,8 @@
 	Date: 12.03.2026
 	Modified: 12.03.2026
 	Desc: Casual jobs system.
+
+	Prace dorywcze
 */
 
 new TrashJobObjects[MAX_TRASH_JOB_OBJECTS];

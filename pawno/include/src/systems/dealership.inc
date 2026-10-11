@@ -241,7 +241,7 @@ stock SetDealershipTextDraws(playerid) {
 		}
 	}
 
-	for(new i = 0; i < DEALERSHIP_FUEL_TYPES; i++) {
+	for(new i = 1; i <= DEALERSHIP_FUEL_TYPES; i++) {
 		if(i == pDealershipFuel[playerid]) {
 			PlayerTextDrawBoxColor(playerid, DealershipTDFuel[playerid][i], (Step == 2 ? 0x2E7D32FF : 0x24402AFF));
 		} else {
@@ -346,7 +346,7 @@ stock ShowDealershipInterface(playerid, DealershipId) {
 	pDealershipStep[playerid] = 0;
 	pDealershipOffer[playerid] = 0;
 	pDealershipColor[playerid] = 0;
-	pDealershipFuel[playerid] = 0;
+	pDealershipFuel[playerid] = VEHICLE_ENGINE_NONE;
 	pDealershipLastUDKey[playerid] = 0;
 	pDealershipLastLRKey[playerid] = 0;
 

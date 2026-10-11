@@ -30,6 +30,7 @@
 #include "src\systems\orgs"
 #include "src\systems\plant"
 #include "src\systems\item"
+#include "src\systems\dealership"
 #include "src\systems\vehicle"
 #include "src\textdraws"
 #include "src\objects"
