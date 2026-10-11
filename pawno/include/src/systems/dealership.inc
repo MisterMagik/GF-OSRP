@@ -396,7 +396,7 @@ stock BuyDealershipVehicle(playerid) {
 		return 1;
 	}
 
-	new Price = GetDealershipFinalPrice(playerid);
+	//new Price = GetDealershipFinalPrice(playerid);
 	new ColorId = DealershipColorIDs[pDealershipColor[playerid]];
 	new EngineType = DealershipFuelTypes[pDealershipFuel[playerid]];
 

@@ -2670,6 +2670,11 @@ sampCallback OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
 				SetTimerEx("VehicleEngineStarting", 10, false, "i", vehicleid);
 			}
 		}
+
+		if(pDealership[playerid] != DEALERSHIP_NONE) {
+			BackDealershipKeyStep(playerid);
+			return 1;
+		}
 	}
 
 	if(PRESSED(KEY_YES)) {
@@ -2683,6 +2688,11 @@ sampCallback OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
 					SetTimerEx("VehicleLightsOff", 10, false, "i", vehicleid);
 				}
 			}
+		}
+
+		if(pDealership[playerid] != DEALERSHIP_NONE) {
+			NextDealershipKeyStep(playerid);
+			return 1;
 		}
 	}
 	return 1;
