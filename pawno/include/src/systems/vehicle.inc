@@ -400,7 +400,7 @@ stock SpawnVehicle(vehicleid) {
 
 	VehicleInfo[vehicleid][v3DDesc] = CreateDynamic3DTextLabel(VehicleInfo[vehicleid][vDesc], COLOR_WHITE, 0.0, 0.0, 0.1, 20.0, INVALID_PLAYER_ID, vehicleid, 0, 0, 0, -1, 20.0, -1, 0);
 	if(strcmp(VehicleInfo[vehicleid][vPlate], "Brak") == 0) {
- 		// SetVehicleNumberPlate(vehicleid, "");
+ 		SetVehicleNumberPlate(vehicleid, " ");
 	} else {
 
 		SetVehicleNumberPlate(vehicleid, VehicleInfo[vehicleid][vPlate]);
