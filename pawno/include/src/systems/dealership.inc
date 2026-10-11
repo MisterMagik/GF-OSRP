@@ -11,10 +11,6 @@
 	Iloœæ salonów bêdzie wynosi³a ok 5. S¹ one po³¹czone z systemem biznesów.
 	Salon musi zostaæ stworzony obok dzia³aj¹cego biznesu.
 	Doda³em tu inny styl deklarowania zmiennych lokalnych.
-	
-	git fetch magik
-	git merge magik/main
-	git push origin main
 */
 
 stock PlayerText:CreateDealershipBox(playerid, Float:X, Float:Y, Float:EndX, Float:Height, Color) {
@@ -104,7 +100,7 @@ stock CreateDealershipTextDraws(playerid, DealershipId) {
 	PlayerTextDrawFont(playerid, pTD, 5);
 	PlayerTextDrawTextSize(playerid, pTD, 180.0, 150.0);
 	PlayerTextDrawBackgroundColor(playerid, pTD, 0x00000000);
-	PlayerTextDrawSetPreviewRot(playerid, pTD, -16.0, 0.0, -55.0, 1.1);
+	PlayerTextDrawSetPreviewRot(playerid, pTD, -16.0, -5.0, -55.0, 1.1);
 
 	DealershipTDs[playerid][7] = pTD;
 
