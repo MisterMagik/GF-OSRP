@@ -241,7 +241,7 @@ stock SetDealershipTextDraws(playerid) {
 		}
 	}
 
-	for(new i = 1; i <= DEALERSHIP_FUEL_TYPES; i++) {
+	for(new i = 0; i < DEALERSHIP_FUEL_TYPES; i++) {
 		if(i == pDealershipFuel[playerid]) {
 			PlayerTextDrawBoxColor(playerid, DealershipTDFuel[playerid][i], (Step == 2 ? 0x2E7D32FF : 0x24402AFF));
 		} else {
@@ -433,6 +433,37 @@ stock MoveDealershipSelection(playerid, Horz, Vert) {
 	}
 
 	UpdateDealershipTextDraws(playerid);
+	return 1;
+}
+
+Callback UpdateDealershipKeys(playerid) {
+	if(pDealership[playerid] == DEALERSHIP_NONE) {
+		return 1;
+	}
+
+	new Keys, UpDown, LeftRight;
+
+	GetPlayerKeys(playerid, Keys, UpDown, LeftRight);
+
+	if(LeftRight != pDealershipLastLRKey[playerid]) {
+		pDealershipLastLRKey[playerid] = LeftRight;
+
+		if(LeftRight < 0) {
+			MoveDealershipSelection(playerid, -1, 0);
+		} else if(LeftRight > 0) {
+			MoveDealershipSelection(playerid, 1, 0);
+		}
+	}
+
+	if(UpDown != pDealershipLastUDKey[playerid]) {
+		pDealershipLastUDKey[playerid] = UpDown;
+
+		if(UpDown < 0) {
+			MoveDealershipSelection(playerid, 0, -1);
+		} else if(UpDown > 0) {
+			MoveDealershipSelection(playerid, 0, 1);
+		}
+	}
 	return 1;
 }
 

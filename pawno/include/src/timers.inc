@@ -995,10 +995,12 @@ task GlobalTimer[1000]() {
 	}
 }
 
-task CasualJobTimer[250]() {
+task SubSecondTimer[100]() {
 	foreach(new i : Player) {
 		TrashJobPickUpObject(i);
 		BushJobPickUpObject(i);
+
+		UpdateDealershipKeys(i);
 	}
 }
 
